@@ -34,7 +34,7 @@ export default function App() {
         </motion.h1>
 
         <p className="text-lg md:text-xl max-w-2xl mx-auto text-gray-600">
-          M.Eng Robotics @ University of Maryland (GPA 3.9) | 7+ Years Industrial Automation
+          M.Eng Robotics @ University of Maryland (GPA 3.9) | 6+ Years Industrial Automation
         </p>
       </section>
 
@@ -54,7 +54,7 @@ export default function App() {
             <h2 className="text-4xl font-bold mb-6">About Me</h2>
 
             <p className="text-gray-700 leading-relaxed mb-6">
-              I am a Robotics Engineer with over seven years of experience building and deploying
+              I am a Robotics Engineer with over six years of experience building and deploying
               industrial control systems in high-reliability environments. My foundation was built
               on Honeywell Experion PKS (EPKS) platforms, including C300 DCS controllers and
               Safety Manager architectures, where I designed and implemented safety-critical
