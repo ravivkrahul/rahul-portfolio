@@ -51,10 +51,31 @@ export default function App() {
           <div>
             <h2 className="text-4xl font-bold mb-6">About Me</h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              Robotics engineer with 7+ years of experience in control systems and
-              industrial automation. Now focused on integrating advanced control
-              architectures with intelligent autonomy.
-            </p>
+  I am a Robotics Engineer with over seven years of experience building and deploying
+  industrial control systems in high-reliability environments. My foundation was built
+  on Honeywell Experion PKS (EPKS) platforms, including C300 DCS controllers and
+  Safety Manager architectures, where I designed and implemented safety-critical
+  control logic.
+</p>
+
+<p className="text-gray-700 leading-relaxed mb-6">
+  I am currently in my first year of the Master of Engineering in Robotics program
+  at the University of Maryland, College Park, where I am deepening my expertise in
+  control systems, autonomy, and intelligent robotics.
+</p>
+
+<p className="text-gray-700 leading-relaxed mb-6">
+  My work now focuses on integrating advanced control systems with intelligent,
+  learning-driven autonomy. I am particularly interested in combining classical
+  control strategies with modern AI techniques such as reinforcement learning,
+  model predictive control (MPC), and adaptive learning-based methods.
+</p>
+
+<p className="text-gray-700 leading-relaxed">
+  I bring a builder’s mindset — comfortable working from hardware integration
+  and low-level control logic to high-level autonomy architecture — motivated by
+  creating deployable systems that balance reliability, intelligence, and execution speed.
+</p>
           </div>
         </div>
       </section>
