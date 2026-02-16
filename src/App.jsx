@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Mail, Linkedin, Github } from "lucide-react";
 import profileImg from "./assets/profile.jpg";
-import micromouseImg from "./assets/projects/micromouse_preview.png";
 
 export default function App() {
   return (
@@ -71,24 +70,20 @@ export default function App() {
             <h2 className="text-4xl font-bold mb-6">About Me</h2>
 
             <p className="text-gray-700 leading-relaxed mb-6">
-              I started my career in industrial automation working on Honeywell
-              Experion PKS (EPKS) systems including C300 DCS controllers and
-              Safety Manager architectures. Over the past seven years,
-              I’ve worked on control logic, interlocks, and safety-critical systems
-              where reliability and structured execution matter.
+              I began my career in industrial automation working on Honeywell
+              Experion PKS systems including C300 DCS controllers and Safety Manager architectures.
+              Over seven years, I designed safety-critical control logic in high-reliability environments.
             </p>
 
             <p className="text-gray-700 leading-relaxed mb-6">
-              I later pursued a Master’s in Robotics at the University of Maryland
-              to move toward intelligent autonomy and advanced control.
-              My work now focuses on combining classical control systems
-              with modern AI-driven decision frameworks.
+              I later transitioned into robotics to work at the intersection of classical control
+              and intelligent autonomy. I am particularly interested in integrating advanced control
+              systems with AI-driven decision frameworks.
             </p>
 
             <p className="text-gray-700 leading-relaxed">
-              I bring a builder’s mindset — comfortable working from hardware integration
-              and low-level control logic to high-level autonomy architecture —
-              focused on building deployable, robust systems.
+              I bring a builder’s mindset — from low-level control implementation
+              to high-level autonomy architecture — focused on building deployable, robust systems.
             </p>
           </div>
 
@@ -109,10 +104,7 @@ export default function App() {
               "Embedded Systems & Integration",
               "Python • C++ • ROS • MATLAB"
             ].map((skill, i) => (
-              <div
-                key={i}
-                className="bg-gray-100 p-6 rounded-2xl shadow-sm text-center"
-              >
+              <div key={i} className="bg-gray-100 p-6 rounded-2xl shadow-sm text-center">
                 {skill}
               </div>
             ))}
@@ -124,71 +116,99 @@ export default function App() {
       <section id="projects" className="px-6 py-16 max-w-6xl mx-auto">
         <h2 className="text-3xl font-semibold mb-10">Selected Projects</h2>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
 
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
+          {/* Preview Image */}
+          <img
+            src={`${import.meta.env.BASE_URL}micromouse_preview.png`}
+            alt="MicroMouse"
+            className="w-full h-52 object-cover"
+          />
 
-            <img
-              src={micromouseImg}
-              alt="MicroMouse"
-              className="w-full h-52 object-cover"
-            />
+          <div className="p-6">
 
-            <div className="p-6">
+            <h3 className="text-xl font-semibold mb-3">
+              ROS2 MicroMouse Navigation System
+            </h3>
 
-              <h3 className="text-xl font-semibold mb-3">
-                ROS2 MicroMouse Navigation System
-              </h3>
+            <p className="text-gray-600 mb-4">
+              Modular ROS2-based autonomous navigation framework in C++17 implementing
+              custom Actions, Services, Topics, and parameter-driven execution.
+              Integrated wall-aware DFS with dynamic replanning.
+            </p>
 
-              <p className="text-gray-600 mb-4">
-                Modular ROS2-based autonomous navigation framework in C++17 implementing
-                custom Actions, Services, Topics, and parameter-driven execution.
-                Integrated wall-aware DFS with dynamic replanning in a simulator environment.
-              </p>
+            {/* Tech Tags */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {["ROS2", "C++17", "rclcpp", "Actions", "Services", "Topics", "MMS Simulator"].map((tech, i) => (
+                <span key={i} className="text-xs bg-gray-100 px-3 py-1 rounded-full">
+                  {tech}
+                </span>
+              ))}
+            </div>
 
-              <div className="flex flex-wrap gap-2 mb-4">
-                {["ROS2", "C++17", "rclcpp", "Actions", "Services", "Topics", "MMS Simulator"].map((tech, i) => (
-                  <span
-                    key={i}
-                    className="text-xs bg-gray-100 px-3 py-1 rounded-full"
-                  >
-                    {tech}
-                  </span>
+            {/* Buttons */}
+            <div className="flex gap-4 mb-6">
+              <a
+                href="https://github.com/ravivkrahul/MicroMouse_Cpp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-black border border-black px-4 py-2 rounded-lg hover:bg-black hover:text-white transition"
+              >
+                View Code
+              </a>
+
+              <a
+                href="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/view"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+              >
+                Watch Demo
+              </a>
+            </div>
+
+            {/* Embedded Video */}
+            <div className="aspect-video w-full mb-6">
+              <iframe
+                src="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview"
+                className="w-full h-full rounded-xl"
+                allow="autoplay"
+                allowFullScreen
+              />
+            </div>
+
+            {/* Metrics + Learnings */}
+            <div className="border-t pt-6">
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-6">
+                {[
+                  { label: "ROS2 Nodes", value: "3" },
+                  { label: "Custom Interfaces", value: "2" },
+                  { label: "Execution Modes", value: "2" },
+                  { label: "Language", value: "C++17" }
+                ].map((item, i) => (
+                  <div key={i} className="bg-gray-100 p-4 rounded-xl">
+                    <p className="text-lg font-semibold">{item.value}</p>
+                    <p className="text-xs text-gray-500">{item.label}</p>
+                  </div>
                 ))}
               </div>
 
-              <div className="flex gap-4 mb-6">
-                <a
-                  href="https://github.com/ravivkrahul/MicroMouse_Cpp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-black border border-black px-4 py-2 rounded-lg hover:bg-black hover:text-white transition"
-                >
-                  View Code
-                </a>
+              <h4 className="text-sm font-semibold mb-3 text-gray-800">
+                Key Engineering Learnings
+              </h4>
 
-                <a
-                  href="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/view"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
-                >
-                  Watch Demo
-                </a>
-              </div>
-
-              <div className="aspect-video w-full">
-                <iframe
-                  src="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview"
-                  className="w-full h-full rounded-xl"
-                  allow="autoplay"
-                  allowFullScreen
-                />
-              </div>
+              <ul className="text-sm text-gray-600 space-y-2">
+                <li>• Implemented custom ROS2 Action lifecycle with feedback & cancellation</li>
+                <li>• Designed modular node architecture separating navigation and clients</li>
+                <li>• Integrated deterministic DFS with dynamic replanning logic</li>
+                <li>• Managed real-time topic publishing and service queries</li>
+                <li>• Ensured dual execution support (standalone & action-driven modes)</li>
+              </ul>
 
             </div>
-          </div>
 
+          </div>
         </div>
       </section>
 
