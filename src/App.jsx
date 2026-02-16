@@ -112,68 +112,103 @@ export default function App() {
       </section>
 
       {/* Projects */}
-      <section id="projects" className="px-6 py-16 max-w-5xl mx-auto">
-        <h2 className="text-3xl font-semibold mb-10 text-center">
-          Project
+      <section id="projects" className="px-6 py-16 max-w-6xl mx-auto">
+        <h2 className="text-3xl font-semibold mb-12 text-center">
+          Projects
         </h2>
 
-        <div className="bg-white rounded-2xl shadow-lg p-6">
+        <div className="grid md:grid-cols-2 gap-10">
 
-          {/* Preview Image */}
-          <img
-            src="/rahul-portfolio/micromouse_preview.png"
-            alt="MicroMouse"
-            className="w-full h-56 object-cover rounded-xl mb-6"
-          />
+          {/* MicroMouse */}
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <img
+              src="/rahul-portfolio/micromouse_preview.png"
+              alt="MicroMouse"
+              className="w-full h-56 object-cover rounded-xl mb-6"
+            />
 
-          <h3 className="text-xl font-semibold mb-3">
-            ROS2 MicroMouse Navigation System
-          </h3>
+            <h3 className="text-xl font-semibold mb-3">
+              ROS2 MicroMouse Navigation System
+            </h3>
 
-          <p className="text-gray-600 mb-4">
-            ROS2-based autonomous navigation framework in C++17 implementing
-            custom Actions, Services, Topics, and wall-aware DFS with dynamic replanning.
-          </p>
+            <p className="text-gray-600 mb-4">
+              ROS2-based autonomous navigation framework in C++17 implementing
+              custom Actions, Services, Topics, and wall-aware DFS with dynamic replanning.
+            </p>
 
-          {/* Tech Tags */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {["ROS2", "C++17", "Actions", "Services", "Topics"].map((tech, i) => (
-              <span key={i} className="text-xs bg-gray-100 px-3 py-1 rounded-full">
-                {tech}
-              </span>
-            ))}
-          </div>
-
-          {/* Buttons */}
-          <div className="flex gap-4 mb-6">
-            <a
-              href="https://github.com/ravivkrahul/MicroMouse_Cpp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium border border-black px-4 py-2 rounded-lg hover:bg-black hover:text-white transition"
-            >
-              View Code
-            </a>
-
-            <button
-              onClick={() => setShowVideo(!showVideo)}
-              className="text-sm font-medium bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
-            >
-              {showVideo ? "Hide Demo" : "Watch Demo"}
-            </button>
-          </div>
-
-          {/* Video Toggle */}
-          {showVideo && (
-            <div className="aspect-video w-full mt-4">
-              <iframe
-                src="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview"
-                className="w-full h-full rounded-xl"
-                allow="autoplay"
-                allowFullScreen
-              />
+            <div className="flex flex-wrap gap-2 mb-6">
+              {["ROS2", "C++17", "Actions", "Services", "Topics"].map((tech, i) => (
+                <span key={i} className="text-xs bg-gray-100 px-3 py-1 rounded-full">
+                  {tech}
+                </span>
+              ))}
             </div>
-          )}
+
+            <div className="flex gap-4 mb-6">
+              <a
+                href="https://github.com/ravivkrahul/MicroMouse_Cpp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium border border-black px-4 py-2 rounded-lg hover:bg-black hover:text-white transition"
+              >
+                View Code
+              </a>
+
+              <button
+                onClick={() => setShowVideo(!showVideo)}
+                className="text-sm font-medium bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+              >
+                {showVideo ? "Hide Demo" : "Watch Demo"}
+              </button>
+            </div>
+
+            {showVideo && (
+              <div className="aspect-video w-full mt-4">
+                <iframe
+                  src="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview"
+                  className="w-full h-full rounded-xl"
+                  allow="autoplay"
+                  allowFullScreen
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Autonomous Robot (In Progress) */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold">
+                Autonomous Mobile Robot
+              </h3>
+              <span className="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
+                In Progress
+              </span>
+            </div>
+
+            <p className="text-gray-600 mb-4">
+              Embedded mobile robot built on Raspberry Pi integrating real-time
+              computer vision, motion control, and structured navigation logic.
+              Development focuses on perception-driven autonomy and hardware-software
+              integration for real-world deployment.
+            </p>
+
+            <div className="flex flex-wrap gap-2 mb-6">
+              {["Raspberry Pi", "OpenCV", "Python", "Embedded Systems", "Path Planning"].map((tech, i) => (
+                <span key={i} className="text-xs bg-gray-100 px-3 py-1 rounded-full">
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <div className="text-sm text-gray-600 space-y-2 border-t pt-4">
+              <p>• Real-time camera perception using OpenCV</p>
+              <p>• Motion control and embedded actuation</p>
+              <p>• Grid-based path planning architecture</p>
+              <p>• Hardware–software system integration</p>
+            </div>
+
+          </div>
 
         </div>
       </section>
@@ -181,7 +216,6 @@ export default function App() {
       {/* Contact */}
       <section id="contact" className="px-6 py-16 bg-white text-center">
         <h2 className="text-3xl font-semibold mb-6">Let’s Connect</h2>
-
         <div className="flex justify-center gap-6">
           <a href="mailto:ravivk.rahul@gmail.com"><Mail /></a>
           <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer"><Linkedin /></a>
