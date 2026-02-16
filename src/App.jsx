@@ -114,7 +114,7 @@ export default function App() {
       {/* Projects */}
       <section id="projects" className="px-6 py-16 max-w-5xl mx-auto">
         <h2 className="text-3xl font-semibold mb-10 text-center">
-          Selected Project
+          Project
         </h2>
 
         <div className="bg-white rounded-2xl shadow-lg p-6">
