@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Mail, Linkedin, Github } from "lucide-react";
 import profileImg from "./assets/profile.jpg";
+import micromouseImg from "./assets/projects/micromouse_preview.png";
 
 export default function App() {
   return (
@@ -58,7 +59,6 @@ export default function App() {
       <section id="about" className="px-6 py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
-          {/* Image */}
           <div className="flex justify-center">
             <img
               src={profileImg}
@@ -67,43 +67,29 @@ export default function App() {
             />
           </div>
 
-          {/* Text */}
           <div>
             <h2 className="text-4xl font-bold mb-6">About Me</h2>
 
             <p className="text-gray-700 leading-relaxed mb-6">
-              I started my career in industrial automation, working on Honeywell
+              I started my career in industrial automation working on Honeywell
               Experion PKS (EPKS) systems including C300 DCS controllers and
-              Safety Manager (ESD) architectures. Over the past seven years,
-              I’ve worked on control logic, interlocks, and safety-critical
-              systems in large-scale process environments where reliability
-              truly matters.
+              Safety Manager architectures. Over the past seven years,
+              I’ve worked on control logic, interlocks, and safety-critical systems
+              where reliability and structured execution matter.
             </p>
 
             <p className="text-gray-700 leading-relaxed mb-6">
-              Over time, I became increasingly interested in how intelligent
-              systems could make these environments more adaptive and efficient.
-              That curiosity led me to pursue a Master’s in Robotics at the
-              University of Maryland and begin working at the intersection of
-              classical control and AI-driven autonomy.
+              I later pursued a Master’s in Robotics at the University of Maryland
+              to move toward intelligent autonomy and advanced control.
+              My work now focuses on combining classical control systems
+              with modern AI-driven decision frameworks.
             </p>
 
-            <p className="text-gray-700 leading-relaxed mb-6">
-            I am now focused on integrating advanced control systems with intelligent,
-            learning-driven autonomy. My work centers on combining classical control
-            strategies with modern AI techniques such as reinforcement learning,
-            model predictive control (MPC), and adaptive learning-based methods.
-            I am particularly interested in building robust robotic and intelligent
-            systems that operate under real-world constraints while continuously
-            improving through data-driven optimization.
-          </p>
-
-          <p className="text-gray-700 leading-relaxed">
-            I bring a builder’s mindset — comfortable working from hardware integration
-            and low-level control logic to high-level autonomy architecture — and I am
-            motivated by creating deployable systems that balance reliability,
-            intelligence, and execution speed.
-          </p>
+            <p className="text-gray-700 leading-relaxed">
+              I bring a builder’s mindset — comfortable working from hardware integration
+              and low-level control logic to high-level autonomy architecture —
+              focused on building deployable, robust systems.
+            </p>
           </div>
 
         </div>
@@ -138,30 +124,71 @@ export default function App() {
       <section id="projects" className="px-6 py-16 max-w-6xl mx-auto">
         <h2 className="text-3xl font-semibold mb-10">Selected Projects</h2>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {[
-            {
-              title: "Autonomous Navigation System",
-              desc: "Implemented SLAM and path planning using ROS with real-world sensor integration."
-            },
-            {
-              title: "Industrial Control System Upgrade",
-              desc: "Led PLC modernization and SCADA integration to improve system reliability and uptime."
-            },
-            {
-              title: "Robotic Arm Optimization",
-              desc: "Designed and tuned PID and state-space controllers for improved trajectory tracking."
-            },
-            {
-              title: "Embedded Vision Module",
-              desc: "Developed camera-based detection system integrated with edge hardware for real-time tracking."
-            }
-          ].map((p, i) => (
-            <div key={i} className="bg-white p-6 rounded-2xl shadow-md">
-              <h3 className="text-xl font-semibold mb-2">{p.title}</h3>
-              <p className="text-gray-600">{p.desc}</p>
+        <div className="grid md:grid-cols-2 gap-10">
+
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
+
+            <img
+              src={micromouseImg}
+              alt="MicroMouse"
+              className="w-full h-52 object-cover"
+            />
+
+            <div className="p-6">
+
+              <h3 className="text-xl font-semibold mb-3">
+                ROS2 MicroMouse Navigation System
+              </h3>
+
+              <p className="text-gray-600 mb-4">
+                Modular ROS2-based autonomous navigation framework in C++17 implementing
+                custom Actions, Services, Topics, and parameter-driven execution.
+                Integrated wall-aware DFS with dynamic replanning in a simulator environment.
+              </p>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {["ROS2", "C++17", "rclcpp", "Actions", "Services", "Topics", "MMS Simulator"].map((tech, i) => (
+                  <span
+                    key={i}
+                    className="text-xs bg-gray-100 px-3 py-1 rounded-full"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex gap-4 mb-6">
+                <a
+                  href="https://github.com/ravivkrahul/MicroMouse_Cpp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-black border border-black px-4 py-2 rounded-lg hover:bg-black hover:text-white transition"
+                >
+                  View Code
+                </a>
+
+                <a
+                  href="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/view"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                >
+                  Watch Demo
+                </a>
+              </div>
+
+              <div className="aspect-video w-full">
+                <iframe
+                  src="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview"
+                  className="w-full h-full rounded-xl"
+                  allow="autoplay"
+                  allowFullScreen
+                />
+              </div>
+
             </div>
-          ))}
+          </div>
+
         </div>
       </section>
 
@@ -170,21 +197,16 @@ export default function App() {
         <h2 className="text-3xl font-semibold mb-6">Let’s Connect</h2>
 
         <div className="flex justify-center gap-6">
-          <a href="mailto:ravivk.rahul@gmail.com">
-            <Mail />
-          </a>
-          <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer">
-            <Linkedin />
-          </a>
-          <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer">
-            <Github />
-          </a>
+          <a href="mailto:ravivk.rahul@gmail.com"><Mail /></a>
+          <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer"><Linkedin /></a>
+          <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer"><Github /></a>
         </div>
       </section>
 
       <footer className="text-center py-6 text-gray-500 text-sm">
         © {new Date().getFullYear()} Rahul Ravi VK
       </footer>
+
     </div>
   );
 }
