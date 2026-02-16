@@ -41,6 +41,7 @@ export default function App() {
       {/* About */}
       <section id="about" className="px-6 py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+
           <div className="flex justify-center">
             <img
               src={profileImg}
@@ -48,34 +49,64 @@ export default function App() {
               className="w-72 h-72 object-cover rounded-2xl shadow-xl"
             />
           </div>
+
           <div>
             <h2 className="text-4xl font-bold mb-6">About Me</h2>
+
             <p className="text-gray-700 leading-relaxed mb-6">
-  I am a Robotics Engineer with over seven years of experience building and deploying
-  industrial control systems in high-reliability environments. My foundation was built
-  on Honeywell Experion PKS (EPKS) platforms, including C300 DCS controllers and
-  Safety Manager architectures, where I designed and implemented safety-critical
-  control logic.
-</p>
+              I am a Robotics Engineer with over seven years of experience building and deploying
+              industrial control systems in high-reliability environments. My foundation was built
+              on Honeywell Experion PKS (EPKS) platforms, including C300 DCS controllers and
+              Safety Manager architectures, where I designed and implemented safety-critical
+              control logic.
+            </p>
 
-<p className="text-gray-700 leading-relaxed mb-6">
-  I am currently in my first year of the Master of Engineering in Robotics program
-  at the University of Maryland, College Park, where I am deepening my expertise in
-  control systems, autonomy, and intelligent robotics.
-</p>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              I am currently in my first year of the Master of Engineering in Robotics program
+              at the University of Maryland, College Park, where I am deepening my expertise in
+              control systems, autonomy, and intelligent robotics.
+            </p>
 
-<p className="text-gray-700 leading-relaxed mb-6">
-  My work now focuses on integrating advanced control systems with intelligent,
-  learning-driven autonomy. I am particularly interested in combining classical
-  control strategies with modern AI techniques such as reinforcement learning,
-  model predictive control (MPC), and adaptive learning-based methods.
-</p>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              My work now focuses on integrating advanced control systems with intelligent,
+              learning-driven autonomy. I am particularly interested in combining classical
+              control strategies with modern AI techniques such as reinforcement learning,
+              model predictive control (MPC), and adaptive learning-based methods.
+            </p>
 
-<p className="text-gray-700 leading-relaxed">
-  I bring a builder’s mindset — comfortable working from hardware integration
-  and low-level control logic to high-level autonomy architecture — motivated by
-  creating deployable systems that balance reliability, intelligence, and execution speed.
-</p>
+            <p className="text-gray-700 leading-relaxed">
+              I bring a builder’s mindset — comfortable working from hardware integration
+              and low-level control logic to high-level autonomy architecture — motivated by
+              creating deployable systems that balance reliability, intelligence, and execution speed.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Skills */}
+      <section id="skills" className="px-6 py-16 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-semibold mb-10 text-center">
+            Core Skills
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              "Robotics & Autonomous Systems",
+              "Control Systems & Estimation",
+              "Motion Planning & Navigation",
+              "Industrial Automation (PLC / SCADA / DCS)",
+              "Embedded Systems & Integration",
+              "Python • C++ • ROS2 • MATLAB"
+            ].map((skill, i) => (
+              <div
+                key={i}
+                className="bg-gray-100 p-6 rounded-2xl shadow-sm text-center"
+              >
+                {skill}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -88,9 +119,9 @@ export default function App() {
 
         <div className="bg-white rounded-2xl shadow-lg p-6">
 
-          {/* Preview Image (Safe public folder method) */}
+          {/* Preview Image */}
           <img
-            src={`${import.meta.env.BASE_URL}micromouse_preview.png`}
+            src="/rahul-portfolio/micromouse_preview.png"
             alt="MicroMouse"
             className="w-full h-56 object-cover rounded-xl mb-6"
           />
@@ -101,7 +132,7 @@ export default function App() {
 
           <p className="text-gray-600 mb-4">
             ROS2-based autonomous navigation framework in C++17 implementing
-            custom Actions, Services, Topics, and dynamic replanning logic.
+            custom Actions, Services, Topics, and wall-aware DFS with dynamic replanning.
           </p>
 
           {/* Tech Tags */}
@@ -132,7 +163,7 @@ export default function App() {
             </button>
           </div>
 
-          {/* Video (only when selected) */}
+          {/* Video Toggle */}
           {showVideo && (
             <div className="aspect-video w-full mt-4">
               <iframe
@@ -150,10 +181,11 @@ export default function App() {
       {/* Contact */}
       <section id="contact" className="px-6 py-16 bg-white text-center">
         <h2 className="text-3xl font-semibold mb-6">Let’s Connect</h2>
+
         <div className="flex justify-center gap-6">
           <a href="mailto:ravivk.rahul@gmail.com"><Mail /></a>
-          <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank"><Linkedin /></a>
-          <a href="https://github.com/ravivkrahul" target="_blank"><Github /></a>
+          <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer"><Linkedin /></a>
+          <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer"><Github /></a>
         </div>
       </section>
 
