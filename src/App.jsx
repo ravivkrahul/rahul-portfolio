@@ -36,6 +36,25 @@ export default function App() {
         <p className="text-lg md:text-xl max-w-2xl mx-auto text-gray-600">
           M.Eng Robotics @ University of Maryland (GPA 3.9) | 6+ Years Industrial Automation
         </p>
+
+        {/* CTA Buttons */}
+        <div className="flex justify-center gap-4 mt-8">
+          <a
+            href={`${import.meta.env.BASE_URL}Rahul_Ravi_Resume.pdf`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-black text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-gray-800 transition"
+          >
+            View Resume
+          </a>
+
+          <a
+            href="#contact"
+            className="border border-black px-6 py-3 rounded-xl text-sm font-medium hover:bg-black hover:text-white transition"
+          >
+            Contact Me
+          </a>
+        </div>
       </section>
 
       {/* About */}
@@ -174,9 +193,8 @@ export default function App() {
             )}
           </div>
 
-          {/* Autonomous Robot (In Progress) */}
+          {/* Autonomous Robot */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold">
                 Autonomous Mobile Robot
@@ -189,8 +207,6 @@ export default function App() {
             <p className="text-gray-600 mb-4">
               Embedded mobile robot built on Raspberry Pi integrating real-time
               computer vision, motion control, and structured navigation logic.
-              Development focuses on perception-driven autonomy and hardware-software
-              integration for real-world deployment.
             </p>
 
             <div className="flex flex-wrap gap-2 mb-6">
@@ -207,7 +223,6 @@ export default function App() {
               <p>• Grid-based path planning architecture</p>
               <p>• Hardware–software system integration</p>
             </div>
-
           </div>
 
         </div>
