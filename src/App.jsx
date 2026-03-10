@@ -215,6 +215,121 @@ function ProjectCard({ title, desc, tags, github, videoSrc, imgSrc, wide }) {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   RESEARCH ACCORDION
+═══════════════════════════════════════════════════════════ */
+
+const PAPERS = [
+  {
+    area: "Controls & Optimal Control",
+    color: "#00ffb4",
+    entries: [
+      {
+        title: "Optimal Controller Design for a Mobile Robot Using Genetic Algorithm and Adaptive PID Controller",
+        authors: "Jin-Hyun Park (2025)",
+        venue: "IEEE Access, Vol. 13",
+        doi: "10.1109/ACCESS.2025.3570472",
+        pdfPath: "/rahul-portfolio/papers/Optimal_Controller_Design_for_a_Mobile_Robot_Using_Genetic_Algorithm_and_Adaptive_PID_Controller.pdf",
+        implemented: true,
+        summary: `This paper tackles a problem I directly worked on — getting a nonholonomic mobile robot to reach a target pose as fast as possible. The core difficulty: optimal kinematic gains can't be derived analytically because the closed-loop equations are nonlinear differential equations whose convergence changes entirely based on initial conditions.
+
+The solution is a two-layer controller. The kinematic controller gains (Kρ, Kα, Kβ) are found offline using a Genetic Algorithm across a discretized grid of 72 initial postures. For any arbitrary starting pose not in the grid, 2D cubic spline interpolation generates smooth gain estimates — running 2.76× faster than the prior neural network approach and with no training overhead.
+
+The dynamic layer is a gradient-descent Adaptive PID that tunes its own gains in real time using wheel angular velocity error. Since the system Jacobian can't be computed exactly in practice, the sign of the incremental ratio is used instead — a pragmatic engineering approximation. Lyapunov analysis proves the closed-loop stability of the full system.
+
+Key result: when the robot mass varies from 5 kg to 70 kg — something a fixed-gain PID completely breaks on — the adaptive controller adjusts within 300 ms and still hits the target cleanly. Under external disturbances, arrival time deviates by at most 0.15 s. The prior method (Park et al.) failed to reach the target entirely in 2 of 6 disturbance test cases.`,
+        relevance: "I implemented this exact architecture in MATLAB for my UMD project — GA-based trajectory generation with cubic interpolation, combined with a gradient descent adaptive PID dynamic controller. Reading the formal Lyapunov stability proof and the systematic gain interpolation method directly shaped how I structured and validated my own simulation.",
+        tags: ["Genetic Algorithm","Adaptive PID","Nonholonomic Robot","Lyapunov Stability","Trajectory Optimization","Cubic Interpolation","MATLAB","IEEE Access 2025"],
+      },
+    ],
+  },
+];
+
+function ResearchAccordion() {
+  const [openArea, setOpenArea] = useState(null);
+  const [openPaper, setOpenPaper] = useState(null);
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      {PAPERS.map((area) => {
+        const areaOpen = openArea === area.area;
+        return (
+          <div key={area.area} style={{border:`1px solid ${areaOpen ? area.color+"50" : "var(--border)"}`,borderRadius:2,overflow:"hidden",transition:"border-color 0.25s"}}>
+            <button
+              onClick={() => { setOpenArea(areaOpen ? null : area.area); setOpenPaper(null); }}
+              style={{width:"100%",background:areaOpen?"rgba(0,0,0,0.3)":"var(--bg2)",border:"none",padding:"16px 22px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer",transition:"background 0.2s"}}
+            >
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <div style={{width:8,height:8,borderRadius:"50%",background:area.color,boxShadow:`0 0 8px ${area.color}`}}/>
+                <span style={{fontFamily:"var(--display)",fontSize:14,fontWeight:700,color:"var(--fg)",letterSpacing:0.5}}>{area.area}</span>
+                <span style={{fontSize:9,color:area.color,letterSpacing:2,opacity:0.7}}>{area.entries.length} {area.entries.length===1?"PAPER":"PAPERS"}</span>
+              </div>
+              <span style={{color:area.color,fontSize:16,transform:areaOpen?"rotate(45deg)":"rotate(0deg)",transition:"transform 0.25s",display:"inline-block"}}>+</span>
+            </button>
+
+            {areaOpen && (
+              <div style={{borderTop:`1px solid ${area.color}20`}}>
+                {area.entries.map((paper, pi) => {
+                  const paperOpen = openPaper === `${area.area}-${pi}`;
+                  return (
+                    <div key={pi} style={{borderBottom:pi<area.entries.length-1?"1px solid rgba(255,255,255,0.04)":"none"}}>
+                      <button
+                        onClick={() => setOpenPaper(paperOpen ? null : `${area.area}-${pi}`)}
+                        style={{width:"100%",background:paperOpen?"rgba(0,0,0,0.25)":"transparent",border:"none",padding:"14px 22px 14px 38px",display:"flex",justifyContent:"space-between",alignItems:"flex-start",cursor:"pointer",textAlign:"left",gap:16,transition:"background 0.15s"}}
+                      >
+                        <div style={{flex:1}}>
+                          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6,flexWrap:"wrap"}}>
+                            {paper.implemented && (
+                              <span style={{fontSize:8,padding:"2px 8px",background:"rgba(0,255,180,0.08)",border:"1px solid rgba(0,255,180,0.35)",color:"#00ffb4",borderRadius:2,letterSpacing:1.5,fontFamily:"var(--mono)"}}>✓ IMPLEMENTED</span>
+                            )}
+                          </div>
+                          <div style={{fontSize:12,fontWeight:600,color:"var(--fg)",lineHeight:1.6,marginBottom:5}}>{paper.title}</div>
+                          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+                            <span style={{fontSize:10,color:"var(--fg3)"}}>{paper.authors}</span>
+                            <span style={{fontSize:9,padding:"2px 7px",border:`1px solid ${area.color}35`,color:area.color,borderRadius:2}}>{paper.venue}</span>
+                            <span style={{fontSize:9,color:"var(--fg3)",fontFamily:"var(--mono)",opacity:0.6}}>DOI: {paper.doi}</span>
+                          </div>
+                        </div>
+                        <span style={{color:area.color,opacity:0.6,fontSize:14,flexShrink:0,transform:paperOpen?"rotate(45deg)":"rotate(0deg)",transition:"transform 0.2s",display:"inline-block",marginTop:4}}>+</span>
+                      </button>
+
+                      {paperOpen && (
+                        <div style={{padding:"0 22px 22px 38px",background:"rgba(0,0,0,0.2)"}}>
+                          <div style={{fontSize:11,color:"var(--fg2)",lineHeight:2.1,marginBottom:16,padding:"16px 18px",borderLeft:`2px solid ${area.color}60`,background:"rgba(0,0,0,0.15)",whiteSpace:"pre-line"}}>
+                            {paper.summary}
+                          </div>
+                          <div style={{fontSize:11,marginBottom:18,lineHeight:1.9,padding:"12px 16px",background:"rgba(0,255,180,0.03)",border:"1px solid rgba(0,255,180,0.08)",borderRadius:2}}>
+                            <span style={{color:"var(--fg3)",fontFamily:"var(--mono)",fontSize:9,letterSpacing:1}}>// WHY IT MATTERS TO ME{"\n"}</span>
+                            <span style={{color:area.color,opacity:0.85}}>{paper.relevance}</span>
+                          </div>
+                          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10}}>
+                            <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                              {paper.tags.map(t=>(
+                                <span key={t} style={{fontSize:9,padding:"2px 8px",border:`1px solid ${area.color}30`,color:area.color,borderRadius:2,opacity:0.75}}>{t}</span>
+                              ))}
+                            </div>
+                            <a href={paper.pdfPath} target="_blank" rel="noopener noreferrer"
+                              style={{display:"flex",alignItems:"center",gap:6,fontSize:10,color:area.color,border:`1px solid ${area.color}40`,padding:"6px 14px",borderRadius:2,textDecoration:"none",transition:"background 0.2s"}}
+                              onMouseEnter={e=>{e.currentTarget.style.background=area.color+"15"}}
+                              onMouseLeave={e=>{e.currentTarget.style.background="transparent"}}
+                            >
+                              <ExternalLink size={11}/> Read Paper (PDF)
+                            </a>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
    MAIN APP
 ═══════════════════════════════════════════════════════════ */
 export default function App() {
@@ -388,7 +503,7 @@ export default function App() {
       <nav className={`nav${scrolled?" scrolled":""}`}>
         <div className="nav-logo"><div className="nav-dot"/>RAHUL RAVI VK</div>
         <div className="nav-links">
-          {["about","skills","projects","contact"].map(s=>(
+          {["about","skills","projects","research","contact"].map(s=>(
             <a key={s} href={`#${s}`} className="nav-link">{s}</a>
           ))}
         </div>
@@ -497,15 +612,25 @@ export default function App() {
           <div className="projects-grid">
             <ProjectCard title="6-DOF Camera Crane – SolidWorks to URDF" desc="Designed and modeled a 6-DOF crane system with prismatic and revolute joints. Exported full assembly to URDF and validated kinematics in ROS2 RViz." tags={["SolidWorks","URDF","ROS2","RViz","6-DOF","Forward Kinematics"]} github="https://github.com/ravivkrahul/Camera_Crane-SOLIDWORKS-MODEL-and-URDF" videoSrc="https://drive.google.com/file/d/15ch_nCc1SRkQLc9Vk0bVXVV0IPXA_89C/preview" imgSrc={`${import.meta.env.BASE_URL}camera_crane_preview.png`}/>
             <ProjectCard title="ROS2 MicroMouse Navigation System" desc="ROS2-based maze navigation using DFS with dynamic replanning. Full ROS2 stack: Actions, Services, Topics, parameter server, and real-time path execution." tags={["ROS2","C++","DFS","Navigation","Path Planning","Action Server"]} github="https://github.com/ravivkrahul/MicroMouse_Cpp" videoSrc="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview" imgSrc={`${import.meta.env.BASE_URL}micromouse_preview.png`}/>
+            <ProjectCard title="Optimal Controller Design – GA + Adaptive PID (MATLAB)" desc="Implemented a two-layer mobile robot control system in MATLAB: a GA-optimized kinematic controller using cubic polynomial interpolation for trajectory generation, and a gradient-descent-based adaptive PID dynamic controller. Validated against mass variation (5–70 kg) and external disturbances using Lyapunov stability analysis." tags={["MATLAB","Genetic Algorithm","Adaptive PID","Lyapunov Stability","Trajectory Optimization","Nonholonomic Robot"]} github="https://github.com/ravivkrahul/Controller_Design_Using_Genetic_Algorithm_and_Adaptive_PID_Controller_MATLAB" wide/>
             <ProjectCard title="Autonomous Mobile Robot – Raspberry Pi + OpenCV" desc="Real-world autonomous robot using Raspberry Pi and a camera-based perception pipeline with OpenCV. Focused on hardware-software integration, real-time vision inference, and closed-loop motor control." tags={["Raspberry Pi","OpenCV","Python","Vision","Embedded","Autonomous"]} wide/>
           </div>
+        </div>
+      </section>
+
+      {/* ── RESEARCH ── */}
+      <section id="research">
+        <div className="section">
+          <div className="sec-header"><span className="sec-num">04 //</span><h2 className="sec-title">Research Radar</h2><div className="sec-line"/></div>
+          <p style={{fontSize:11,color:"var(--fg3)",marginBottom:32,letterSpacing:1}}>// Papers I've studied, implemented, or built upon — summarized in my own words</p>
+          <ResearchAccordion />
         </div>
       </section>
 
       {/* ── CONTACT ── */}
       <section id="contact" style={{background:"var(--bg2)",borderTop:"1px solid var(--border)"}}>
         <div className="section">
-          <div className="sec-header"><span className="sec-num">04 //</span><h2 className="sec-title">Let's Connect</h2><div className="sec-line"/></div>
+          <div className="sec-header"><span className="sec-num">05 //</span><h2 className="sec-title">Let's Connect</h2><div className="sec-line"/></div>
           <div className="contact-grid">
             <div>
               <p style={{fontSize:12,color:"var(--fg2)",lineHeight:2.1,marginBottom:22}}>Open to robotics engineering roles, research collaborations, and interesting automation challenges. Reach out anytime.</p>
