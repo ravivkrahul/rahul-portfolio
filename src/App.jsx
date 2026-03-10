@@ -424,6 +424,18 @@ export default function App() {
         .stat-val{font-family:var(--display);font-size:2rem;font-weight:800;color:var(--acc);}
         .stat-lbl{font-size:9px;color:var(--fg3);letter-spacing:1px;margin-top:3px;}
 
+        /* TIMELINE */
+        .timeline{position:relative;margin-top:40px;padding-top:8px;}
+        .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--acc),rgba(0,255,180,0.1));}
+        .tl-item{position:relative;padding:0 0 32px 28px;}
+        .tl-item:last-child{padding-bottom:0;}
+        .tl-dot{position:absolute;left:-5px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--acc);box-shadow:0 0 8px rgba(0,255,180,0.4);}
+        .tl-dot.dim{border-color:rgba(0,255,180,0.3);box-shadow:none;}
+        .tl-year{font-size:9px;color:var(--acc);letter-spacing:2px;margin-bottom:5px;font-family:var(--mono);opacity:0.7;}
+        .tl-role{font-size:13px;font-weight:600;color:var(--fg);margin-bottom:3px;}
+        .tl-org{font-size:11px;color:var(--fg3);margin-bottom:6px;}
+        .tl-desc{font-size:11px;color:var(--fg2);line-height:1.9;}
+
         /* SKILLS */
         .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
         .skill-group{background:var(--bg2);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden;}
@@ -542,6 +554,8 @@ export default function App() {
                 <div className="term-out">ROS2 · C++ · MATLAB · PID/LQR</div>
                 <div style={{display:"flex",gap:8}}><span className="term-prompt">$</span><span>echo $STATUS</span></div>
                 <div className="term-out">seeking_roles=true ✓</div>
+                <div style={{display:"flex",gap:8}}><span className="term-prompt">$</span><span>cat learning.txt</span></div>
+                <div className="term-out" style={{color:"#a78bfa"}}>[ Nav2, MPC, RL for Control ]</div>
                 <div style={{display:"flex",gap:8,alignItems:"center"}}>
                   <span className="term-prompt">$</span>
                   <span style={{display:"inline-block",width:7,height:13,background:"var(--acc)",animation:"blink 1s infinite",verticalAlign:"middle"}}/>
@@ -582,6 +596,22 @@ export default function App() {
               <div className="stats">
                 {[{v:"AIR 96",l:"GATE Rank"},{v:"6+",l:"Yrs Industry"},{v:"3.9",l:"M.Eng GPA"}].map(s=>(
                   <div key={s.l} className="stat"><div className="stat-val" style={{fontSize:s.v.length>3?"1.3rem":"2rem"}}>{s.v}</div><div className="stat-lbl">{s.l}</div></div>
+                ))}
+              </div>
+              <div className="timeline">
+                {[
+                  {year:"Sep 2025 – Present", role:"M.Eng in Robotics", org:"University of Maryland, College Park · GPA 3.9", desc:"Autonomous navigation, optimal control, ROS2, and ML-based robotics. Building on industrial foundation to work at the frontier of intelligent systems.", active:true},
+                  {year:"May 2023 – Jul 2025", role:"Assistant Manager, Instrumentation", org:"KRIBHCO Fertilizers Ltd · Gujarat, India", desc:"Led reliability initiatives on safety-critical units — 50% downtime reduction. Integrated torque-converter logic in Honeywell DCS (C300), 15% availability gain.", active:false},
+                  {year:"Oct 2019 – Apr 2023", role:"Senior Engineer, Instrumentation", org:"KRIBHCO Fertilizers Ltd · Gujarat, India", desc:"Designed Siemens PLC logic to eliminate false trips (90% reduction). Tuned PID loops on pressure and flow controls — 30% decrease in process downtime.", active:false},
+                  {year:"Aug 2014 – May 2018", role:"B.Eng, Instrumentation & Control", org:"L.D. College of Engineering · Gujarat, India", desc:"GATE All India Rank 96. Foundation in control theory, instrumentation systems, and process engineering.", active:false},
+                ].map((item,i)=>(
+                  <div key={i} className="tl-item">
+                    <div className={`tl-dot${item.active?"":" dim"}`}/>
+                    <div className="tl-year">{item.year}</div>
+                    <div className="tl-role">{item.role}</div>
+                    <div className="tl-org">{item.org}</div>
+                    <div className="tl-desc">{item.desc}</div>
+                  </div>
                 ))}
               </div>
             </div>
