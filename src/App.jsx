@@ -348,8 +348,8 @@ export default function App() {
 
   const skills = [
     { cat:"Robotics", items:["ROS2 (Actions/Services/Topics)","URDF / Xacro","Gazebo Simulation","MoveIt","Digital Twin (Falcon Editor)","Inverse Kinematics (ikpy)"] },
-    { cat:"Controls", items:["PID / Adaptive PID","LQR / LQG","Kalman Filtering","State-Space Modeling","Lyapunov Stability","Trajectory Optimization"] },
-    { cat:"Industrial Automation", items:["Honeywell DCS (C300, Experion PKS)","Siemens PLC (Ladder Logic)","SCADA Systems","Safety Interlocks","Control Valve Tuning","Loop Checking"] },
+    { cat:"Controls", items:["PID / Adaptive PID","LQR / LQG","Kalman Filtering","State-Space Modeling","Lyapunov Stability","Trajectory Optimization","MATLAB / Simulink","Simscape"] },
+    { cat:"Industrial Automation", items:["Honeywell DCS (C300, Experion PKS)","Siemens PLC (Ladder Logic)","Schneider M580 PLC","SCADA Systems","Safety Interlocks","Control Valve Tuning"] },
     { cat:"Programming & Tools", items:["C++17","Python (NumPy, SciPy, OpenCV)","MATLAB","SolidWorks / Blender","Linux / Git","Raspberry Pi"] },
   ];
 
@@ -357,7 +357,7 @@ export default function App() {
     <div id="top" style={{background:"var(--bg)",color:"var(--fg)",minHeight:"100vh"}}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@700;800&display=swap');
-        :root{--bg:#070b0f;--bg2:#0c1117;--bg3:#101820;--fg:#e8f4f0;--fg2:rgba(232,244,240,0.5);--fg3:rgba(232,244,240,0.2);--acc:#00ffb4;--border:rgba(0,255,180,0.12);--mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;}
+        :root{--bg:#070b0f;--bg2:#0c1117;--bg3:#101820;--fg:#e8f4f0;--fg2:rgba(232,244,240,0.72);--fg3:rgba(232,244,240,0.42);--acc:#00ffb4;--border:rgba(0,255,180,0.18);--mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;}
         *{box-sizing:border-box;margin:0;padding:0;}
         html{scroll-behavior:smooth;}
         body{font-family:var(--mono);background:var(--bg);}
@@ -369,7 +369,7 @@ export default function App() {
         .nav-logo{font-family:var(--display);font-size:13px;color:var(--acc);letter-spacing:2px;display:flex;align-items:center;gap:8px;}
         .nav-dot{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 2s infinite;}
         .nav-links{display:flex;gap:28px;}
-        .nav-link{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--fg3);transition:color 0.2s;position:relative;}
+        .nav-link{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--fg2);transition:color 0.2s;position:relative;}
         .nav-link:hover{color:var(--acc);}
         .nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--acc);transition:width 0.3s;}
         .nav-link:hover::after{width:100%;}
@@ -430,8 +430,8 @@ export default function App() {
         .tl-item{position:relative;padding:0 0 32px 28px;}
         .tl-item:last-child{padding-bottom:0;}
         .tl-dot{position:absolute;left:-5px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--acc);box-shadow:0 0 8px rgba(0,255,180,0.4);}
-        .tl-dot.dim{border-color:rgba(0,255,180,0.3);box-shadow:none;}
-        .tl-year{font-size:9px;color:var(--acc);letter-spacing:2px;margin-bottom:5px;font-family:var(--mono);opacity:0.7;}
+        .tl-dot.dim{border-color:rgba(0,255,180,0.4);box-shadow:none;}
+        .tl-year{font-size:9px;color:var(--acc);letter-spacing:2px;margin-bottom:5px;font-family:var(--mono);opacity:0.8;}
         .tl-role{font-size:13px;font-weight:600;color:var(--fg);margin-bottom:3px;}
         .tl-org{font-size:11px;color:var(--fg3);margin-bottom:6px;}
         .tl-desc{font-size:11px;color:var(--fg2);line-height:1.9;}
@@ -440,9 +440,9 @@ export default function App() {
         .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
         .skill-group{background:var(--bg2);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden;}
         .skill-cat{font-size:9px;color:var(--acc);letter-spacing:3px;margin-bottom:14px;position:relative;}
-        .skill-item{font-size:11px;color:var(--fg2);padding:5px 0;border-bottom:1px solid rgba(0,255,180,0.06);display:flex;align-items:center;gap:8px;position:relative;}
+        .skill-item{font-size:11px;color:var(--fg);padding:5px 0;border-bottom:1px solid rgba(0,255,180,0.08);display:flex;align-items:center;gap:8px;position:relative;}
         .skill-item:last-child{border-bottom:none;}
-        .skill-item::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--acc);flex-shrink:0;opacity:0.55;}
+        .skill-item::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--acc);flex-shrink:0;opacity:0.7;}
 
         /* PROJECTS */
         .projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
@@ -603,7 +603,8 @@ export default function App() {
                   {year:"Sep 2025 – Present", role:"M.Eng in Robotics", org:"University of Maryland, College Park · GPA 3.9", desc:"Autonomous navigation, optimal control, ROS2, and ML-based robotics. Building on industrial foundation to work at the frontier of intelligent systems.", active:true},
                   {year:"May 2023 – Jul 2025", role:"Assistant Manager, Instrumentation", org:"KRIBHCO Fertilizers Ltd · Gujarat, India", desc:"Led reliability initiatives on safety-critical units — 50% downtime reduction. Integrated torque-converter logic in Honeywell DCS (C300), 15% availability gain.", active:false},
                   {year:"Oct 2019 – Apr 2023", role:"Senior Engineer, Instrumentation", org:"KRIBHCO Fertilizers Ltd · Gujarat, India", desc:"Designed Siemens PLC logic to eliminate false trips (90% reduction). Tuned PID loops on pressure and flow controls — 30% decrease in process downtime.", active:false},
-                  {year:"Oct 2018 – Oct 2019", role:"Graduate Engineer Trainee", org:"KRIBHCO Fertilizers Ltd · Gujarat, India", desc:"Hands-on training across instrumentation, process control, and plant operations in a safety-critical fertilizer production environment.", active:false},
+                  {year:"Oct 2018 – Oct 2019", role:"Graduate Engineer Trainee", org:"KRIBHCO Fertilizers Ltd · Gujarat, India", desc:"Installed and calibrated 20+ types of process instrumentation including transmitters, sensors, and controllers. Configured hardware and software platforms for real-time data acquisition and analysis.", active:false},
+                  {year:"May 2017 – Jun 2017", role:"Summer Intern", org:"Indian Oil Corporation Ltd · Vadodara, India", desc:"Exposure to large-scale industrial operations and the role of instrumentation & control in a major oil refinery environment.", active:false},
                   {year:"Aug 2014 – May 2018", role:"B.Eng, Instrumentation & Control", org:"L.D. College of Engineering · Gujarat, India", desc:"GATE All India Rank 96. Foundation in control theory, instrumentation systems, and process engineering.", active:false},
                 ].map((item,i)=>(
                   <div key={i} className="tl-item">
@@ -632,6 +633,25 @@ export default function App() {
                 {g.items.map(item=><div key={item} className="skill-item">{item}</div>)}
               </div>
             ))}
+          </div>
+
+          {/* Certifications */}
+          <div style={{marginTop:40}}>
+            <div style={{fontSize:9,color:"var(--acc)",letterSpacing:3,marginBottom:18,opacity:0.7}}>CERTIFICATIONS</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:10}}>
+              {[
+                {name:"Honeywell Experion PKS C300 Fundamentals", issuer:"Honeywell"},
+                {name:"Siemens – Basics of PLC & SCADA", issuer:"Siemens"},
+                {name:"Schneider Electric M580 PLC & EcoStruxure Control Expert", issuer:"Schneider Electric"},
+                {name:"Basics of Process Instrumentation", issuer:"Industry"},
+                {name:"Simscape Onramp", issuer:"MathWorks"},
+              ].map(c=>(
+                <div key={c.name} style={{display:"flex",flexDirection:"column",gap:4,padding:"10px 14px",border:"1px solid rgba(0,255,180,0.15)",background:"rgba(0,255,180,0.02)",minWidth:200,flex:"1 1 200px"}}>
+                  <span style={{fontSize:10,color:"var(--fg)",lineHeight:1.5}}>{c.name}</span>
+                  <span style={{fontSize:9,color:"var(--acc)",opacity:0.55,letterSpacing:1}}>{c.issuer.toUpperCase()}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
