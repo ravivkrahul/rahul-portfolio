@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Mail, Linkedin, Github, ExternalLink, Play, X, ChevronDown } from "lucide-react";
+import profileImg from "./assets/profile.jpg";
 
 /* ═══════════════════════════════════════════════════════════
    VISUAL COMPONENTS
@@ -446,7 +447,7 @@ export default function App() {
           <div className="sec-header"><span className="sec-num">01 //</span><h2 className="sec-title">About Me</h2><div className="sec-line"/></div>
           <div className="about-grid">
             <div className="profile-wrap">
-              <img src={`${import.meta.env.BASE_URL}profile.jpg`} alt="Rahul" className="profile-img"/>
+              <img src={profileImg} alt="Rahul" className="profile-img"/>
               <div className="profile-frame"/><div className="profile-frame2"/>
               <div className="pcorner tl"/><div className="pcorner tr"/><div className="pcorner bl"/><div className="pcorner br"/>
             </div>
