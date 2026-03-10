@@ -217,7 +217,7 @@ function ProjectCard({ title, desc, tags, github, videoSrc, imgSrc, wide }) {
    MAIN APP
 ═══════════════════════════════════════════════════════════ */
 export default function App() {
-  const typed = useTyped(["Robotics & Controls Engineer","Deep Learning Practitioner","ROS2 · C++ · PyTorch","Autonomous Systems Builder","M.Eng @ University of Maryland"]);
+  const typed = useTyped(["Robotics & Controls Engineer","Industrial Automation Specialist","ROS2 · C++ · MATLAB · Python","Autonomous Systems Builder","M.Eng @ University of Maryland"]);
   const [scrolled, setScrolled] = useState(false);
   const [scrollPct, setScrollPct] = useState(0);
   useEffect(() => {
@@ -231,10 +231,10 @@ export default function App() {
   }, []);
 
   const skills = [
-    { cat:"Robotics", items:["ROS2","URDF","6-DOF Kinematics","Gazebo","MoveIt"] },
-    { cat:"Controls", items:["PID / LQR","State Estimation","Kalman Filter","MATLAB/Simulink","Motion Planning"] },
-    { cat:"Deep Learning", items:["PyTorch","OpenCV","CNNs","Object Detection","Sensor Fusion"] },
-    { cat:"Systems", items:["C++","Python","Embedded","Raspberry Pi","Industrial PLC"] },
+    { cat:"Robotics", items:["ROS2 (Actions/Services/Topics)","URDF / Xacro","Gazebo Simulation","MoveIt","Digital Twin (Falcon Editor)","Inverse Kinematics (ikpy)"] },
+    { cat:"Controls", items:["PID / Adaptive PID","LQR / LQG","Kalman Filtering","State-Space Modeling","Lyapunov Stability","Trajectory Optimization"] },
+    { cat:"Industrial Automation", items:["Honeywell DCS (C300, Experion PKS)","Siemens PLC (Ladder Logic)","SCADA Systems","Safety Interlocks","Control Valve Tuning","Loop Checking"] },
+    { cat:"Programming & Tools", items:["C++17","Python (NumPy, SciPy, OpenCV)","MATLAB","SolidWorks / Blender","Linux / Git","Raspberry Pi"] },
   ];
 
   return (
@@ -387,7 +387,7 @@ export default function App() {
       <nav className={`nav${scrolled?" scrolled":""}`}>
         <div className="nav-logo"><div className="nav-dot"/>RAHUL RAVI VK</div>
         <div className="nav-links">
-          {["about","skills","projects","controls","contact"].map(s=>(
+          {["about","skills","projects","contact"].map(s=>(
             <a key={s} href={`#${s}`} className="nav-link">{s}</a>
           ))}
         </div>
@@ -408,7 +408,7 @@ export default function App() {
             <div className="hero-typed">{typed}<span className="cursor"/></div>
             <p className="hero-sub">M.Eng Robotics · University of Maryland · GPA 3.9<br/>6+ years in industrial automation &amp; control systems</p>
             <div className="hero-btns">
-              <a href="/rahul-portfolio/Rahul_Ravi_Resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-solid"><ExternalLink size={13}/> View Resume</a>
+              <a href={`${import.meta.env.BASE_URL}Rahul_Ravi_Resume.pdf`} target="_blank" rel="noopener noreferrer" className="btn-solid"><ExternalLink size={13}/> View Resume</a>
               <a href="#contact" className="btn-outline">Contact Me</a>
             </div>
           </div>
@@ -423,7 +423,7 @@ export default function App() {
                 <div style={{display:"flex",gap:8}}><span className="term-prompt">$</span><span>whoami</span></div>
                 <div className="term-out">rahul_ravi_vk</div>
                 <div style={{display:"flex",gap:8}}><span className="term-prompt">$</span><span>cat expertise.txt</span></div>
-                <div className="term-out">ROS2 · C++ · PyTorch · PID</div>
+                <div className="term-out">ROS2 · C++ · MATLAB · PID/LQR</div>
                 <div style={{display:"flex",gap:8}}><span className="term-prompt">$</span><span>echo $STATUS</span></div>
                 <div className="term-out">seeking_roles=true ✓</div>
                 <div style={{display:"flex",gap:8,alignItems:"center"}}>
@@ -446,16 +446,26 @@ export default function App() {
           <div className="sec-header"><span className="sec-num">01 //</span><h2 className="sec-title">About Me</h2><div className="sec-line"/></div>
           <div className="about-grid">
             <div className="profile-wrap">
-              <img src="/rahul-portfolio/profile.jpg" alt="Rahul" className="profile-img"/>
+              <img src={`${import.meta.env.BASE_URL}profile.jpg`} alt="Rahul" className="profile-img"/>
               <div className="profile-frame"/><div className="profile-frame2"/>
               <div className="pcorner tl"/><div className="pcorner tr"/><div className="pcorner bl"/><div className="pcorner br"/>
             </div>
             <div>
-              <p className="about-text">Robotics engineer with 6+ years in industrial control systems, currently pursuing an M.Eng in Robotics at the University of Maryland. I build systems that <span style={{color:"var(--acc)"}}>sense, reason, and act</span> — bridging classical controls with modern deep learning.</p>
-              <p className="about-text">My work spans URDF simulation pipelines, real-time ROS2 navigation, PID/LQR control design, and neural perception systems. I care deeply about hardware-software integration and deploying intelligence on real robots.</p>
+              <p className="about-text">
+                I grew up fascinated by machines that could think and act. After completing my B.Eng in <span style={{color:"var(--acc)"}}>Instrumentation &amp; Control Engineering</span> at L.D. College of Engineering, Gujarat, India, I sat the GATE exam — one of India's most competitive engineering entrance tests — and secured an <span style={{color:"var(--acc)"}}>All India Rank of 96</span>. That result represented years of focused work and remains one of my proudest achievements.
+              </p>
+              <p className="about-text">
+                Despite aiming for IIT Bombay, IIT Madras, and IISc Bangalore, I didn't get into a master's program at the time. Instead of waiting, I channeled that drive into industry. I joined <span style={{color:"var(--acc)"}}>KRIBHCO Fertilizers Ltd</span> — one of India's largest fertilizer producers — as a trainee engineer, rising over six years to <span style={{color:"var(--acc)"}}>Assistant Manager of Instrumentation</span>. In that role I worked on safety-critical process units, tuned PID loops on Honeywell DCS and Siemens PLC systems, reduced equipment downtime by 50%, and led plant-wide SCADA automation initiatives.
+              </p>
+              <p className="about-text">
+                The master's dream never left. Watching AI, deep learning, and reinforcement learning reshape what autonomous systems can do, I made the decision to leave a stable career and move to the US. I'm now pursuing an <span style={{color:"var(--acc)"}}>M.Eng in Robotics at the University of Maryland, College Park</span> (GPA 3.9) — building on my industrial foundation to work at the frontier of autonomous navigation, optimal control, and intelligent robotics.
+              </p>
+              <p className="about-text">
+                My goal: become an <span style={{color:"var(--acc)"}}>advanced automation engineer</span> who bridges the reliability of classical industrial controls with the intelligence of modern AI — designing robotic systems that are not just capable, but truly deployable in the real world.
+              </p>
               <div className="stats">
-                {[{v:"6+",l:"Years Exp"},{v:"3.9",l:"GPA"},{v:"3",l:"Projects"}].map(s=>(
-                  <div key={s.l} className="stat"><div className="stat-val">{s.v}</div><div className="stat-lbl">{s.l}</div></div>
+                {[{v:"AIR 96",l:"GATE Rank"},{v:"6+",l:"Yrs Industry"},{v:"3.9",l:"M.Eng GPA"}].map(s=>(
+                  <div key={s.l} className="stat"><div className="stat-val" style={{fontSize:s.v.length>3?"1.3rem":"2rem"}}>{s.v}</div><div className="stat-lbl">{s.l}</div></div>
                 ))}
               </div>
             </div>
@@ -484,38 +494,9 @@ export default function App() {
         <div className="section">
           <div className="sec-header"><span className="sec-num">03 //</span><h2 className="sec-title">Projects</h2><div className="sec-line"/></div>
           <div className="projects-grid">
-            <ProjectCard title="6-DOF Camera Crane – SolidWorks to URDF" desc="Designed and modeled a 6-DOF crane system with prismatic and revolute joints. Exported full assembly to URDF and validated kinematics in ROS2 RViz." tags={["SolidWorks","URDF","ROS2","RViz","6-DOF","Forward Kinematics"]} github="https://github.com/ravivkrahul/Camera_Crane-SOLIDWORKS-MODEL-and-URDF" videoSrc="https://drive.google.com/file/d/15ch_nCc1SRkQLc9Vk0bVXVV0IPXA_89C/preview" imgSrc="/rahul-portfolio/camera_crane_preview.png"/>
-            <ProjectCard title="ROS2 MicroMouse Navigation System" desc="ROS2-based maze navigation using DFS with dynamic replanning. Full ROS2 stack: Actions, Services, Topics, parameter server, and real-time path execution." tags={["ROS2","C++","DFS","Navigation","Path Planning","Action Server"]} github="https://github.com/ravivkrahul/MicroMouse_Cpp" videoSrc="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview" imgSrc="/rahul-portfolio/micromouse_preview.png"/>
+            <ProjectCard title="6-DOF Camera Crane – SolidWorks to URDF" desc="Designed and modeled a 6-DOF crane system with prismatic and revolute joints. Exported full assembly to URDF and validated kinematics in ROS2 RViz." tags={["SolidWorks","URDF","ROS2","RViz","6-DOF","Forward Kinematics"]} github="https://github.com/ravivkrahul/Camera_Crane-SOLIDWORKS-MODEL-and-URDF" videoSrc="https://drive.google.com/file/d/15ch_nCc1SRkQLc9Vk0bVXVV0IPXA_89C/preview" imgSrc={`${import.meta.env.BASE_URL}camera_crane_preview.png`}/>
+            <ProjectCard title="ROS2 MicroMouse Navigation System" desc="ROS2-based maze navigation using DFS with dynamic replanning. Full ROS2 stack: Actions, Services, Topics, parameter server, and real-time path execution." tags={["ROS2","C++","DFS","Navigation","Path Planning","Action Server"]} github="https://github.com/ravivkrahul/MicroMouse_Cpp" videoSrc="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview" imgSrc={`${import.meta.env.BASE_URL}micromouse_preview.png`}/>
             <ProjectCard title="Autonomous Mobile Robot – Raspberry Pi + OpenCV" desc="Real-world autonomous robot using Raspberry Pi and a camera-based perception pipeline with OpenCV. Focused on hardware-software integration, real-time vision inference, and closed-loop motor control." tags={["Raspberry Pi","OpenCV","Python","Vision","Embedded","Autonomous"]} wide/>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CONTROLS & PERCEPTION ── */}
-      <section id="controls">
-        <div className="section">
-          <div className="sec-header"><span className="sec-num">04 //</span><h2 className="sec-title">Controls &amp; Perception</h2><div className="sec-line"/></div>
-          <div className="ctrl-panel">
-            <div>
-              <div className="ctrl-lbl">CONTROL SYSTEMS · STEP RESPONSE</div>
-              <p className="ctrl-desc">Designing feedback controllers from classical PID to modern LQR. The waveform shows a live <span style={{color:"var(--acc)"}}>step response</span> — dashed setpoint, response converging with tuned damping ratio.</p>
-              <div style={{marginTop:20}}><ControlWave/></div>
-              <div className="ctrl-metrics">
-                {[{v:"~0.8s",l:"Settling Time"},{v:"<5%",l:"Overshoot"},{v:"0",l:"SS Error"},{v:"PID/LQR",l:"Controller"}].map(m=>(
-                  <div key={m.l} className="ctrl-metric"><div className="ctrl-metric-val">{m.v}</div><div className="ctrl-metric-lbl">{m.l}</div></div>
-                ))}
-              </div>
-            </div>
-            <div style={{display:"flex",flexDirection:"column",gap:20,alignItems:"center"}}>
-              <div className="ctrl-lbl" style={{alignSelf:"flex-start"}}>PERCEPTION · LIDAR SWEEP</div>
-              <RadarSweep/>
-              <div style={{background:"var(--bg3)",border:"1px solid var(--border)",padding:"12px 16px",width:"100%",fontSize:10,color:"var(--fg2)",lineHeight:2.2}}>
-                <div><span style={{color:"var(--acc)",opacity:0.6}}>SENSOR:</span> LiDAR + Camera Fusion</div>
-                <div><span style={{color:"var(--acc)",opacity:0.6}}>ALGO:</span> Kalman Filter + CNN</div>
-                <div><span style={{color:"var(--acc)",opacity:0.6}}>TARGETS:</span> <span style={{color:"var(--acc)"}}>5 detected</span></div>
-                <div><span style={{color:"var(--acc)",opacity:0.6}}>RANGE:</span> 60m</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -523,7 +504,7 @@ export default function App() {
       {/* ── CONTACT ── */}
       <section id="contact" style={{background:"var(--bg2)",borderTop:"1px solid var(--border)"}}>
         <div className="section">
-          <div className="sec-header"><span className="sec-num">05 //</span><h2 className="sec-title">Let's Connect</h2><div className="sec-line"/></div>
+          <div className="sec-header"><span className="sec-num">04 //</span><h2 className="sec-title">Let's Connect</h2><div className="sec-line"/></div>
           <div className="contact-grid">
             <div>
               <p style={{fontSize:12,color:"var(--fg2)",lineHeight:2.1,marginBottom:22}}>Open to robotics engineering roles, research collaborations, and interesting automation challenges. Reach out anytime.</p>
