@@ -180,37 +180,62 @@ function useTyped(texts, speed=55) {
 /* ═══════════════════════════════════════════════════════════
    PROJECT CARD
 ═══════════════════════════════════════════════════════════ */
+function VideoModal({ videoSrc, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+  return (
+    <div
+      style={{position:"fixed",inset:0,zIndex:1000,background:"rgba(7,11,15,0.93)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:24}}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div style={{width:"100%",maxWidth:820,border:"1px solid rgba(0,255,180,0.3)",overflow:"hidden"}}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        <div style={{background:"#0c1117",padding:"10px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",fontSize:10,color:"var(--acc)",letterSpacing:2,borderBottom:"1px solid rgba(0,255,180,0.12)"}}>
+          <span>// DEMO PLAYBACK</span>
+          <button onClick={onClose} style={{background:"none",border:"none",color:"rgba(232,244,240,0.5)",cursor:"pointer",lineHeight:1}}><X size={15}/></button>
+        </div>
+        <div style={{aspectRatio:"16/9",background:"#000"}}>
+          <iframe src={videoSrc} allowFullScreen style={{width:"100%",height:"100%",border:"none"}} title="Demo"/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ProjectCard({ title, desc, tags, github, videoSrc, imgSrc, wide }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className={`proj-card${wide?" wide":""}`}>
-      <div className="card-accent-line" />
-      {imgSrc && (
-        <div className="card-img-wrap">
-          <img src={imgSrc} alt={title} className="card-img" />
-          <div className="card-img-fade" />
-          <div className="card-corner tl"/><div className="card-corner tr"/>
-          <div className="card-corner bl"/><div className="card-corner br"/>
-        </div>
-      )}
-      <div className="card-body">
-        <h3 className="card-title">{title}</h3>
-        <p className="card-desc">{desc}</p>
-        {tags && <div className="card-tags">{tags.map(t=><span key={t} className="tag">{t}</span>)}</div>}
-        <div className="card-actions">
-          {github && <a href={github} target="_blank" rel="noopener noreferrer" className="btn-outline"><Github size={12}/> GitHub</a>}
-          {videoSrc && <button onClick={()=>setOpen(true)} className="btn-solid"><Play size={12}/> Watch Demo</button>}
-        </div>
-      </div>
-      {open && (
-        <div className="modal-backdrop" onClick={()=>setOpen(false)}>
-          <div className="modal-box" onClick={e=>e.stopPropagation()}>
-            <div className="modal-header"><span>// DEMO PLAYBACK</span><button onClick={()=>setOpen(false)}><X size={15}/></button></div>
-            <div className="modal-video"><iframe src={videoSrc} allowFullScreen style={{width:"100%",height:"100%",border:"none"}}/></div>
+    <>
+      <div className={`proj-card${wide?" wide":""}`}>
+        <div className="card-accent-line" />
+        {imgSrc && (
+          <div className="card-img-wrap">
+            <img src={imgSrc} alt={title} className="card-img" />
+            <div className="card-img-fade" />
+            <div className="card-corner tl"/><div className="card-corner tr"/>
+            <div className="card-corner bl"/><div className="card-corner br"/>
+          </div>
+        )}
+        <div className="card-body">
+          <h3 className="card-title">{title}</h3>
+          <p className="card-desc">{desc}</p>
+          {tags && <div className="card-tags">{tags.map(t=><span key={t} className="tag">{t}</span>)}</div>}
+          <div className="card-actions">
+            {github && <a href={github} target="_blank" rel="noopener noreferrer" className="btn-outline"><Github size={12}/> GitHub</a>}
+            {videoSrc && <button onClick={()=>setOpen(true)} className="btn-solid"><Play size={12}/> Watch Demo</button>}
           </div>
         </div>
-      )}
-    </div>
+      </div>
+      {open && <VideoModal videoSrc={videoSrc} onClose={()=>setOpen(false)}/>}
+    </>
   );
 }
 
