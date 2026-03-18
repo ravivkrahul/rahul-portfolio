@@ -587,24 +587,6 @@ export default function App() {
             </div>
           </div>
           <div className="hero-right">
-            <div style={{display:"flex",flexDirection:"column",gap:10,width:295}}>
-              <div style={{display:"flex",gap:10}}>
-                {[{v:"6+",l:"Years Industry"},{v:"3.9",l:"GPA"}].map(s=>(
-                  <div key={s.l} style={{flex:1,padding:"14px 12px",border:"1px solid var(--border)",background:"rgba(0,255,180,0.03)",textAlign:"center"}}>
-                    <div style={{fontFamily:"var(--display)",fontSize:"1.5rem",fontWeight:800,color:"var(--acc)"}}>{s.v}</div>
-                    <div style={{fontSize:9,color:"var(--fg3)",letterSpacing:1,marginTop:3}}>{s.l}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{display:"flex",gap:10}}>
-                {[{v:"6",l:"Projects"},{v:"AIR 96",l:"GATE Rank"}].map(s=>(
-                  <div key={s.l} style={{flex:1,padding:"14px 12px",border:"1px solid var(--border)",background:"rgba(0,255,180,0.03)",textAlign:"center"}}>
-                    <div style={{fontFamily:"var(--display)",fontSize:s.v.length>3?"1.2rem":"1.5rem",fontWeight:800,color:"var(--acc)"}}>{s.v}</div>
-                    <div style={{fontSize:9,color:"var(--fg3)",letterSpacing:1,marginTop:3}}>{s.l}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
             <div className="terminal">
               <div className="term-bar">
                 {["#ff5f57","#febc2e","#28c840"].map(c=><div key={c} className="term-dot" style={{background:c}}/>)}
