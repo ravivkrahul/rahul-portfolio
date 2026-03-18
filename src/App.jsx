@@ -587,7 +587,24 @@ export default function App() {
             </div>
           </div>
           <div className="hero-right">
-            <RadarSweep/>
+            <div style={{display:"flex",flexDirection:"column",gap:10,width:295}}>
+              <div style={{display:"flex",gap:10}}>
+                {[{v:"6+",l:"Years Industry"},{v:"3.9",l:"GPA"}].map(s=>(
+                  <div key={s.l} style={{flex:1,padding:"14px 12px",border:"1px solid var(--border)",background:"rgba(0,255,180,0.03)",textAlign:"center"}}>
+                    <div style={{fontFamily:"var(--display)",fontSize:"1.5rem",fontWeight:800,color:"var(--acc)"}}>{s.v}</div>
+                    <div style={{fontSize:9,color:"var(--fg3)",letterSpacing:1,marginTop:3}}>{s.l}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{display:"flex",gap:10}}>
+                {[{v:"6",l:"Projects"},{v:"AIR 96",l:"GATE Rank"}].map(s=>(
+                  <div key={s.l} style={{flex:1,padding:"14px 12px",border:"1px solid var(--border)",background:"rgba(0,255,180,0.03)",textAlign:"center"}}>
+                    <div style={{fontFamily:"var(--display)",fontSize:s.v.length>3?"1.2rem":"1.5rem",fontWeight:800,color:"var(--acc)"}}>{s.v}</div>
+                    <div style={{fontSize:9,color:"var(--fg3)",letterSpacing:1,marginTop:3}}>{s.l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
             <div className="terminal">
               <div className="term-bar">
                 {["#ff5f57","#febc2e","#28c840"].map(c=><div key={c} className="term-dot" style={{background:c}}/>)}
@@ -617,7 +634,7 @@ export default function App() {
       </section>
 
       {/* ── ABOUT ── */}
-      <section id="about" style={{background:"var(--bg)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
+      <section id="about" style={{background:"var(--bg2)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
         <div className="section">
           <div className="sec-header"><span className="sec-num">01 //</span><h2 className="sec-title">About Me</h2><div className="sec-line"/></div>
           <div className="about-grid">
@@ -668,7 +685,7 @@ export default function App() {
       </section>
 
       {/* ── PROJECTS ── */}
-      <section id="projects" style={{background:"var(--bg2)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
+      <section id="projects" style={{background:"var(--bg)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
         <div className="section">
           <div className="sec-header"><span className="sec-num">02 //</span><h2 className="sec-title">Projects</h2><div className="sec-line"/></div>
           <div className="projects-grid">
@@ -678,13 +695,12 @@ export default function App() {
             <ProjectCard title="ROS2 MicroMouse Navigation System" desc="ROS2-based maze navigation using DFS with dynamic replanning. Full ROS2 stack: Actions, Services, Topics, parameter server, and real-time path execution." tags={["ROS2","C++","DFS","Navigation","Path Planning","Action Server"]} github="https://github.com/ravivkrahul/MicroMouse_Cpp" videoSrc="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview" imgSrc={`${import.meta.env.BASE_URL}micromouse_preview.png`}/>
             <ProjectCard title="Truck Twin-Trailer Simulation – ROS2 + Gazebo" desc="Simulated a truck with two articulated trailers in Gazebo Classic. Built URDF/Xacro model of the full assembly, implemented a Proportional controller for waypoint tracking, keyboard teleoperation via pynput, and ROS2 Control integration with position and velocity controllers. Also deployed the robot model on Falcon simulation platform using Blender URDF→FBX conversion." tags={["ROS2 Humble","Gazebo","URDF/Xacro","P Controller","ROS2 Control","Teleoperation","Python","Blender"]} github="https://github.com/ravivkrahul/Truck-trailer-ros2" videoSrc="https://drive.google.com/file/d/1mdpFN_nNgGmpQJpitGadek_PmwLtWvHB/preview" imgSrc={`${import.meta.env.BASE_URL}truck_preview.png`}/>
             <ProjectCard title="Autonomous Mobile Robot – Raspberry Pi + OpenCV" desc="Real-world autonomous robot using Raspberry Pi and a camera-based perception pipeline with OpenCV. Focused on hardware-software integration, real-time vision inference, and closed-loop motor control." tags={["Raspberry Pi","OpenCV","Python","Vision","Embedded","Autonomous","🚧 In Progress"]}/>
-            <ProjectCard title="Autonomous Mobile Robot – Raspberry Pi + OpenCV" desc="Real-world autonomous robot using Raspberry Pi and a camera-based perception pipeline with OpenCV. Focused on hardware-software integration, real-time vision inference, and closed-loop motor control." tags={["Raspberry Pi","OpenCV","Python","Vision","Embedded","Autonomous","🚧 In Progress"]}/>
           </div>
         </div>
       </section>
 
       {/* ── SKILLS ── */}
-      <section id="skills" style={{background:"var(--bg3)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
+      <section id="skills" style={{background:"var(--bg2)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
         <div className="section">
           <div className="sec-header"><span className="sec-num">03 //</span><h2 className="sec-title">Core Skills</h2><div className="sec-line"/></div>
           <div className="skills-grid">
@@ -719,7 +735,7 @@ export default function App() {
       </section>
 
       {/* ── RESEARCH ── */}
-      <section id="research" style={{background:"var(--bg3)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
+      <section id="research" style={{background:"var(--bg)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
         <div className="section">
           <div className="sec-header"><span className="sec-num">04 //</span><h2 className="sec-title">Research Radar</h2><div className="sec-line"/></div>
           <p style={{fontSize:11,color:"var(--fg3)",marginBottom:32,letterSpacing:1}}>// Papers I've studied, implemented, or built upon — summarized in my own words</p>
