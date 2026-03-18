@@ -210,12 +210,13 @@ function VideoModal({ videoSrc, onClose }) {
   );
 }
 
-function ProjectCard({ title, desc, tags, github, videoSrc, imgSrc, wide }) {
+function ProjectCard({ title, desc, tags, github, videoSrc, imgSrc, wide, featured }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div className={`proj-card${wide?" wide":""}`}>
+      <div className={`proj-card${wide?" wide":""}${featured?" featured":""}`}>
         <div className="card-accent-line" />
+        {featured && <div className="featured-badge">⭐ FEATURED</div>}
         {imgSrc && (
           <div className="card-img-wrap">
             <img src={imgSrc} alt={title} className="card-img" />
@@ -361,11 +362,17 @@ export default function App() {
   const typed = useTyped(["Robotics & Controls Engineer","Industrial Automation Specialist","ROS2 · C++ · MATLAB · Python","Autonomous Systems Builder","M.Eng @ University of Maryland"]);
   const [scrolled, setScrolled] = useState(false);
   const [scrollPct, setScrollPct] = useState(0);
+  const [activeSection, setActiveSection] = useState("about");
   useEffect(() => {
     const fn = () => {
       setScrolled(window.scrollY > 40);
       const el = document.documentElement;
       setScrollPct(window.scrollY / (el.scrollHeight - el.clientHeight));
+      const sections = ["about","projects","skills","research","contact"];
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el && window.scrollY >= el.offsetTop - 120) { setActiveSection(sections[i]); break; }
+      }
     };
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
@@ -396,8 +403,10 @@ export default function App() {
         .nav-links{display:flex;gap:28px;}
         .nav-link{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--fg2);transition:color 0.2s;position:relative;}
         .nav-link:hover{color:var(--acc);}
+        .nav-link.active{color:var(--acc);}
         .nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--acc);transition:width 0.3s;}
         .nav-link:hover::after{width:100%;}
+        .nav-link.active::after{width:100%;}
 
         .progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--acc),#00c8ff);z-index:200;transition:width 0.1s linear;}
 
@@ -443,29 +452,22 @@ export default function App() {
         .pcorner.tr{top:0;right:0;border-top:2px solid var(--acc);border-right:2px solid var(--acc);}
         .pcorner.bl{bottom:0;left:0;border-bottom:2px solid var(--acc);border-left:2px solid var(--acc);}
         .pcorner.br{bottom:0;right:0;border-bottom:2px solid var(--acc);border-right:2px solid var(--acc);}
-        .about-text{font-size:12.5px;color:var(--fg2);line-height:2.1;margin-bottom:18px;}
-        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;}
+        .about-text{font-size:14px;color:var(--fg2);line-height:2.1;margin-bottom:18px;}
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px;}
         .stat{text-align:center;padding:16px 8px;border:1px solid var(--border);background:rgba(0,255,180,0.02);}
         .stat-val{font-family:var(--display);font-size:2rem;font-weight:800;color:var(--acc);}
-        .stat-lbl{font-size:9px;color:var(--fg3);letter-spacing:1px;margin-top:3px;}
+        .stat-lbl{font-size:10px;color:var(--fg3);letter-spacing:1px;margin-top:3px;}
 
-        /* TIMELINE */
-        .timeline{position:relative;margin-top:40px;padding-top:8px;}
-        .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--acc),rgba(0,255,180,0.1));}
-        .tl-item{position:relative;padding:0 0 32px 28px;}
-        .tl-item:last-child{padding-bottom:0;}
-        .tl-dot{position:absolute;left:-5px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--acc);box-shadow:0 0 8px rgba(0,255,180,0.4);}
-        .tl-dot.dim{border-color:rgba(0,255,180,0.4);box-shadow:none;}
-        .tl-year{font-size:9px;color:var(--acc);letter-spacing:2px;margin-bottom:5px;font-family:var(--mono);opacity:0.8;}
-        .tl-role{font-size:13px;font-weight:600;color:var(--fg);margin-bottom:3px;}
-        .tl-org{font-size:11px;color:var(--fg3);margin-bottom:6px;}
-        .tl-desc{font-size:11px;color:var(--fg2);line-height:1.9;}
+        .tl-year{font-size:10px;color:var(--acc);letter-spacing:2px;margin-bottom:5px;font-family:var(--mono);opacity:0.8;}
+        .tl-role{font-size:14px;font-weight:600;color:var(--fg);margin-bottom:3px;}
+        .tl-org{font-size:12px;color:var(--fg3);margin-bottom:6px;}
+        .tl-desc{font-size:12px;color:var(--fg2);line-height:1.9;}
 
         /* SKILLS */
         .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
         .skill-group{background:var(--bg2);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden;}
-        .skill-cat{font-size:9px;color:var(--acc);letter-spacing:3px;margin-bottom:14px;position:relative;}
-        .skill-item{font-size:11px;color:var(--fg);padding:5px 0;border-bottom:1px solid rgba(0,255,180,0.08);display:flex;align-items:center;gap:8px;position:relative;}
+        .skill-cat{font-size:10px;color:var(--acc);letter-spacing:3px;margin-bottom:14px;position:relative;}
+        .skill-item{font-size:12px;color:var(--fg);padding:6px 0;border-bottom:1px solid rgba(0,255,180,0.08);display:flex;align-items:center;gap:8px;position:relative;}
         .skill-item:last-child{border-bottom:none;}
         .skill-item::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--acc);flex-shrink:0;opacity:0.7;}
 
@@ -473,9 +475,12 @@ export default function App() {
         .projects-grid{display:grid;grid-template-columns:1fr;gap:18px;}
         .proj-card{background:var(--bg2);border:1px solid var(--border);overflow:hidden;position:relative;transition:border-color 0.2s,transform 0.2s;}
         .proj-card:hover{border-color:rgba(0,255,180,0.38);transform:translateY(-2px);}
+        .proj-card.featured{border-color:rgba(0,255,180,0.28);background:linear-gradient(135deg,#0c1117 0%,#0d1a14 100%);}
+        .proj-card.featured .card-accent-line{background:linear-gradient(90deg,transparent,var(--acc),#00c8ff,transparent);}
+        .featured-badge{display:inline-flex;align-items:center;gap:5px;font-size:8px;padding:2px 8px;background:rgba(0,255,180,0.1);border:1px solid rgba(0,255,180,0.35);color:var(--acc);letter-spacing:1.5px;margin-bottom:8px;}
         .proj-card.wide{grid-column:1/-1;}
         .card-accent-line{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--acc),transparent);}
-        .card-img-wrap{position:relative;height:195px;overflow:hidden;}
+        .card-img-wrap{position:relative;height:220px;overflow:hidden;}
         .card-img{width:100%;height:100%;object-fit:cover;opacity:0.55;transition:opacity 0.4s,transform 0.5s;}
         .proj-card:hover .card-img{opacity:0.78;transform:scale(1.04);}
         .card-img-fade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg2) 100%);}
@@ -484,15 +489,15 @@ export default function App() {
         .card-corner.tr{top:8px;right:8px;border-top:1px solid var(--acc);border-right:1px solid var(--acc);}
         .card-corner.bl{bottom:8px;left:8px;border-bottom:1px solid var(--acc);border-left:1px solid var(--acc);}
         .card-corner.br{bottom:8px;right:8px;border-bottom:1px solid var(--acc);border-right:1px solid var(--acc);}
-        .card-body{padding:20px;}
-        .card-title{font-size:13.5px;font-weight:600;color:var(--fg);margin-bottom:9px;line-height:1.4;}
-        .card-desc{font-size:11px;color:var(--fg2);line-height:1.9;margin-bottom:14px;}
+        .card-body{padding:22px;}
+        .card-title{font-size:15px;font-weight:600;color:var(--fg);margin-bottom:10px;line-height:1.4;}
+        .card-desc{font-size:12.5px;color:var(--fg2);line-height:1.9;margin-bottom:14px;}
         .card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
         .tag{font-size:9px;padding:3px 8px;border:1px solid rgba(0,255,180,0.2);color:var(--acc);opacity:0.8;}
         .card-actions{display:flex;gap:10px;}
-        .btn-outline{display:flex;align-items:center;gap:6px;font-size:11px;padding:7px 14px;border:1px solid rgba(232,244,240,0.2);color:var(--fg2);font-family:var(--mono);cursor:pointer;background:none;transition:all 0.2s;}
+        .btn-outline{display:flex;align-items:center;gap:6px;font-size:12px;padding:7px 14px;border:1px solid rgba(232,244,240,0.2);color:var(--fg2);font-family:var(--mono);cursor:pointer;background:none;transition:all 0.2s;}
         .btn-outline:hover{border-color:var(--acc);color:var(--acc);}
-        .btn-solid{display:flex;align-items:center;gap:6px;font-size:11px;padding:7px 14px;background:var(--acc);color:#070b0f;font-family:var(--mono);font-weight:700;cursor:pointer;border:none;transition:opacity 0.2s;}
+        .btn-solid{display:flex;align-items:center;gap:6px;font-size:12px;padding:7px 14px;background:var(--acc);color:#070b0f;font-family:var(--mono);font-weight:700;cursor:pointer;border:none;transition:opacity 0.2s;}
         .btn-solid:hover{opacity:0.85;}
 
         /* MODAL */
@@ -520,7 +525,23 @@ export default function App() {
         .contact-arrow{margin-left:auto;color:var(--fg3);transition:color 0.2s;}
         .contact-link:hover .contact-arrow{color:var(--acc);}
 
-        .footer{padding:22px 36px;border-top:1px solid var(--border);text-align:center;font-size:9px;color:var(--fg3);letter-spacing:1px;}
+        /* TIMELINE */
+        .timeline{position:relative;margin-top:40px;padding-top:8px;}
+        .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--acc),rgba(0,255,180,0.1));}
+        .tl-item{position:relative;padding:0 0 32px 28px;}
+        .tl-item:last-child{padding-bottom:0;}
+        .tl-dot{position:absolute;left:-5px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--acc);box-shadow:0 0 8px rgba(0,255,180,0.4);}
+        .tl-dot.dim{border-color:rgba(0,255,180,0.4);box-shadow:none;}
+
+        .footer{padding:36px;border-top:1px solid var(--border);background:var(--bg2);}
+        .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+        .footer-left{display:flex;flex-direction:column;gap:6px;}
+        .footer-name{font-family:var(--display);font-size:13px;color:var(--acc);letter-spacing:2px;}
+        .footer-copy{font-size:10px;color:var(--fg3);letter-spacing:1px;}
+        .footer-links{display:flex;gap:16px;align-items:center;}
+        .footer-link{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--fg3);transition:color 0.2s;letter-spacing:1px;}
+        .footer-link:hover{color:var(--acc);}
+        .footer-email{font-size:10px;color:var(--fg3);letter-spacing:0.5px;}
 
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
@@ -541,7 +562,7 @@ export default function App() {
         <div className="nav-logo"><div className="nav-dot"/>RAHUL RAVI VK</div>
         <div className="nav-links">
           {["about","projects","skills","research","contact"].map(s=>(
-            <a key={s} href={`#${s}`} className="nav-link">{s}</a>
+            <a key={s} href={`#${s}`} className={`nav-link${activeSection===s?" active":""}`}>{s}</a>
           ))}
         </div>
       </nav>
@@ -566,6 +587,7 @@ export default function App() {
             </div>
           </div>
           <div className="hero-right">
+            <RadarSweep/>
             <div className="terminal">
               <div className="term-bar">
                 {["#ff5f57","#febc2e","#28c840"].map(c=><div key={c} className="term-dot" style={{background:c}}/>)}
@@ -595,7 +617,7 @@ export default function App() {
       </section>
 
       {/* ── ABOUT ── */}
-      <section id="about" style={{background:"var(--bg2)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
+      <section id="about" style={{background:"var(--bg)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
         <div className="section">
           <div className="sec-header"><span className="sec-num">01 //</span><h2 className="sec-title">About Me</h2><div className="sec-line"/></div>
           <div className="about-grid">
@@ -618,7 +640,7 @@ export default function App() {
                 My goal: become an <span style={{color:"var(--acc)"}}>advanced automation engineer</span> who bridges the reliability of classical industrial controls with the intelligence of modern AI — designing robotic systems that are not just capable, but truly deployable in the real world.
               </p>
               <div className="stats">
-                {[{v:"AIR 96",l:"GATE Rank"},{v:"6+",l:"Yrs Industry"},{v:"3.9",l:"M.Eng GPA"}].map(s=>(
+                {[{v:"AIR 96",l:"GATE Rank"},{v:"6+",l:"Yrs Industry"},{v:"3.9",l:"M.Eng GPA"},{v:"6",l:"Projects"}].map(s=>(
                   <div key={s.l} className="stat"><div className="stat-val" style={{fontSize:s.v.length>3?"1.3rem":"2rem"}}>{s.v}</div><div className="stat-lbl">{s.l}</div></div>
                 ))}
               </div>
@@ -650,18 +672,19 @@ export default function App() {
         <div className="section">
           <div className="sec-header"><span className="sec-num">02 //</span><h2 className="sec-title">Projects</h2><div className="sec-line"/></div>
           <div className="projects-grid">
-            <ProjectCard title="6-DOF Camera Crane – SolidWorks to URDF" desc="Designed and modeled a 6-DOF crane system with prismatic and revolute joints. Exported full assembly to URDF and validated kinematics in ROS2 RViz." tags={["SolidWorks","URDF","ROS2","RViz","6-DOF","Forward Kinematics"]} github="https://github.com/ravivkrahul/Camera_Crane-SOLIDWORKS-MODEL-and-URDF" videoSrc="https://drive.google.com/file/d/15ch_nCc1SRkQLc9Vk0bVXVV0IPXA_89C/preview" imgSrc={`${import.meta.env.BASE_URL}camera_crane_preview.png`}/>
-            <ProjectCard title="UR5 Drawing Robot – ROS2 + WebSocket + IK" desc="Built a decoupled control architecture for a UR5 manipulator in ROS2, bridging a web interface to a Python backend via WebSockets to execute real-time inverse kinematics (ikpy) in Gazebo simulation. Users draw paths in the browser which are translated to joint commands and executed live on the robot arm." tags={["ROS2","UR5","Inverse Kinematics","WebSocket","Python","Gazebo","ikpy","Web Control"]} github="https://github.com/ravivkrahul/UR5-ros2-drawing-robot" videoSrc="https://drive.google.com/file/d/1DiG7gqiEOJPpZ6RzulsZfuZ8Wa0lbqSt/preview" imgSrc={`${import.meta.env.BASE_URL}web_socket_preview.png`}/>
+            <ProjectCard featured title="6-DOF Camera Crane – SolidWorks to URDF" desc="Designed and modeled a 6-DOF crane system with prismatic and revolute joints. Exported full assembly to URDF and validated kinematics in ROS2 RViz." tags={["SolidWorks","URDF","ROS2","RViz","6-DOF","Forward Kinematics"]} github="https://github.com/ravivkrahul/Camera_Crane-SOLIDWORKS-MODEL-and-URDF" videoSrc="https://drive.google.com/file/d/15ch_nCc1SRkQLc9Vk0bVXVV0IPXA_89C/preview" imgSrc={`${import.meta.env.BASE_URL}camera_crane_preview.png`}/>
+            <ProjectCard featured title="UR5 Drawing Robot – ROS2 + WebSocket + IK" desc="Built a decoupled control architecture for a UR5 manipulator in ROS2, bridging a web interface to a Python backend via WebSockets to execute real-time inverse kinematics (ikpy) in Gazebo simulation. Users draw paths in the browser which are translated to joint commands and executed live on the robot arm." tags={["ROS2","UR5","Inverse Kinematics","WebSocket","Python","Gazebo","ikpy","Web Control"]} github="https://github.com/ravivkrahul/UR5-ros2-drawing-robot" videoSrc="https://drive.google.com/file/d/1DiG7gqiEOJPpZ6RzulsZfuZ8Wa0lbqSt/preview" imgSrc={`${import.meta.env.BASE_URL}web_socket_preview.png`}/>
+            <ProjectCard featured title="Optimal Controller Design – GA + Adaptive PID (MATLAB)" desc="Implemented a two-layer mobile robot control system in MATLAB: a GA-optimized kinematic controller using cubic polynomial interpolation for trajectory generation, and a gradient-descent-based adaptive PID dynamic controller. Validated against mass variation (5–70 kg) and external disturbances using Lyapunov stability analysis." tags={["MATLAB","Genetic Algorithm","Adaptive PID","Lyapunov Stability","Trajectory Optimization","Nonholonomic Robot"]} github="https://github.com/ravivkrahul/Controller_Design_Using_Genetic_Algorithm_and_Adaptive_PID_Controller_MATLAB"/>
             <ProjectCard title="ROS2 MicroMouse Navigation System" desc="ROS2-based maze navigation using DFS with dynamic replanning. Full ROS2 stack: Actions, Services, Topics, parameter server, and real-time path execution." tags={["ROS2","C++","DFS","Navigation","Path Planning","Action Server"]} github="https://github.com/ravivkrahul/MicroMouse_Cpp" videoSrc="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview" imgSrc={`${import.meta.env.BASE_URL}micromouse_preview.png`}/>
             <ProjectCard title="Truck Twin-Trailer Simulation – ROS2 + Gazebo" desc="Simulated a truck with two articulated trailers in Gazebo Classic. Built URDF/Xacro model of the full assembly, implemented a Proportional controller for waypoint tracking, keyboard teleoperation via pynput, and ROS2 Control integration with position and velocity controllers. Also deployed the robot model on Falcon simulation platform using Blender URDF→FBX conversion." tags={["ROS2 Humble","Gazebo","URDF/Xacro","P Controller","ROS2 Control","Teleoperation","Python","Blender"]} github="https://github.com/ravivkrahul/Truck-trailer-ros2" videoSrc="https://drive.google.com/file/d/1mdpFN_nNgGmpQJpitGadek_PmwLtWvHB/preview" imgSrc={`${import.meta.env.BASE_URL}truck_preview.png`}/>
-            <ProjectCard title="Optimal Controller Design – GA + Adaptive PID (MATLAB)" desc="Implemented a two-layer mobile robot control system in MATLAB: a GA-optimized kinematic controller using cubic polynomial interpolation for trajectory generation, and a gradient-descent-based adaptive PID dynamic controller. Validated against mass variation (5–70 kg) and external disturbances using Lyapunov stability analysis." tags={["MATLAB","Genetic Algorithm","Adaptive PID","Lyapunov Stability","Trajectory Optimization","Nonholonomic Robot"]} github="https://github.com/ravivkrahul/Controller_Design_Using_Genetic_Algorithm_and_Adaptive_PID_Controller_MATLAB"/>
+            <ProjectCard title="Autonomous Mobile Robot – Raspberry Pi + OpenCV" desc="Real-world autonomous robot using Raspberry Pi and a camera-based perception pipeline with OpenCV. Focused on hardware-software integration, real-time vision inference, and closed-loop motor control." tags={["Raspberry Pi","OpenCV","Python","Vision","Embedded","Autonomous","🚧 In Progress"]}/>
             <ProjectCard title="Autonomous Mobile Robot – Raspberry Pi + OpenCV" desc="Real-world autonomous robot using Raspberry Pi and a camera-based perception pipeline with OpenCV. Focused on hardware-software integration, real-time vision inference, and closed-loop motor control." tags={["Raspberry Pi","OpenCV","Python","Vision","Embedded","Autonomous","🚧 In Progress"]}/>
           </div>
         </div>
       </section>
 
       {/* ── SKILLS ── */}
-      <section id="skills">
+      <section id="skills" style={{background:"var(--bg3)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
         <div className="section">
           <div className="sec-header"><span className="sec-num">03 //</span><h2 className="sec-title">Core Skills</h2><div className="sec-line"/></div>
           <div className="skills-grid">
@@ -696,7 +719,7 @@ export default function App() {
       </section>
 
       {/* ── RESEARCH ── */}
-      <section id="research">
+      <section id="research" style={{background:"var(--bg3)",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
         <div className="section">
           <div className="sec-header"><span className="sec-num">04 //</span><h2 className="sec-title">Research Radar</h2><div className="sec-line"/></div>
           <p style={{fontSize:11,color:"var(--fg3)",marginBottom:32,letterSpacing:1}}>// Papers I've studied, implemented, or built upon — summarized in my own words</p>
@@ -752,7 +775,20 @@ export default function App() {
         </div>
       </section>
 
-      <footer className="footer">© 2025 Rahul Ravi VK · Robotics &amp; Controls Engineer · Built with React</footer>
+      <footer className="footer">
+        <div className="footer-inner">
+          <div className="footer-left">
+            <div className="footer-name">RAHUL RAVI VK</div>
+            <div className="footer-copy">© 2025 · Robotics & Controls Engineer · M.Eng UMD</div>
+            <div className="footer-email">ravivk.rahul@gmail.com</div>
+          </div>
+          <div className="footer-links">
+            <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="footer-link"><Linkedin size={13}/> LinkedIn</a>
+            <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="footer-link"><Github size={13}/> GitHub</a>
+            <a href={`${import.meta.env.BASE_URL}Rahul_Ravi_Resume.pdf`} target="_blank" rel="noopener noreferrer" className="footer-link"><ExternalLink size={13}/> Resume</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
