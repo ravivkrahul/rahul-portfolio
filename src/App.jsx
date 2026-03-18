@@ -636,7 +636,7 @@ export default function App() {
                 The master's dream never left. Watching AI, deep learning, and reinforcement learning reshape what autonomous systems can do, I made the decision to leave a stable career and move to the US. I'm now pursuing an <span style={{color:"var(--acc)"}}>M.Eng in Robotics at the University of Maryland, College Park</span> (GPA 3.9) — building on my industrial foundation to work at the frontier of autonomous navigation, optimal control, and intelligent robotics.
               </p>
               <p className="about-text">
-                My goal: become an <span style={{color:"var(--acc)"}}>advanced automation engineer</span> who bridges the reliability of classical industrial controls with the intelligence of modern AI — designing robotic systems that are not just capable, but truly deployable in the real world.
+                My goal: become an <span style={{color:"var(--acc)"}}>advanced automation engineer</span> who bridges the reliability of classical industrial controls with the intelligence of modern AI — designing robotic systems that are not just capable, but truly deployable in the real world. Outside engineering, I'm a lifelong sports enthusiast — cricket, soccer, and badminton have been constants, and I'm currently picking up tennis.
               </p>
               <div className="stats">
                 {[{v:"AIR 96",l:"GATE Rank"},{v:"6+",l:"Yrs Industry"},{v:"3.9",l:"M.Eng GPA"},{v:"6",l:"Projects"}].map(s=>(
