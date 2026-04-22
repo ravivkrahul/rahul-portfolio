@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Mail, Linkedin, Github, ExternalLink, Play, X, ChevronDown } from "lucide-react";
+import { Mail, Linkedin, Github, ExternalLink, Play, X, ChevronDown, Youtube } from "lucide-react";
 import profileImg from "./assets/profile.jpg";
 
 /* ═══════════════════════════════════════════════════════════
@@ -210,7 +210,7 @@ function VideoModal({ videoSrc, onClose }) {
   );
 }
 
-function ProjectCard({ title, desc, tags, github, videoSrc, imgSrc, wide, featured }) {
+function ProjectCard({ title, desc, tags, github, youtube, videoSrc, imgSrc, wide, featured }) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -231,6 +231,7 @@ function ProjectCard({ title, desc, tags, github, videoSrc, imgSrc, wide, featur
           {tags && <div className="card-tags">{tags.map(t=><span key={t} className="tag">{t}</span>)}</div>}
           <div className="card-actions">
             {github && <a href={github} target="_blank" rel="noopener noreferrer" className="btn-outline"><Github size={12}/> GitHub</a>}
+            {youtube && <a href={youtube} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{borderColor:"#FF0000",color:"#FF0000"}}><Youtube size={12}/> YouTube</a>}
             {videoSrc && <button onClick={()=>setOpen(true)} className="btn-solid"><Play size={12}/> Watch Demo</button>}
           </div>
         </div>
@@ -636,7 +637,7 @@ export default function App() {
                 The master's dream never left. Watching AI, deep learning, and reinforcement learning reshape what autonomous systems can do, I made the decision to leave a stable career and move to the US. I'm now pursuing an <span style={{color:"var(--acc)"}}>M.Eng in Robotics at the University of Maryland, College Park</span> (GPA 3.9) — building on my industrial foundation to work at the frontier of autonomous navigation, optimal control, and intelligent robotics.
               </p>
               <p className="about-text">
-                My goal: become an <span style={{color:"var(--acc)"}}>advanced automation engineer</span> who bridges the reliability of classical industrial controls with the intelligence of modern AI — designing robotic systems that are not just capable, but truly deployable in the real world. Outside engineering, I'm a lifelong sports enthusiast — cricket, soccer, and badminton have been constants, and I'm currently picking up tennis.
+                My goal: become an <span style={{color:"var(--acc)"}}>advanced automation engineer</span> who bridges the reliability of classical industrial controls with the intelligence of modern AI — designing robotic systems that are not just capable, but truly deployable in the real world.
               </p>
               <div className="stats">
                 {[{v:"AIR 96",l:"GATE Rank"},{v:"6+",l:"Yrs Industry"},{v:"3.9",l:"M.Eng GPA"},{v:"6",l:"Projects"}].map(s=>(
@@ -676,7 +677,7 @@ export default function App() {
             <ProjectCard featured title="Optimal Controller Design – GA + Adaptive PID (MATLAB)" desc="Implemented a two-layer mobile robot control system in MATLAB: a GA-optimized kinematic controller using cubic polynomial interpolation for trajectory generation, and a gradient-descent-based adaptive PID dynamic controller. Validated against mass variation (5–70 kg) and external disturbances using Lyapunov stability analysis." tags={["MATLAB","Genetic Algorithm","Adaptive PID","Lyapunov Stability","Trajectory Optimization","Nonholonomic Robot"]} github="https://github.com/ravivkrahul/Controller_Design_Using_Genetic_Algorithm_and_Adaptive_PID_Controller_MATLAB"/>
             <ProjectCard title="ROS2 MicroMouse Navigation System" desc="ROS2-based maze navigation using DFS with dynamic replanning. Full ROS2 stack: Actions, Services, Topics, parameter server, and real-time path execution." tags={["ROS2","C++","DFS","Navigation","Path Planning","Action Server"]} github="https://github.com/ravivkrahul/MicroMouse_Cpp" videoSrc="https://drive.google.com/file/d/1msblbBuDRnCMMHjjYTiJ9KUk_LyJcBGa/preview" imgSrc={`${import.meta.env.BASE_URL}micromouse_preview.png`}/>
             <ProjectCard title="Truck Twin-Trailer Simulation – ROS2 + Gazebo" desc="Simulated a truck with two articulated trailers in Gazebo Classic. Built URDF/Xacro model of the full assembly, implemented a Proportional controller for waypoint tracking, keyboard teleoperation via pynput, and ROS2 Control integration with position and velocity controllers. Also deployed the robot model on Falcon simulation platform using Blender URDF→FBX conversion." tags={["ROS2 Humble","Gazebo","URDF/Xacro","P Controller","ROS2 Control","Teleoperation","Python","Blender"]} github="https://github.com/ravivkrahul/Truck-trailer-ros2" videoSrc="https://drive.google.com/file/d/1mdpFN_nNgGmpQJpitGadek_PmwLtWvHB/preview" imgSrc={`${import.meta.env.BASE_URL}truck_preview.png`}/>
-            <ProjectCard title="Autonomous Mobile Robot – Raspberry Pi + OpenCV" desc="Real-world autonomous robot using Raspberry Pi and a camera-based perception pipeline with OpenCV. Focused on hardware-software integration, real-time vision inference, and closed-loop motor control." tags={["Raspberry Pi","OpenCV","Python","Vision","Embedded","Autonomous","🚧 In Progress"]}/>
+            <ProjectCard title="Autonomous Mobile Robot – Raspberry Pi + OpenCV" desc="Real-world autonomous robot using Raspberry Pi and a camera-based perception pipeline with OpenCV. Focused on hardware-software integration, real-time vision inference, and closed-loop motor control." tags={["Raspberry Pi","OpenCV","Python","Vision","Embedded","Autonomous","🚧 In Progress"]} youtube="https://youtube.com/playlist?list=PLdM7LpLw5C1EBv95E1sSbJ2eZQ9Ftlzfo&si=hW21UI1M3-VP9cq7"/>
           </div>
         </div>
       </section>
