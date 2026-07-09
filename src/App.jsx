@@ -57,7 +57,7 @@ const BASE = import.meta.env.BASE_URL;
 
 const PROJECTS = [
   {
-    title: "Baron — Autonomous Block Retrieval Robot",
+    title: "Autonomous Block Retrieval Robot",
     blurb: "A ground-up autonomous robot that navigated a 10×10 ft arena, detected colored blocks in sequence, and delivered them with zero human input — scoring a perfect 9/9 in the Grand Challenge.",
     stack: ["Raspberry Pi 4", "C++", "PID Control", "Sensor Fusion", "OpenCV"],
     category: "Autonomous Systems",
@@ -239,6 +239,13 @@ export default function App() {
   const [filter, setFilter] = useState("All");
   const [modalVideo, setModalVideo] = useState(null);
   const [active, setActive] = useState("work");
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = () => {
+    navigator.clipboard?.writeText("ravivk.rahul@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
 
   useEffect(() => {
     const main = document.querySelector(".right-pane");
@@ -276,23 +283,24 @@ export default function App() {
           <h1 className="name">Rahul Ravi <span>VK</span></h1>
           <div className="typed">{typed}<span className="cursor" /></div>
           <p className="tagline">
-            Six years tuning safety-critical industrial control systems — now building
-            autonomous robots at the University of Maryland.
+            Six years tuning safety-critical industrial control systems — now widening my
+            expertise into robotics, computer vision, and industrial AI/ML through an M.Eng.
+            at the University of Maryland, College Park.
           </p>
 
           <div className="rail-loc"><MapPin size={13} /> College Park, MD · DMV Area</div>
 
           <div className="socials">
-            <a href="mailto:ravivk.rahul@gmail.com" className="soc" aria-label="Email"><Mail size={19} /></a>
+            <button onClick={copyEmail} className="soc" aria-label="Copy email"><Mail size={19} /></button>
             <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="soc" aria-label="LinkedIn"><Linkedin size={19} /></a>
             <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="soc" aria-label="GitHub"><Github size={19} /></a>
           </div>
+          {copied && <div className="copied-toast">Email copied — ravivk.rahul@gmail.com</div>}
 
           <div className="rail-cta">
             <a href={`${BASE}Rahul_Ravi_Resume.pdf`} target="_blank" rel="noopener noreferrer" className="btn-fill">
               Résumé <ArrowUpRight size={15} />
             </a>
-            <a href="mailto:ravivk.rahul@gmail.com" className="btn-line">Get in touch</a>
           </div>
 
           <nav className="rail-nav">
@@ -316,8 +324,7 @@ export default function App() {
         <section className="block" id="work">
           <header className="block-head">
             <span className="eyebrow">01 · Selected work</span>
-            <h2>Projects across autonomy, perception, and control.</h2>
-            <p>Fourteen robotics and controls builds — from a from-scratch autonomous robot to reproduced control-theory research. Filter by focus.</p>
+            <h2>Projects</h2>
           </header>
 
           <div className="filters">
@@ -339,7 +346,6 @@ export default function App() {
           <header className="block-head">
             <span className="eyebrow">02 · Experience & education</span>
             <h2>From the control room to the robotics lab.</h2>
-            <p>6+ years in industrial automation — now widening that foundation into <strong>robotics, computer vision, and industrial AI/ML</strong>.</p>
           </header>
 
           <div className="timeline">
@@ -389,7 +395,7 @@ export default function App() {
             <h3>Let's build something.</h3>
             <p>Open to robotics engineering roles, research collaborations, and hard automation problems.</p>
             <div className="closer-links">
-              <a href="mailto:ravivk.rahul@gmail.com" className="btn-fill">ravivk.rahul@gmail.com</a>
+              <button onClick={copyEmail} className="btn-fill">ravivk.rahul@gmail.com</button>
               <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="btn-line">LinkedIn <ArrowUpRight size={14} /></a>
               <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="btn-line">GitHub <ArrowUpRight size={14} /></a>
             </div>
@@ -463,6 +469,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
   border:1px solid var(--line2);color:var(--ink2);transition:all .2s;}
 .soc:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px);}
 .rail-cta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;}
+.copied-toast{font-family:var(--mono);font-size:11.5px;color:var(--sage);background:var(--sage-soft);
+  padding:8px 13px;border-radius:8px;margin-bottom:20px;display:inline-block;animation:fade .2s ease;}
 
 .btn-fill{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#fff;
   font-size:13.5px;font-weight:500;padding:11px 20px;border-radius:100px;transition:all .2s;}
