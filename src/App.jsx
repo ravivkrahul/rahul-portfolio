@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mail, Linkedin, Github, ExternalLink, X, GraduationCap, Award, Play, Youtube, FileText, MapPin, ArrowUpRight } from "lucide-react";
+import { Mail, Linkedin, Github, ExternalLink, X, GraduationCap, Award, Play, Youtube, FileText, MapPin, ArrowUpRight, MessageCircle } from "lucide-react";
 import profileImg from "./assets/profile.jpg";
 
 /* ═══════════════════════════════════════════════════════════
@@ -239,12 +239,13 @@ export default function App() {
   const [filter, setFilter] = useState("All");
   const [modalVideo, setModalVideo] = useState(null);
   const [active, setActive] = useState("work");
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState("");
+  const [photoOpen, setPhotoOpen] = useState(false);
 
-  const copyEmail = () => {
-    navigator.clipboard?.writeText("ravivk.rahul@gmail.com");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
+  const copyText = (text, label) => {
+    navigator.clipboard?.writeText(text);
+    setCopied(label);
+    setTimeout(() => setCopied(""), 1800);
   };
 
   useEffect(() => {
@@ -276,9 +277,9 @@ export default function App() {
       {/* ── LEFT RAIL ── */}
       <aside className="left-pane">
         <div className="rail-top">
-          <div className="avatar-wrap">
+          <button className="avatar-wrap" onClick={() => setPhotoOpen(true)} aria-label="View larger photo">
             <img src={profileImg} alt="Rahul Ravi VK" className="avatar" />
-          </div>
+          </button>
           <div className="badge">Open to 2026 Co-op & 2027 Full-time</div>
           <h1 className="name">Rahul Ravi <span>VK</span></h1>
           <div className="typed">{typed}<span className="cursor" /></div>
@@ -291,11 +292,12 @@ export default function App() {
           <div className="rail-loc"><MapPin size={13} /> College Park, MD · DMV Area</div>
 
           <div className="socials">
-            <button onClick={copyEmail} className="soc" aria-label="Copy email"><Mail size={19} /></button>
+            <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="soc" aria-label="Copy email"><Mail size={19} /></button>
             <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="soc" aria-label="LinkedIn"><Linkedin size={19} /></a>
             <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="soc" aria-label="GitHub"><Github size={19} /></a>
+            <button onClick={() => copyText("abhyutthanam", "Discord copied — abhyutthanam")} className="soc" aria-label="Copy Discord username"><MessageCircle size={19} /></button>
           </div>
-          {copied && <div className="copied-toast">Email copied — ravivk.rahul@gmail.com</div>}
+          {copied && <div className="copied-toast">{copied}</div>}
 
           <div className="rail-cta">
             <a href={`${BASE}Rahul_Ravi_Resume.pdf`} target="_blank" rel="noopener noreferrer" className="btn-fill">
@@ -395,7 +397,7 @@ export default function App() {
             <h3>Let's build something.</h3>
             <p>Open to robotics engineering roles, research collaborations, and hard automation problems.</p>
             <div className="closer-links">
-              <button onClick={copyEmail} className="btn-fill">ravivk.rahul@gmail.com</button>
+              <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="btn-fill">ravivk.rahul@gmail.com</button>
               <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="btn-line">LinkedIn <ArrowUpRight size={14} /></a>
               <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="btn-line">GitHub <ArrowUpRight size={14} /></a>
             </div>
@@ -404,6 +406,13 @@ export default function App() {
       </main>
 
       {modalVideo && <VideoModal videoSrc={modalVideo} onClose={() => setModalVideo(null)} />}
+
+      {photoOpen && (
+        <div className="photo-backdrop" onClick={() => setPhotoOpen(false)}>
+          <img src={profileImg} alt="Rahul Ravi VK" className="photo-large" onClick={(e) => e.stopPropagation()} />
+          <button className="photo-close" onClick={() => setPhotoOpen(false)} aria-label="Close"><X size={22} /></button>
+        </div>
+      )}
     </div>
   );
 }
@@ -445,14 +454,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .app{display:flex;min-height:100vh;}
 
 /* ── LEFT RAIL ── */
-.left-pane{width:38%;max-width:520px;position:fixed;top:0;left:0;height:100vh;padding:52px 52px 32px;
+.left-pane{width:38%;max-width:520px;position:fixed;top:0;left:0;height:100vh;padding:44px 52px 28px;
   background:var(--paper2);border-right:1px solid var(--line);display:flex;flex-direction:column;
-  justify-content:space-between;overflow-y:auto;}
+  justify-content:space-between;overflow:hidden;}
 .left-pane::before{content:'';position:absolute;top:0;left:0;right:0;height:220px;
   background:linear-gradient(180deg,rgba(176,96,63,0.06),transparent);pointer-events:none;}
 .rail-top{position:relative;}
 .avatar-wrap{width:132px;height:132px;border-radius:50%;padding:4px;background:var(--card);
-  border:1px solid var(--line2);margin-bottom:26px;box-shadow:0 8px 26px rgba(33,31,27,0.08);}
+  border:1px solid var(--line2);margin-bottom:26px;box-shadow:0 8px 26px rgba(33,31,27,0.08);
+  cursor:pointer;transition:transform .2s,box-shadow .2s;display:block;}
+.avatar-wrap:hover{transform:scale(1.03);box-shadow:0 12px 32px rgba(33,31,27,0.14);}
 .avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;filter:grayscale(6%);display:block;}
 .badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.02em;color:var(--accent-deep);
   background:var(--accent-soft);padding:6px 13px;border-radius:100px;margin-bottom:20px;}
@@ -588,6 +599,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .modal-header button:hover{color:var(--ink);}
 .modal-video{aspect-ratio:16/9;background:#000;}
 .modal-video iframe{width:100%;height:100%;border:none;}
+
+/* photo lightbox */
+.photo-backdrop{position:fixed;inset:0;z-index:600;background:rgba(33,31,27,0.7);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:32px;animation:fade .2s ease;cursor:zoom-out;}
+.photo-large{max-width:min(480px,90vw);max-height:88vh;width:auto;border-radius:16px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.4);cursor:default;}
+.photo-close{position:absolute;top:24px;right:24px;width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,0.12);color:#fff;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.photo-close:hover{background:rgba(255,255,255,0.22);}
 
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 @keyframes fade{from{opacity:0;}to{opacity:1;}}
