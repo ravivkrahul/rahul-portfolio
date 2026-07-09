@@ -44,8 +44,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .left-pane::before{content:'';position:absolute;top:0;left:0;right:0;height:220px;
   background:linear-gradient(180deg,rgba(176,96,63,0.06),transparent);pointer-events:none;}
 .rail-top{position:relative;}
-.avatar-wrap{width:88px;height:88px;border-radius:50%;padding:3px;background:var(--card);
-  border:1px solid var(--line2);margin-bottom:24px;box-shadow:0 6px 20px rgba(33,31,27,0.06);}
+.avatar-wrap{width:132px;height:132px;border-radius:50%;padding:4px;background:var(--card);
+  border:1px solid var(--line2);margin-bottom:26px;box-shadow:0 8px 26px rgba(33,31,27,0.08);}
 .avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;filter:grayscale(6%);display:block;}
 .badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.02em;color:var(--accent-deep);
   background:var(--accent-soft);padding:6px 13px;border-radius:100px;margin-bottom:20px;}
