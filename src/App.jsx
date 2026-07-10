@@ -285,7 +285,7 @@ export default function App() {
           <div className="typed">{typed}<span className="cursor" /></div>
           <p className="tagline">
             Six years tuning safety-critical industrial control systems — now widening my
-            expertise into robotics, computer vision, and industrial AI/ML through an M.Eng.
+            expertise into Robotics, Computer Vision, ML, and Industrial AI through an M.Eng.
             at the University of Maryland, College Park.
           </p>
 
