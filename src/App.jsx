@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
-import { Mail, Linkedin, Github, ExternalLink, X, GraduationCap, Award, Play, Youtube, FileText, MapPin, ArrowUpRight, MessageCircle } from "lucide-react";
+import { Mail, Linkedin, Github, ExternalLink, X, GraduationCap, Award, Play, Youtube, FileText, MapPin, ArrowUpRight } from "lucide-react";
 import profileImg from "./assets/profile.jpg";
+
+/* Discord logo (lucide has no official Discord icon) */
+function DiscordIcon({ size = 19 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.211.375-.445.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.056c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419z" />
+    </svg>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════════
    HOOKS & SMALL COMPONENTS
@@ -70,7 +79,7 @@ const PROJECTS = [
     title: "TurtleBot4 Real-Time Perception Pipeline",
     blurb: "A native ROS 2 vision-control layer running four perception tasks at once on-robot — scanline path following, SIFT/FLANN logo detection, optical-flow collision stops, and Hough horizon tracking — all in classical CV to stay inside the control loop.",
     stack: ["ROS 2", "TurtleBot4", "SIFT Matching", "Optical Flow", "OpenCV"],
-    category: "Autonomous Systems",
+    category: "Perception & Vision",
     featured: true,
     metric: "4 tasks · on-robot",
     github: "https://github.com/ravivkrahul/turtlebot4-perception-pipeline",
@@ -159,7 +168,7 @@ const PROJECTS = [
     title: "ResNet18 Arrow Direction Regression",
     blurb: "A navigation network that moved from classical thresholding to deep learning — a ResNet18 transfer-learning model regressing continuous steering angles, deployed for live inference on Raspberry Pi hardware.",
     stack: ["PyTorch", "Transfer Learning", "ResNet18", "Raspberry Pi"],
-    category: "Autonomous Systems",
+    category: "Perception & Vision",
     github: "https://github.com/ravivkrahul/ResNet18-Arrow-Direction-Regression",
   },
   {
@@ -167,6 +176,99 @@ const PROJECTS = [
     blurb: "An Arduino Mega station that reads soil, temperature, and light, actuates solenoid valves on thresholds, and streams live telemetry to ThingSpeak over ESP8266 — a self-running irrigation controller.",
     stack: ["Arduino", "ESP8266", "IoT", "ThingSpeak"],
     category: "Classical & Industrial Controls",
+  },
+
+  /* ── KRIBHCO INDUSTRIAL (2018–2025) ── */
+  {
+    title: "Air Dryer Unit — Control Panel Redesign & Commissioning",
+    blurb: "Redesigned and built an in-house control panel that replaced a worn bistable relay and mechanical timer with PLC ladder logic — preserving proven operator behavior while removing the mechanical failure points. Executed a single-day cutover inside the 8-hour maintenance window with zero production loss.",
+    stack: ["Siemens PLC", "TIA Portal", "Ladder Logic", "Panel Design", "Commissioning"],
+    category: "Industrial Automation",
+    metric: "Single-day cutover",
+    details: {
+      scope: "Complete redesign and in-house construction of a control panel to eliminate mechanical failure points in the air dryer regeneration system.",
+      sections: [
+        { h: "Challenge", b: "The original panel relied on two degraded mechanical components. A bistable relay served as the mode selector between Dryer A ↔ Dryer B regeneration and inline bypass — its worn cam mechanism caused poor contact, elevated resistance, and erratic false mode transitions. A mechanical timer controlled the 5-hour heating and 3-hour cooling regeneration cycles; worn gears caused timing drift and unpredictable execution. The deteriorated panel made preventive maintenance risky and prompted a full replacement." },
+        { h: "Solution", b: "Designed and built a new panel in-house that preserved the proven relay-based control logic (and operator familiarity), eliminated the bistable relay and timer by implementing their functionality in an integrated PLC, and consolidated all logic into a single maintainable platform." },
+        { h: "Execution", b: "Documented the exact relay switching sequence and timer cycle with operators and maintenance staff; redrew complete electrical documentation in Microsoft Visio. Designed the layout and supervised in-house construction, integrating temperature sensors, flow sensors, control valves, and solenoid valves with organized terminal blocks. Verified the new logic operated identically to the original before commissioning, coordinating cutover with Mechanical, Electrical, Production, and Civil teams." },
+        { h: "Commissioning & Cutover", b: "Executed a single-day cutover: shut down the compressor, de-energized and disconnected the old panel (fully documented), rewired to the new panel, powered up, tested, and handed over — all within the scheduled 8-hour maintenance window." },
+        { h: "Outcome", b: "Transitioned from legacy mechanical control to modern PLC logic with no production loss, eliminated failures from worn relay contacts and timer degradation, and delivered a maintainable system operators could run reliably." },
+      ],
+      stack: "Siemens PLC · TIA Portal (ladder logic) · Microsoft Visio · Temperature/flow sensors · Control & solenoid valves",
+    },
+  },
+  {
+    title: "Pump Torque-Converter Speed Control Modernization",
+    blurb: "Consolidated a legacy two-stage cascade controller into the Honeywell C300 DCS, replaced an obsolete speed sensor with a Pepperl+Fuchs unit on a custom-fabricated mount, and performed online PID retuning of both level and speed loops during shutdown at near-normal operating conditions.",
+    stack: ["Honeywell DCS", "Cascade PID", "Pepperl+Fuchs", "Online Tuning"],
+    category: "Industrial Automation",
+    metric: "Dual-loop consolidation",
+    details: {
+      scope: "Upgrade a 30-year-old pump control system to consolidate dual cascade controllers into a single DCS platform with modern sensor technology.",
+      sections: [
+        { h: "Challenge", b: "The system used a two-stage cascade design: a level controller in the DCS output a setpoint to a local speed controller in the pump's original panel. No spare parts existed for the obsolete local controller, and the worn speed sensor had no available equivalent — failure of either meant production stoppage with no repair path." },
+        { h: "Solution", b: "Consolidated both cascade controllers into the DCS to eliminate dependence on the obsolete local panel, replaced the speed sensor with a modern Pepperl+Fuchs unit, redesigned the sensor mounting with the fabrication team, and retraced and reconfigured all wiring for the new architecture." },
+        { h: "Execution", b: "Selected the Pepperl+Fuchs sensor and built a custom mounting bracket integrating it with the existing pump structure. Developed the secondary speed-controller logic inside the Honeywell C300 DCS, configuring level (primary) → speed (secondary) cascade PID modules while preserving all legacy safety interlocks and pre-start conditions. Installed new multicore cable from the DCS to the legacy panel and updated all terminal routing." },
+        { h: "Commissioning & PID Tuning", b: "Brought the system online with production during annual shutdown, held process conditions near normal operating parameters, and performed online PID retuning of both level and speed loops under realistic dynamics — validating stability across the operating range." },
+        { h: "Outcome", b: "Eliminated single points of failure from obsolete hardware, created a sustainable vendor-standard solution, and tuned the system to run reliably at actual operating conditions with no permanent downtime." },
+      ],
+      stack: "Honeywell Experion PKS C300 DCS · Pepperl+Fuchs speed sensor · Cascade PID loops · Fabrication support",
+    },
+  },
+  {
+    title: "DCS & Safety System Management — 4000+ Loops",
+    blurb: "Ran day-to-day operations of a Honeywell Experion PKS C300 DCS and Safety Manager ESD supporting 4000+ control loops: RAID5 storage administration, backup and disaster-recovery validation, safety-interlock verification, one-to-one station redundancy, and plant-trip root-cause analysis for operators.",
+    stack: ["Honeywell C300", "Safety Manager ESD", "RAID5", "Trip Analysis"],
+    category: "Industrial Automation",
+    metric: "99.5%+ availability",
+    details: {
+      scope: "Manage and maintain Honeywell Experion PKS C300 DCS infrastructure and the Safety Manager ESD system supporting 4000+ control loops across plant operations.",
+      sections: [
+        { h: "System Architecture", b: "A primary C300 DCS server on RAID5 storage drove 4000+ process loops across fertilizer units, air handling, compressor control, pump speed, temperature/pressure, and level systems. Multiple operator and engineering stations connected over the plant network, with spare station/server configurations maintained for one-to-one replacement, plus a Safety Manager ESD for safety-critical interlocks." },
+        { h: "DCS & RAID5 Administration", b: "Continuously monitored server performance and availability, managed user access across stations, ran routine backups to RAID5, validated data integrity and disaster recovery, and monitored disk-array health — performing drive replacements as needed to maintain redundancy." },
+        { h: "Safety Manager (ESD)", b: "Verified Emergency Shut Down function and interlock operation, monitored safety diagnostics for faults or degradation, ensured safety-critical loops maintained proper response times, and ran periodic safety-system tests and validation." },
+        { h: "Trip Analysis & Troubleshooting", b: "On plant trips, checked interlocks and identified root causes — distinguishing safety-system function, process upset, or instrumentation anomaly — and gave operators clear root-cause analysis to speed recovery. Resolved DCS server, station-connectivity, and loop-performance issues with minimal production impact." },
+        { h: "Outcome", b: "Maintained 99.5%+ DCS availability across 4000+ loops, kept the ESD system operational, protected data integrity via RAID5 and backups, and supported continuous plant operation without critical outages." },
+      ],
+      stack: "Honeywell Experion PKS C300 DCS · Safety Manager ESD · RAID5 storage · Distributed client-server architecture · 4000+ loops",
+    },
+  },
+  {
+    title: "Cracker Unit — 72-Channel Temperature System Upgrade",
+    blurb: "Replaced an aged 72-channel temperature scanner with modern instrumentation: 72 new K-type thermocouples in Inconel thermowells, a signal-conditioning junction box, full rewiring with shielding, and per-channel simulation plus high/low alarm testing across all 72 measurement points.",
+    stack: ["Thermocouples", "Inconel Thermowells", "Signal Conditioning", "Alarm Testing"],
+    category: "Industrial Automation",
+    metric: "72 channels verified",
+    details: {
+      scope: "Replace an aged 72-channel temperature scanner and upgrade the temperature measurement system across the cracker unit with modern instrumentation.",
+      sections: [
+        { h: "Challenge", b: "The original 72-channel scanner had aged and become unreliable. Multiple K-type thermocouple elements needed replacement, temperature measurement was critical to operation and product quality, and the signal-conditioning and junction-box infrastructure required an upgrade — with all 72 channels needing reconfiguration and alarm testing." },
+        { h: "Mechanical Coordination", b: "Coordinated with the mechanical team to fabricate small thermowells on the pipeline, sized to the new element dimensions and validated for proper thermal contact and sensor protection." },
+        { h: "Scanner & Element Replacement", b: "Procured a modern 72-channel scanner, 72 high-temperature K-type thermocouples, Inconel thermowells for durability, and a junction box with signal conditioning and reference-junction compensation. Installed all hardware and connected each element to its scanner channel." },
+        { h: "Rewiring & Configuration", b: "Performed complete rewiring of all 72 channels with proper shielding and grounding, configuring each channel's sensor type, temperature range, alarm setpoints, and data-logging parameters — with clear labeling and documentation." },
+        { h: "Simulation & Alarm Testing", b: "Ran temperature simulation on each of the 72 channels, verified scanner response across the operating range, tested every high/low alarm, confirmed setpoints triggered at design temperatures, and validated data logging — documenting results for all channels." },
+        { h: "Outcome", b: "Restored reliable, accurate temperature measurement across cracker operations with improved alarm functionality and full visibility into the temperature profile — all 72 channels verified operational." },
+      ],
+      stack: "72-channel scanner · K-type thermocouples · Inconel thermowells · Signal-conditioning junction box · Shielded wiring · Simulation & alarm testing",
+    },
+  },
+  {
+    title: "Compressor Panel — Isolator Replacement & Loop Verification",
+    blurb: "Documented and replaced aged AI/AO/DI/DO isolators in a compressor control panel with matched Pepperl+Fuchs equivalents during annual shutdown, then verified signal integrity end-to-end across all 60 control loops from field transmitter through panel to final element.",
+    stack: ["Pepperl+Fuchs Isolators", "Loop Verification", "24VDC", "Shutdown Execution"],
+    category: "Industrial Automation",
+    metric: "60 loops verified",
+    details: {
+      scope: "Replace aged isolators in a compressor control panel with modern equivalents and verify integrity across all 60 dependent control loops.",
+      sections: [
+        { h: "Challenge", b: "The panel's isolators had aged and were no longer reliable or readily available as spares. Multiple types (AI, AO, DI, DO) supported 60 control loops critical to compressor operation, and replacement had to happen during annual shutdown to minimize production impact." },
+        { h: "Documentation & Procurement", b: "Conducted a full documentation review of every installed isolator, capturing electrical specs and functionality, and built a matched replacement list from the Pepperl+Fuchs catalog — including single-input/double-output configurations — selected for drop-in compatibility." },
+        { h: "Replacement", b: "During shutdown, systematically removed all aged isolators and installed new Pepperl+Fuchs units in identical positions to preserve circuit configuration, verifying proper seating and electrical contact." },
+        { h: "Wiring & Loop Verification", b: "Wired with printed ferrules and terminal lugs for reliable connections, then verified all 60 loops — confirming signal continuity from field transmitters through the panel to control valves, testing each loop for correct transmission and response, and confirming no signal degradation." },
+        { h: "Outcome", b: "Restored reliable signal isolation across all 60 loops, verified complete signal-chain integrity, eliminated isolator-failure risk, and extended panel service life — all within the annual shutdown window with no production impact." },
+      ],
+      stack: "Pepperl+Fuchs isolators (AI/AO/DI/DO) · 24VDC supply · Printed ferrules & terminal lugs · Loop verification procedures",
+    },
   },
 ];
 
@@ -197,7 +299,9 @@ const COURSEWORK = [
 
 const CAT = {
   "Autonomous Systems": { label: "Autonomous", tint: "var(--sage)", soft: "var(--sage-soft)" },
+  "Perception & Vision": { label: "Computer Vision", tint: "var(--plum)", soft: "var(--plum-soft)" },
   "Classical & Industrial Controls": { label: "Controls", tint: "var(--slate)", soft: "var(--slate-soft)" },
+  "Industrial Automation": { label: "Industrial", tint: "var(--accent)", soft: "var(--accent-soft)" },
 };
 
 const NAV = [["work", "Work"], ["path", "Experience"], ["credentials", "Credentials"]];
@@ -206,7 +310,41 @@ const NAV = [["work", "Work"], ["path", "Experience"], ["credentials", "Credenti
    PROJECT CARD
 ═══════════════════════════════════════════════════════════ */
 
-function ProjectCard({ p, onPlay }) {
+function DetailModal({ project, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [onClose]);
+  const d = project.details;
+  const meta = CAT[project.category] || {};
+  return (
+    <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="detail-box" onMouseDown={(e) => e.stopPropagation()} style={{ "--tint": meta.tint, "--soft": meta.soft }}>
+        <div className="detail-head">
+          <div>
+            <span className="detail-cat">{meta.label}</span>
+            <h3>{project.title}</h3>
+          </div>
+          <button onClick={onClose} aria-label="Close"><X size={18} /></button>
+        </div>
+        <div className="detail-body">
+          {d.scope && <p className="detail-scope"><span>Scope</span>{d.scope}</p>}
+          {d.sections.map((s, i) => (
+            <div key={i} className="detail-sec">
+              <h4>{s.h}</h4>
+              <p>{s.b}</p>
+            </div>
+          ))}
+          {d.stack && <div className="detail-stack"><span>Stack</span>{d.stack}</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectCard({ p, onPlay, onDetails }) {
   const meta = CAT[p.category] || {};
   return (
     <article className={`card ${p.featured ? "card-feat" : ""}`} style={{ "--tint": meta.tint, "--soft": meta.soft }}>
@@ -225,6 +363,7 @@ function ProjectCard({ p, onPlay }) {
         {p.videoUrl && <a href={p.videoUrl} target="_blank" rel="noopener noreferrer" className="clink accent"><Play size={12} fill="currentColor" /> Demo</a>}
         {p.youtube && <a href={p.youtube} target="_blank" rel="noopener noreferrer" className="clink yt"><Youtube size={14} fill="currentColor" /> YouTube</a>}
         {p.pdf && <a href={`${BASE}${p.pdf}`} target="_blank" rel="noopener noreferrer" className="clink"><FileText size={14} /> Report</a>}
+        {p.details && <button onClick={() => onDetails(p)} className="clink accent"><FileText size={14} /> View details</button>}
       </div>
     </article>
   );
@@ -238,6 +377,7 @@ export default function App() {
   const typed = useTyped(["Robotics & Controls Engineer", "Industrial Automation Specialist", "ROS 2 · C++ · Python · MATLAB", "M.Eng. Robotics @ UMD"]);
   const [filter, setFilter] = useState("All");
   const [modalVideo, setModalVideo] = useState(null);
+  const [detailProject, setDetailProject] = useState(null);
   const [active, setActive] = useState("work");
   const [copied, setCopied] = useState("");
   const [photoOpen, setPhotoOpen] = useState(false);
@@ -266,6 +406,8 @@ export default function App() {
   const counts = {
     All: PROJECTS.length,
     "Autonomous Systems": PROJECTS.filter(p => p.category === "Autonomous Systems").length,
+    "Perception & Vision": PROJECTS.filter(p => p.category === "Perception & Vision").length,
+    "Industrial Automation": PROJECTS.filter(p => p.category === "Industrial Automation").length,
     "Classical & Industrial Controls": PROJECTS.filter(p => p.category === "Classical & Industrial Controls").length,
   };
   const shown = PROJECTS.filter(p => filter === "All" || p.category === filter);
@@ -285,7 +427,7 @@ export default function App() {
           <div className="typed">{typed}<span className="cursor" /></div>
           <p className="tagline">
             Six years tuning safety-critical industrial control systems — now widening my
-            expertise into Robotics, Computer Vision, ML, and Industrial AI through an M.Eng.
+            expertise into robotics, computer vision, and industrial AI/ML through an M.Eng.
             at the University of Maryland, College Park.
           </p>
 
@@ -295,7 +437,7 @@ export default function App() {
             <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="soc" aria-label="Copy email"><Mail size={19} /></button>
             <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="soc" aria-label="LinkedIn"><Linkedin size={19} /></a>
             <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="soc" aria-label="GitHub"><Github size={19} /></a>
-            <button onClick={() => copyText("abhyutthanam", "Discord copied — abhyutthanam")} className="soc" aria-label="Copy Discord username"><MessageCircle size={19} /></button>
+            <button onClick={() => copyText("abhyutthanam", "Discord copied — abhyutthanam")} className="soc" aria-label="Copy Discord username"><DiscordIcon /></button>
           </div>
           {copied && <div className="copied-toast">{copied}</div>}
 
@@ -330,7 +472,7 @@ export default function App() {
           </header>
 
           <div className="filters">
-            {["All", "Autonomous Systems", "Classical & Industrial Controls"].map(f => (
+            {["All", "Autonomous Systems", "Perception & Vision", "Industrial Automation", "Classical & Industrial Controls"].map(f => (
               <button key={f} className={`fbtn ${filter === f ? "on" : ""}`} onClick={() => setFilter(f)}>
                 {f === "All" ? "All" : CAT[f].label}
                 <span className="fcount">{counts[f]}</span>
@@ -339,7 +481,7 @@ export default function App() {
           </div>
 
           <div className="grid">
-            {shown.map((p, i) => <ProjectCard key={i} p={p} onPlay={setModalVideo} />)}
+            {shown.map((p, i) => <ProjectCard key={i} p={p} onPlay={setModalVideo} onDetails={setDetailProject} />)}
           </div>
         </section>
 
@@ -406,6 +548,7 @@ export default function App() {
       </main>
 
       {modalVideo && <VideoModal videoSrc={modalVideo} onClose={() => setModalVideo(null)} />}
+      {detailProject && <DetailModal project={detailProject} onClose={() => setDetailProject(null)} />}
 
       {photoOpen && (
         <div className="photo-backdrop" onClick={() => setPhotoOpen(false)}>
@@ -422,7 +565,7 @@ export default function App() {
 ═══════════════════════════════════════════════════════════ */
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;8..144,500;8..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root{
   --paper:#fcfbf8;
@@ -440,7 +583,9 @@ const CSS = `
   --sage-soft:#e9f0ea;
   --slate:#5a6b8c;
   --slate-soft:#eaeef4;
-  --serif:'Fraunces',Georgia,serif;
+  --plum:#7a5a78;
+  --plum-soft:#f0eaf0;
+  --serif:'Roboto Serif',Georgia,serif;
   --sans:'Inter',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
 }
@@ -599,6 +744,28 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .modal-header button:hover{color:var(--ink);}
 .modal-video{aspect-ratio:16/9;background:#000;}
 .modal-video iframe{width:100%;height:100%;border:none;}
+
+/* detail modal */
+.detail-box{width:100%;max-width:720px;max-height:88vh;background:var(--card);border-radius:16px;
+  overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 70px rgba(0,0,0,0.3);animation:fade .2s ease;}
+.detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:26px 30px;
+  border-bottom:1px solid var(--line);background:var(--soft);}
+.detail-cat{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;
+  font-weight:600;color:var(--tint);margin-bottom:10px;}
+.detail-head h3{font-family:var(--serif);font-size:1.4rem;font-weight:500;letter-spacing:-0.01em;line-height:1.25;}
+.detail-head button{color:var(--ink3);display:flex;flex-shrink:0;margin-top:2px;}
+.detail-head button:hover{color:var(--ink);}
+.detail-body{padding:26px 30px 32px;overflow-y:auto;}
+.detail-scope{font-size:14.5px;line-height:1.6;color:var(--ink);margin-bottom:26px;padding:16px 18px;
+  background:var(--paper2);border-radius:10px;border-left:3px solid var(--tint);}
+.detail-scope span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--tint);margin-bottom:7px;font-weight:600;}
+.detail-sec{margin-bottom:22px;}
+.detail-sec h4{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:7px;letter-spacing:-0.01em;}
+.detail-sec p{font-size:14px;line-height:1.7;color:var(--ink2);}
+.detail-stack{margin-top:6px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;line-height:1.6;color:var(--ink2);}
+.detail-stack span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--tint);margin-bottom:7px;font-weight:600;}
 
 /* photo lightbox */
 .photo-backdrop{position:fixed;inset:0;z-index:600;background:rgba(33,31,27,0.7);backdrop-filter:blur(6px);
