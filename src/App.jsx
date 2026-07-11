@@ -537,7 +537,7 @@ export default function App() {
 
           <div className="closer">
             <h3>Let's build something.</h3>
-            <p>Open to robotics engineering roles, research collaborations, and hard automation problems.</p>
+            <p>Open to automation, controls, and robotics engineering roles, research collaborations, and hard automation problems.</p>
             <div className="closer-links">
               <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="btn-fill">ravivk.rahul@gmail.com</button>
               <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="btn-line">LinkedIn <ArrowUpRight size={14} /></a>
