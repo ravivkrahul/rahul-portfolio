@@ -443,7 +443,7 @@ export default function App() {
 
           <div className="rail-cta">
             <a href={`${BASE}Rahul_Ravi_Resume.pdf`} target="_blank" rel="noopener noreferrer" className="btn-fill">
-              Résumé <ArrowUpRight size={15} />
+              Resume <ArrowUpRight size={15} />
             </a>
           </div>
 
