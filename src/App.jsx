@@ -423,11 +423,11 @@ export default function App() {
             <img src={profileImg} alt="Rahul Ravi VK" className="avatar" />
           </button>
           <div className="badge">Open to 2026 Co-op & 2027 Full-time</div>
-          <h1 className="name">Rahul <span>Ravi VK</span></h1>
+          <h1 className="name">Rahul Ravi <span>VK</span></h1>
           <div className="typed">{typed}<span className="cursor" /></div>
           <p className="tagline">
-            Six years tuning safety-critical industrial control systems. Now widening my
-            expertise into robotics, computer vision, ML and Industrial AI through an M.Eng.
+            Six years tuning safety-critical industrial control systems — now widening my
+            expertise into robotics, computer vision, and industrial AI/ML through an M.Eng.
             at the University of Maryland, College Park.
           </p>
 
@@ -440,12 +440,6 @@ export default function App() {
             <button onClick={() => copyText("abhyutthanam", "Discord copied — abhyutthanam")} className="soc" aria-label="Copy Discord username"><DiscordIcon /></button>
           </div>
           {copied && <div className="copied-toast">{copied}</div>}
-
-          <div className="rail-cta">
-            <a href={`${BASE}Rahul_Ravi_Resume.pdf`} target="_blank" rel="noopener noreferrer" className="btn-fill">
-              Resume <ArrowUpRight size={15} />
-            </a>
-          </div>
 
           <nav className="rail-nav">
             {NAV.map(([id, label]) => (
@@ -537,7 +531,7 @@ export default function App() {
 
           <div className="closer">
             <h3>Let's build something.</h3>
-            <p>Open to automation, controls, and robotics engineering roles, research collaborations, and hard automation problems.</p>
+            <p>Open to robotics engineering roles, research collaborations, and hard automation problems.</p>
             <div className="closer-links">
               <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="btn-fill">ravivk.rahul@gmail.com</button>
               <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="btn-line">LinkedIn <ArrowUpRight size={14} /></a>
