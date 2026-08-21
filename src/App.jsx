@@ -107,7 +107,7 @@ const PROJECTS = [
     videoUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7466973004321779713/",
   },
   {
-    title: "Optimal Control — Nonholonomic Robot",
+    title: "Optimal Control: Nonholonomic Robot",
     blurb: "I rebuilt the method from an IEEE Access paper from scratch to check it held up. A genetic algorithm finds the kinematic gains offline across 72 start postures, a gradient descent adaptive PID handles the dynamics, and I worked through the Lyapunov proof to confirm stability as the robot mass moves from 5 to 70 kg. Reproducing it without the paper's exact GA weights showed how sensitive the result is to the fitness function.",
     stack: ["MATLAB", "Genetic Algorithm", "Adaptive PID", "Lyapunov Stability"],
     category: "Classical & Industrial Controls",
@@ -117,7 +117,7 @@ const PROJECTS = [
     pdf: "Optimal_Control_Report.pdf",
   },
   {
-    title: "6-DOF Camera Crane — SolidWorks to URDF",
+    title: "6-DOF Camera Crane: SolidWorks to URDF",
     blurb: "Modeled a 6 DOF crane in SolidWorks with a mix of prismatic and revolute joints, exported it to URDF, and checked the joint frames and forward kinematics in ROS 2 RViz. Most of the work was getting the URDF export clean so the joint axes and link origins matched the CAD instead of drifting.",
     stack: ["SolidWorks", "URDF", "ROS 2", "RViz", "6-DOF"],
     category: "Autonomous Systems",
@@ -133,7 +133,7 @@ const PROJECTS = [
     videoSrc: "https://drive.google.com/file/d/1DiG7gqiEOJPpZ6RzulsZfuZ8Wa0lbqSt/preview",
   },
   {
-    title: "Multi-Robot Planning — Anytime RRT* + ORCA",
+    title: "Multi-Robot Planning: Anytime RRT* + ORCA",
     blurb: "Two TurtleBot3 Burgers planning in Webots with Anytime RRT* for the global path and ORCA for local avoidance, no central coordinator. Across 10 paired runs it averaged 17.9 m paths at 100% success with zero robot to robot collisions, against 21.4 m and 4 collisions for plain RRT and 18.7 m and 2 collisions for RRT*.",
     stack: ["Webots", "Anytime RRT*", "ORCA", "Multi-Robot"],
     category: "Autonomous Systems",
@@ -148,7 +148,7 @@ const PROJECTS = [
     videoUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7466973004321779713/",
   },
   {
-    title: "LQG Control — Underactuated Double Pendulum Cart",
+    title: "LQG Control: Underactuated Double Pendulum Cart",
     blurb: "An underactuated cart with two pendulums of different lengths. I derived the equations of motion with Euler-Lagrange, and the math only works out controllable when the two pendulum lengths differ. LQR settles the states under 20 seconds, a Luenberger observer reconstructs everything from cart position alone in under 3 seconds, and adding integral action holds zero steady state error against a 50 N push.",
     stack: ["MATLAB", "LQG", "State-Space Observers", "Euler-Lagrange"],
     category: "Classical & Industrial Controls",
@@ -179,7 +179,7 @@ const PROJECTS = [
     youtube: "https://www.youtube.com/playlist?list=PLfEoLXDpE4Es",
   },
   {
-    title: "A* Path Planning — Wheelchair Robot",
+    title: "A* Path Planning: Wheelchair Robot",
     blurb: "A differential drive wheelchair robot with a URDF I wrote from scratch (0.30 m wheel radius, 0.65 m separation) to replace the stock TurtleBot3. It plans with 8 connected A* on a scaled 8x16 m map with inflated obstacles, then runs the path through cmd_vel with live odometry, in Gazebo and a FalconSim twin.",
     stack: ["ROS 2 Humble", "Custom URDF", "A* Search", "FalconSim"],
     category: "Autonomous Systems",
@@ -201,7 +201,7 @@ const PROJECTS = [
 
   /* ── KRIBHCO INDUSTRIAL (2018–2025) ── */
   {
-    title: "Air Dryer Unit — Control Panel Redesign & Commissioning",
+    title: "Air Dryer Unit: Control Panel Redesign & Commissioning",
     blurb: "The air dryer panel ran on a worn bistable relay and a mechanical timer that had started drifting and throwing false mode changes. I rebuilt the panel in house, moved the relay and timer logic into a PLC, and kept the exact switching behavior operators already knew. The swap happened in one shift inside the 8 hour maintenance window with no lost production.",
     stack: ["Siemens PLC", "TIA Portal", "Ladder Logic", "Panel Design", "Commissioning"],
     category: "Industrial Automation",
@@ -237,7 +237,7 @@ const PROJECTS = [
     },
   },
   {
-    title: "DCS & Safety System Management — 4000+ Loops",
+    title: "DCS & Safety System Management: 4000+ Loops",
     blurb: "I ran the day to day of a Honeywell Experion PKS C300 DCS and its Safety Manager ESD covering more than 4000 control loops. That meant RAID5 storage and drive replacement, backups and recovery checks, periodic ESD interlock testing, keeping spare stations ready for one to one swap, and being the person who worked out the root cause when the plant tripped. Availability stayed above 99.5%.",
     stack: ["Honeywell C300", "Safety Manager ESD", "RAID5", "Trip Analysis"],
     category: "Industrial Automation",
@@ -255,7 +255,7 @@ const PROJECTS = [
     },
   },
   {
-    title: "Cracker Unit — 72-Channel Temperature System Upgrade",
+    title: "Cracker Unit: 72-Channel Temperature System Upgrade",
     blurb: "The cracker unit's 72 channel temperature scanner had aged out and gone unreliable, and temperature there drives both operation and product quality. I replaced the scanner, put in 72 new K type thermocouples in Inconel thermowells with a signal conditioning junction box, rewired all 72 channels with proper shielding, and simulated and alarm tested every one of them before handing it back.",
     stack: ["Thermocouples", "Inconel Thermowells", "Signal Conditioning", "Alarm Testing"],
     category: "Industrial Automation",
@@ -274,7 +274,7 @@ const PROJECTS = [
     },
   },
   {
-    title: "Compressor Panel — Isolator Replacement & Loop Verification",
+    title: "Compressor Panel: Isolator Replacement & Loop Verification",
     blurb: "The isolators in a compressor control panel had aged out and were no longer available as spares, across AI, AO, DI, and DO types feeding 60 loops the compressor depends on. During annual shutdown I documented every isolator, matched each to a Pepperl+Fuchs equivalent, swapped them in place, and then checked all 60 loops end to end from the field transmitter through the panel to the final element.",
     stack: ["Pepperl+Fuchs Isolators", "Loop Verification", "24VDC", "Shutdown Execution"],
     category: "Industrial Automation",
@@ -294,26 +294,26 @@ const PROJECTS = [
 ];
 
 const TIMELINE = [
-  { year: "May 2026 — Aug 2026", role: "Research Intern, Robotics & Machine Vision", org: "Telehealth & Robotics Lab, Children's National Medical Center · Washington, D.C.", desc: "Built a vision and geometry pipeline for surgical tray sorting across 12 tool classes on an Intel RealSense D455. Trained a DINOv2 ViT-L transformer to 94.5% accuracy, 35 points ahead of a ResNet-50 CNN once background and lighting changed, and paired it with an ArUco and PCA length gate plus multi angle voting to separate tools that look alike." },
-  { year: "Sep 2025 — May 2027", role: "M.Eng. in Robotics", org: "University of Maryland, College Park", desc: "Autonomous navigation, perception, planning, and optimal control. Widening a controls foundation into robotics, computer vision, ML, and industrial AI. GPA 3.9 / 4.0." },
-  { year: "May 2023 — Jul 2025", role: "Assistant Manager, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Sustained 99.5%+ availability of a Honeywell Safety Manager (ESD) and Experion PKS C300 DCS across 4000+ control loops — owning RAID5 storage administration, one-to-one spare-station redundancy, periodic ESD interlock testing, and plant-trip root-cause analysis at live operating conditions." },
-  { year: "Oct 2019 — Apr 2023", role: "Senior Engineer, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Upgraded a 72-channel cracker-unit temperature system — commissioning a modern scanner, 72 K-type thermocouples, and Inconel thermowells, then configuring and alarm-testing every channel for reliable high-temperature monitoring. Eliminated 90% of air-dryer false trips via bistable-relay software emulation." },
-  { year: "Oct 2018 — Oct 2019", role: "Graduate Engineer Trainee, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Achieved ±0.075% FS measurement accuracy across 4–20 mA / HART loops — pre-calibrating and validating 20+ instrument types (Coriolis, guided-wave radar, RTD Pt100, Type K/J thermocouples, control valves) against baselines and diagnosing drift and failure root causes on live process lines." },
-  { year: "Aug 2014 — May 2018", role: "B.Eng., Instrumentation & Control", org: "L.D. College of Engineering · Gujarat, India", desc: "GATE All India Rank 96. Foundation in control theory and process engineering. GPA 3.3 / 4.0." },
+  { year: "May 2026 – Aug 2026", role: "Research Intern, Robotics & Machine Vision", org: "Telehealth & Robotics Lab, Children's National Medical Center · Washington, D.C.", desc: "Built a vision and geometry pipeline for surgical tray sorting across 12 tool classes on an Intel RealSense D455. Trained a DINOv2 ViT-L transformer to 94.5% accuracy, 35 points ahead of a ResNet-50 CNN once background and lighting changed, and paired it with an ArUco and PCA length gate plus multi angle voting to separate tools that look alike." },
+  { year: "Sep 2025 – May 2027", role: "M.Eng. in Robotics", org: "University of Maryland, College Park", desc: "Autonomous navigation, perception, planning, and optimal control. Widening a controls foundation into robotics, computer vision, ML, and industrial AI. GPA 3.9 / 4.0." },
+  { year: "May 2023 – Jul 2025", role: "Assistant Manager, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Held 99.5%+ availability of a Honeywell Safety Manager (ESD) and Experion PKS C300 DCS across 4000+ control loops, owning RAID5 storage, one to one spare station redundancy, periodic ESD interlock testing, and plant trip root cause analysis at live operating conditions." },
+  { year: "Oct 2019 – Apr 2023", role: "Senior Engineer, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Upgraded a 72-channel cracker unit temperature system, commissioning a modern scanner, 72 K-type thermocouples, and Inconel thermowells, then configuring and alarm testing every channel for reliable high temperature monitoring. Cut 90% of air dryer false trips with bistable relay software emulation." },
+  { year: "Oct 2018 – Oct 2019", role: "Graduate Engineer Trainee, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Held ±0.075% FS measurement accuracy across 4-20 mA and HART loops, pre calibrating and validating 20+ instrument types (Coriolis, guided wave radar, RTD Pt100, Type K/J thermocouples, control valves) against baselines and tracing drift and failure root causes on live process lines." },
+  { year: "Aug 2014 – May 2018", role: "B.Eng., Instrumentation & Control", org: "L.D. College of Engineering · Gujarat, India", desc: "GATE All India Rank 96. Foundation in control theory and process engineering. GPA 3.3 / 4.0." },
 ];
 
 const AFFILIATIONS = [
-  { org: "International Society of Automation (ISA)", detail: "Member · Baltimore–Washington, D.C. Section" },
+  { org: "International Society of Automation (ISA)", detail: "Member · Baltimore-Washington, D.C. Section" },
 ];
 
 const CERTIFICATIONS = [
-  "Control Valve Sizing (PDH) — ISA",
-  "Experion PKS C300 Fundamentals & Troubleshooting — Honeywell",
-  "M580 PLC Hardware & EcoStruxure Control Expert — Schneider Electric",
-  "Process Instrumentation, SCADA & PLC Logic — Siemens",
-  "Simscape, Simulink & MATLAB Onramp — MathWorks",
+  "Control Valve Sizing (PDH), ISA",
+  "Experion PKS C300 Fundamentals & Troubleshooting, Honeywell",
+  "M580 PLC Hardware & EcoStruxure Control Expert, Schneider Electric",
+  "Process Instrumentation, SCADA & PLC Logic, Siemens",
+  "Simscape, Simulink & MATLAB Onramp, MathWorks",
   "Aveva Edge HMI / SCADA Architecture",
-  "Docker & Git / GitHub — LinkedIn Learning",
+  "Docker & Git / GitHub, LinkedIn Learning",
 ];
 
 const COURSEWORK = [
@@ -451,7 +451,7 @@ export default function App() {
           <h1 className="name">Rahul Ravi <span>VK</span></h1>
           <div className="typed">{typed}<span className="cursor" /></div>
           <p className="tagline">
-            Six years tuning safety-critical industrial control systems — now widening my
+            Six years tuning safety-critical industrial control systems, now widening my
             expertise into robotics, computer vision, and industrial AI/ML through an M.Eng.
             at the University of Maryland, College Park.
           </p>
@@ -459,10 +459,10 @@ export default function App() {
           <div className="rail-loc"><MapPin size={13} /> College Park, MD · DMV Area</div>
 
           <div className="socials">
-            <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="soc" aria-label="Copy email"><Mail size={19} /></button>
+            <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied: ravivk.rahul@gmail.com")} className="soc" aria-label="Copy email"><Mail size={19} /></button>
             <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="soc" aria-label="LinkedIn"><Linkedin size={19} /></a>
             <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="soc" aria-label="GitHub"><Github size={19} /></a>
-            <button onClick={() => copyText("abhyutthanam", "Discord copied — abhyutthanam")} className="soc" aria-label="Copy Discord username"><DiscordIcon /></button>
+            <button onClick={() => copyText("abhyutthanam", "Discord copied: abhyutthanam")} className="soc" aria-label="Copy Discord username"><DiscordIcon /></button>
           </div>
           {copied && <div className="copied-toast">{copied}</div>}
 
@@ -568,7 +568,7 @@ export default function App() {
             <h3>Let's build something.</h3>
             <p>Open to robotics engineering roles, research collaborations, and hard automation problems.</p>
             <div className="closer-links">
-              <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="btn-fill">ravivk.rahul@gmail.com</button>
+              <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied: ravivk.rahul@gmail.com")} className="btn-fill">ravivk.rahul@gmail.com</button>
               <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="btn-line">LinkedIn <ArrowUpRight size={14} /></a>
               <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="btn-line">GitHub <ArrowUpRight size={14} /></a>
             </div>
