@@ -294,12 +294,16 @@ const PROJECTS = [
 ];
 
 const TIMELINE = [
-  { year: "May 2026 — Present", role: "Robotics Research Intern", org: "Children's National Hospital · Washington, DC", desc: "Applied robotics research within surgical and clinical contexts." },
-  { year: "Sep 2025 — May 2027", role: "M.Eng. in Robotics", org: "University of Maryland, College Park", desc: "Autonomous navigation, high-speed perception pipelines, and optimal control theory. GPA 3.9." },
-  { year: "May 2023 — Jul 2025", role: "Assistant Manager, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Surat, India", desc: "Led automation lifecycle and predictive maintenance across Honeywell DCS and Siemens PLC arrays, cutting system-level downtime by 50%." },
-  { year: "Oct 2019 — Apr 2023", role: "Senior Engineer, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Surat, India", desc: "Eliminated 90% of false trips on air-drying systems via bistable-relay software emulation, alongside comprehensive control-loop re-tuning." },
-  { year: "Oct 2018 — Oct 2019", role: "Graduate Engineering Trainee", org: "KRIBHCO Fertilizers Ltd", desc: "Calibrated and validated signal integrity across 20+ field transmitter types over 4–20 mA and HART loops." },
-  { year: "Aug 2014 — May 2018", role: "B.Eng., Instrumentation & Control", org: "L.D. College of Engineering · Ahmedabad, India", desc: "GATE All India Rank 96. Foundation in control theory and process engineering." },
+  { year: "May 2026 — Aug 2026", role: "Research Intern, Robotics & Machine Vision", org: "Telehealth & Robotics Lab, Children's National Medical Center · Washington, D.C.", desc: "Built a vision-and-geometry pipeline for automated surgical-tray sorting across 12 tool classes on an Intel RealSense D455 — trained a DINOv2 ViT-L transformer to 94.5% accuracy (+35 pts more robust than a ResNet-50 CNN under background/lighting shifts) and fused it with an ArUco + PCA length gate and multi-angle voting to separate visually similar instruments." },
+  { year: "Sep 2025 — May 2027", role: "M.Eng. in Robotics", org: "University of Maryland, College Park", desc: "Autonomous navigation, perception, planning, and optimal control. Widening a controls foundation into robotics, computer vision, ML, and industrial AI. GPA 3.9 / 4.0." },
+  { year: "May 2023 — Jul 2025", role: "Assistant Manager, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Sustained 99.5%+ availability of a Honeywell Safety Manager (ESD) and Experion PKS C300 DCS across 4000+ control loops — owning RAID5 storage administration, one-to-one spare-station redundancy, periodic ESD interlock testing, and plant-trip root-cause analysis at live operating conditions." },
+  { year: "Oct 2019 — Apr 2023", role: "Senior Engineer, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Upgraded a 72-channel cracker-unit temperature system — commissioning a modern scanner, 72 K-type thermocouples, and Inconel thermowells, then configuring and alarm-testing every channel for reliable high-temperature monitoring. Eliminated 90% of air-dryer false trips via bistable-relay software emulation." },
+  { year: "Oct 2018 — Oct 2019", role: "Graduate Engineer Trainee, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Achieved ±0.075% FS measurement accuracy across 4–20 mA / HART loops — pre-calibrating and validating 20+ instrument types (Coriolis, guided-wave radar, RTD Pt100, Type K/J thermocouples, control valves) against baselines and diagnosing drift and failure root causes on live process lines." },
+  { year: "Aug 2014 — May 2018", role: "B.Eng., Instrumentation & Control", org: "L.D. College of Engineering · Gujarat, India", desc: "GATE All India Rank 96. Foundation in control theory and process engineering. GPA 3.3 / 4.0." },
+];
+
+const AFFILIATIONS = [
+  { org: "International Society of Automation (ISA)", detail: "Member · Baltimore–Washington, D.C. Section" },
 ];
 
 const CERTIFICATIONS = [
@@ -550,6 +554,16 @@ export default function App() {
             </div>
           </div>
 
+          <div className="affil">
+            <div className="cred-label"><Award size={16} /> Professional affiliations</div>
+            {AFFILIATIONS.map((a, i) => (
+              <div key={i} className="affil-row">
+                <span className="affil-org">{a.org}</span>
+                <span className="affil-detail">{a.detail}</span>
+              </div>
+            ))}
+          </div>
+
           <div className="closer">
             <h3>Let's build something.</h3>
             <p>Open to robotics engineering roles, research collaborations, and hard automation problems.</p>
@@ -583,23 +597,23 @@ const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,400;8..144,500;8..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root{
-  --paper:#fcfbf8;
-  --paper2:#f4f2ec;
+  --paper:#fbfcfd;
+  --paper2:#eef2f7;
   --card:#ffffff;
-  --ink:#211f1b;
-  --ink2:#5a564e;
-  --ink3:#98938a;
-  --line:#e8e4db;
-  --line2:#d9d4c8;
-  --accent:#b0603f;
-  --accent-deep:#8f4a2e;
-  --accent-soft:#f6ebe4;
-  --sage:#4d6a56;
-  --sage-soft:#e9f0ea;
+  --ink:#1a2231;
+  --ink2:#4c586b;
+  --ink3:#8b95a6;
+  --line:#e2e8f0;
+  --line2:#cfd8e5;
+  --accent:#1e3a5f;
+  --accent-deep:#152b47;
+  --accent-soft:#e5edf6;
+  --sage:#2c6e7f;
+  --sage-soft:#e2f0f2;
   --slate:#5a6b8c;
   --slate-soft:#eaeef4;
-  --plum:#7a5a78;
-  --plum-soft:#f0eaf0;
+  --plum:#4a4a8a;
+  --plum-soft:#eaeaf4;
   --serif:'Roboto Serif',Georgia,serif;
   --sans:'Inter',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
@@ -618,12 +632,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
   background:var(--paper2);border-right:1px solid var(--line);display:flex;flex-direction:column;
   justify-content:space-between;overflow:hidden;}
 .left-pane::before{content:'';position:absolute;top:0;left:0;right:0;height:220px;
-  background:linear-gradient(180deg,rgba(176,96,63,0.06),transparent);pointer-events:none;}
+  background:linear-gradient(180deg,rgba(30,58,95,0.06),transparent);pointer-events:none;}
 .rail-top{position:relative;}
 .avatar-wrap{width:132px;height:132px;border-radius:50%;padding:4px;background:var(--card);
-  border:1px solid var(--line2);margin-bottom:26px;box-shadow:0 8px 26px rgba(33,31,27,0.08);
+  border:1px solid var(--line2);margin-bottom:26px;box-shadow:0 8px 26px rgba(26,34,49,0.08);
   cursor:pointer;transition:transform .2s,box-shadow .2s;display:block;}
-.avatar-wrap:hover{transform:scale(1.03);box-shadow:0 12px 32px rgba(33,31,27,0.14);}
+.avatar-wrap:hover{transform:scale(1.03);box-shadow:0 12px 32px rgba(26,34,49,0.14);}
 .avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;filter:grayscale(6%);display:block;}
 .badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.02em;color:var(--accent-deep);
   background:var(--accent-soft);padding:6px 13px;border-radius:100px;margin-bottom:20px;}
@@ -691,9 +705,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
   transition:transform .2s,box-shadow .2s,border-color .2s;}
 .card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--tint);
   opacity:0;transition:opacity .2s;}
-.card:hover{transform:translateY(-4px);box-shadow:0 16px 32px -14px rgba(33,31,27,0.16);border-color:var(--line2);}
+.card:hover{transform:translateY(-4px);box-shadow:0 16px 32px -14px rgba(26,34,49,0.16);border-color:var(--line2);}
 .card:hover::before{opacity:1;}
-.card-feat{border-color:var(--line2);box-shadow:0 4px 18px -12px rgba(33,31,27,0.12);}
+.card-feat{border-color:var(--line2);box-shadow:0 4px 18px -12px rgba(26,34,49,0.12);}
 .card-feat::before{opacity:0.5;}
 .card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px;}
 .card-cat{font-family:var(--mono);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;
@@ -742,6 +756,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
   background:var(--accent);opacity:0.5;}
 
 /* closer */
+.affil{margin-bottom:72px;}
+.affil-row{display:flex;flex-direction:column;gap:4px;padding:16px 20px;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;max-width:60ch;}
+.affil-org{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;}
+.affil-detail{font-family:var(--mono);font-size:12px;color:var(--ink3);letter-spacing:0.02em;}
 .closer{border-top:1px solid var(--line);padding-top:56px;text-align:center;}
 .closer h3{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:500;
   letter-spacing:-0.02em;margin-bottom:14px;}
@@ -749,7 +768,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .closer-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 
 /* modal */
-.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(33,31,27,0.55);backdrop-filter:blur(5px);
+.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(26,34,49,0.55);backdrop-filter:blur(5px);
   display:flex;align-items:center;justify-content:center;padding:24px;animation:fade .2s ease;}
 .modal-box{width:100%;max-width:860px;background:var(--card);border-radius:14px;overflow:hidden;
   box-shadow:0 30px 70px rgba(0,0,0,0.3);}
@@ -783,7 +802,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
   color:var(--tint);margin-bottom:7px;font-weight:600;}
 
 /* photo lightbox */
-.photo-backdrop{position:fixed;inset:0;z-index:600;background:rgba(33,31,27,0.7);backdrop-filter:blur(6px);
+.photo-backdrop{position:fixed;inset:0;z-index:600;background:rgba(26,34,49,0.7);backdrop-filter:blur(6px);
   display:flex;align-items:center;justify-content:center;padding:32px;animation:fade .2s ease;cursor:zoom-out;}
 .photo-large{max-width:min(480px,90vw);max-height:88vh;width:auto;border-radius:16px;
   box-shadow:0 30px 80px rgba(0,0,0,0.4);cursor:default;}
