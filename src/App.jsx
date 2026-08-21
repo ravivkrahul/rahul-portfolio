@@ -66,6 +66,27 @@ const BASE = import.meta.env.BASE_URL;
 
 const PROJECTS = [
   {
+    title: "Surgical Tool Identification, Counting & Measurement",
+    blurb: "A computer-vision pipeline for a robotic surgical-tray sorting system (Children's National): identifies 12 instrument classes, counts tools, and measures physical length to disambiguate visually identical instruments. Established that a DINOv2 Transformer generalizes far better than a ResNet-50 CNN under real-world imaging changes.",
+    stack: ["DINOv2 ViT-L", "ResNet-50", "YOLOv11", "PyTorch", "RealSense", "ArUco"],
+    category: "Perception & Vision",
+    featured: true,
+    metric: "94.5% in-domain",
+    github: "https://github.com/ravivkrahul/Surgical-Tool-Sorting-counting-and-identification",
+    details: {
+      scope: "Research internship at Children's National Hospital — build a computer-vision pipeline to identify and count surgical instruments on a tray as a step toward automated robotic (UR5) sorting, using an Intel RealSense D455 camera.",
+      sections: [
+        { h: "The Core Problem", b: "The tray holds 12 instrument classes, four of which are Needle Driver variants that differ mainly in physical size, not shape or texture. A pure appearance-based classifier produces confident-but-wrong predictions on these, which motivated pairing a deep-learning classifier with an independent physical length measurement as a corroborating second signal." },
+        { h: "Architecture", b: "Two independent capabilities over a shared RealSense capture layer: Identification (two classifier tracks — CNN and Transformer — evaluated independently, plus ArUco-marker length measurement) and Counting (a YOLOv11 single-class detector). A deliberate capture protocol covered 9 hard scene types — overlapping, occluded, cluttered, glare/reflection, edge-cutoff — specifically to stress cross-condition generalization." },
+        { h: "Key Finding — CNN vs Transformer", b: "The ResNet-50 CNN reached 83.6% in-domain accuracy but collapsed to ~0% under changed lighting, background, or angle — predicting a single class almost regardless of input. The DINOv2 ViT-L Transformer reached 94.5% in-domain and 47–65% cross-condition (64.9% on the hard 12-class test). This robustness gap made the Transformer the primary identification pipeline, with the CNN kept as a documented baseline." },
+        { h: "Transformer Pipeline", b: "DINOv2 ViT-L at 518px, fine-tuned in probe / partial / full modes. Training used ISNet (rembg) segmentation to composite tools onto synthetic backgrounds, pre-resizing and rotation-band filtering to manage a large ~12MP dataset. A key gotcha: training must run on a single GPU — multi-GPU DataParallel mis-scaled the learning rate and caused divergence." },
+        { h: "Length Measurement", b: "Depth was tried and abandoned — the D455's ~0.4–0.6 m minimum range made close-up tool-scale depth unreliable. The replacement is a depth-free, marker-scaled measurement: four ArUco markers define a valid work-region quad and set the pixel-to-mm scale, and the ISNet-segmented tool mask's rotated bounding-box long axis gives length in mm — a second signal to disambiguate the size-only Needle Driver variants." },
+        { h: "Counting", b: "A single-class YOLOv11 detector answers 'how many tools are on the tray.' V1 (Roboflow-trained) is reliable for spread-out tools; a V2 targeting occluded and stacked tools is trained on manually captured data and in progress. The live counter runs color-only with temporal smoothing to keep the displayed total from flickering." },
+      ],
+      stack: "DINOv2 ViT-L (timm) · ResNet-50 · YOLOv11 (Ultralytics) · PyTorch · Intel RealSense D455 · ISNet/rembg · ArUco · Grad-CAM · Ubuntu 22.04 · RTX A6000",
+    },
+  },
+  {
     title: "Autonomous Block Retrieval Robot",
     blurb: "A ground-up autonomous robot that navigated a 10×10 ft arena, detected colored blocks in sequence, and delivered them with zero human input — scoring a perfect 9/9 in the Grand Challenge.",
     stack: ["Raspberry Pi 4", "C++", "PID Control", "Sensor Fusion", "OpenCV"],
@@ -299,7 +320,7 @@ const COURSEWORK = [
 
 const CAT = {
   "Autonomous Systems": { label: "Autonomous", tint: "var(--sage)", soft: "var(--sage-soft)" },
-  "Perception & Vision": { label: "Computer Vision", tint: "var(--plum)", soft: "var(--plum-soft)" },
+  "Perception & Vision": { label: "Computer Vision / ML", tint: "var(--plum)", soft: "var(--plum-soft)" },
   "Classical & Industrial Controls": { label: "Controls", tint: "var(--slate)", soft: "var(--slate-soft)" },
   "Industrial Automation": { label: "Industrial", tint: "var(--accent)", soft: "var(--accent-soft)" },
 };
@@ -531,7 +552,7 @@ export default function App() {
 
           <div className="closer">
             <h3>Let's build something.</h3>
-            <p>Open to automation, controls, and robotics engineering roles, research collaborations, and hard automation problems.</p>
+            <p>Open to robotics engineering roles, research collaborations, and hard automation problems.</p>
             <div className="closer-links">
               <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="btn-fill">ravivk.rahul@gmail.com</button>
               <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="btn-line">LinkedIn <ArrowUpRight size={14} /></a>
