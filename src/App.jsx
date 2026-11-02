@@ -80,7 +80,7 @@ const PROJECTS = [
         { h: "Architecture", b: "Two separate capabilities share one RealSense capture layer. Identification runs two classifier tracks, a CNN and a transformer, scored against each other, plus an ArUco based length measurement. Counting runs a single class YOLOv11 detector. I captured data across 9 deliberately hard scene types (overlapping, occluded, cluttered, glare, edge cutoff) because the easy single tool shots hide exactly the failures that matter on a real tray." },
         { h: "CNN vs transformer, and what broke", b: "The ResNet-50 hit 83.6% on data that matched its training conditions, then dropped to near zero the moment lighting, background, or camera angle changed. It stopped discriminating and just predicted one class regardless of input. The DINOv2 ViT-L held 94.5% in domain and 47 to 65% across changed conditions (64.9% on the hard 12 class set). That gap is why the transformer became the primary classifier and the CNN stayed only as a logged baseline." },
         { h: "Transformer pipeline", b: "DINOv2 ViT-L at 518px, tried as a frozen probe, partial unfreeze, and full fine tune. I used ISNet segmentation to cut tools out and composite them onto plain backgrounds to widen the training set, and pre resized the roughly 12MP source images once so I was not decoding huge JPEGs every epoch. One trap cost real time: multi GPU DataParallel mis scaled the learning rate and the run diverged. It only trains cleanly pinned to a single GPU." },
-        { h: "Length measurement", b: "I tried depth first and dropped it. The D455 has a minimum range around 0.4 to 0.6 m, so at tool scale close up the depth was too noisy to measure a few millimeters. Instead I put four ArUco markers in the scene. Their centers define the work region and set the pixel to millimeter scale, which also stops a marker from being read as a tool. Tool length comes from the long axis of the segmented mask's rotated bounding box, converted through that scale. Markers and tool have to sit in the same plane for the scale to hold." },
+        { h: "Length measurement", b: "I tried depth first and dropped it. The D455 has a minimum range around 0.4 to 0.6 m, so at tool scale close up the depth was too noisy to measure a few millimeters. Instead I put four ArUco markers in the scene. Their centers define the work region and set the pixel to millimeter scale, which also stops a marker from being read as a tool. Tool length comes from the PCA principal axis of the ISNet-segmented mask, converted through that scale. I used PCA over a min-area rotated box because the ring handles tilt the box and skew the length. Classes outside ±5 mm of the measured length are dropped and the remaining confidences renormalized, which overrides confident-wrong picks. Live ID then captures 5 IMU-guided views at least 10° apart and votes. Markers and tool have to sit in the same plane for the scale to hold." },
         { h: "Counting", b: "A single class YOLOv11 detector answers how many tools are on the tray. V1, trained on a Roboflow set, is reliable when tools are spread out and struggles on crowded overlapping trays because most of its training data is single tool shots. V2, aimed at occluded and stacked tools, is trained on manually captured data and not yet validated. The live counter runs on color only, with a mode filter over recent frames so the displayed number does not flicker frame to frame." },
       ],
       stack: "DINOv2 ViT-L (timm) · ResNet-50 · YOLOv11 (Ultralytics) · PyTorch · Intel RealSense D455 · ISNet/rembg · ArUco · Grad-CAM · Ubuntu 22.04 · RTX A6000",
@@ -106,9 +106,60 @@ const PROJECTS = [
     github: "https://github.com/ravivkrahul/turtlebot4-perception-pipeline",
     videoUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7466973004321779713/",
   },
+  // ENME691 HW3 (+ HW2 and HW4 in the details)
+  {
+    title: "Shaft Health Assessment: Self-Supervised LeJEPA + SVM",
+    blurb: "Classifies rotor-bearing vibration records as Healthy, Unbalance L1, or Unbalance L2. A 1D-CNN encoder pre-trained with LeJEPA on unlabeled 1 s windows feeds a single SVM that labels all 30 test files correctly across 3 seeds. A notch test showed why it works: remove the 1X shaft component and accuracy falls to chance. Without labels, the encoder rediscovered the physical signature of unbalance.",
+    stack: ["PyTorch", "LeJEPA", "1D-CNN", "SVM", "Vibration Analysis"],
+    category: "Industrial AI",
+    featured: true,
+    metric: "30/30 test · 3 seeds",
+    details: {
+      scope: "ENME691 Industrial AI, Homework 03. Assess shaft health on a rotor-bearing testbed from vibration data: 60 training records (20 per class) and 30 test records, 38,400 samples each.",
+      sections: [
+        { h: "Method", b: "Each 15 s record is cut into 1 s windows with 50% overlap, giving 1,740 unlabeled training windows. A 1D-CNN encoder (4 conv blocks to 128-d) is pre-trained with LeJEPA for 100 epochs: 0.95 prediction loss so crops of one window agree, plus 0.05 SIGReg pushing embeddings toward an isotropic Gaussian to prevent collapse. The frozen encoder is averaged over 29 windows per file, reduced to 6-D with PCA, and fed to a one-against-one LIBSVM SVM with C = 100." },
+        { h: "Results", b: "LeJEPA features reach 100% with RBF, linear, and sigmoid kernels (98.9% polynomial), mean over 3 seeds. The same encoder with random weights gets 71 to 74%, so the gain comes from pre-training. Hand-crafted top-6 Fisher features reach 96.7%. A linear SVM is 100% in every seed, and only 7 to 9 of the 60 training files end up as support vectors." },
+        { h: "What the encoder learned", b: "First-layer filters moved to low frequencies, and the encoder is most sensitive at 20 to 24 Hz, centred on 1X (21.07 Hz). The random encoder peaks at 400 to 800 Hz. Notching out 1X drops accuracy to 33% (chance) and every faulty file is called Healthy. Removing 2X gives 93 to 100%, and removing 3X or the 484 Hz peak changes nothing. PC1 tracks 1X energy (r = 0.92 to 0.94)." },
+        { h: "Drift and ensembles", b: "Five Level 2 test files drift to lower 1X and more energy above 300 Hz. Hand-crafted features misclassify them; LeJEPA does not. Bagging, AdaBoost, Arc-x4, and MAdaBoost ensembles never beat the single SVM, which matches Wang et al.: a perfect, linearly separable single model has nothing left to improve." },
+        { h: "The series around it", b: "HW2 found the shaft actually runs at 21.07 Hz, not the nominal 20 Hz, and a one-feature logistic regression on 1X amplitude separated the classes with 100% leave-one-out accuracy. HW4 used the same data for SOM and SOM-MQE: three CV-selected order-domain features gave 100% with SOM-MQE, where the plain SOM classifier got 83% because it could not extrapolate to the drifting Level 2 files." },
+        { h: "Limitations", b: "Only 30 test files, so one error is 3.3%, and no separate validation set. The sampling rate is assumed. LeJEPA was adapted from images to 1-D signals, and relying on 1X means anything that masks 1X would mislead the classifier." },
+      ],
+      stack: "PyTorch · LeJEPA / SIGReg · 1D-CNN · PCA · LIBSVM · Fisher feature ranking · SOM / SOM-MQE · Python",
+    },
+  },
+
+  // ENME691 HW1
+  {
+    title: "Industrial AI Literature Survey: 21 Papers",
+    blurb: "A survey reviewing 21 sources across Industry 4.0, IoT, cyber-physical systems, industrial big data analytics, and large language models, from the 2013 acatech Industrie 4.0 report and the 5C CPS architecture to 2023 foundation models for prognostics and health management. The thread through it: analytics is what turns the Industry 4.0 architecture into decisions on the plant floor.",
+    stack: ["Industry 4.0", "Cyber-Physical Systems", "PHM", "LLMs", "Literature Review"],
+    category: "Industrial AI",
+    metric: "21 papers reviewed",
+    // pdf: "papers/Industrial_AI_Survey.pdf",   // copy HW1_report_Rahul_Ravi_Vk.pdf into public/papers/ if you want it linked
+  },
+
+  // CMSC818V HW1
+  {
+    title: "HexBot Tracking & Trajectory Prediction",
+    blurb: "Tracks a vibratory micro-robot in a 1x1 ft arena from 30 fps video and predicts where it will be one second later. A homography rectifies the floor to centimetres, HSV segmentation finds the body, and its longest extent gives heading, with position error under 0.5 cm on held-out clips. An LSTM predicted 1 s ahead at 6.22 cm mean error against 10.81 cm for constant velocity. For two robots, colour failed on the dark shell, so tracking switched to dense optical flow with a Kalman filter and Hungarian assignment.",
+    stack: ["OpenCV", "Homography", "PyTorch LSTM", "Optical Flow", "Kalman Filter"],
+    category: "Perception & Vision",
+    metric: "<0.5 cm position error",
+    // github: "",   // add if Bug_direction_predictor has a public remote
+  },
+
+  // CMSC818V paper presentation
+  {
+    title: "Paper Review: TransFusion (CVPR 2022)",
+    blurb: "Critical review and team presentation of Bai et al.'s LiDAR-camera fusion detector. It fuses on object queries after LiDAR proposals instead of hard point-to-pixel association. Where it falls short: recall stays LiDAR-bound, the robustness tests are synthetic, and fusion runs about 2.3x slower than the LiDAR-only model (265.9 vs 114.9 ms). A toy PyTorch head (query init, spatially modulated cross-attention, Hungarian matching) was used to explain the mechanism.",
+    stack: ["Sensor Fusion", "Transformers", "3D Detection", "nuScenes", "PyTorch"],
+    category: "Perception & Vision",
+    metric: "Paper review",
+  },
+
   {
     title: "Optimal Control: Nonholonomic Robot",
-    blurb: "I rebuilt the method from an IEEE Access paper from scratch to check it held up. A genetic algorithm finds the kinematic gains offline across 72 start postures, a gradient descent adaptive PID handles the dynamics, and I worked through the Lyapunov proof to confirm stability as the robot mass moves from 5 to 70 kg. Reproducing it without the paper's exact GA weights showed how sensitive the result is to the fitness function.",
+    blurb: "I rebuilt the method from an IEEE Access paper from scratch to check it held up. A genetic algorithm finds the kinematic gains offline across 72 start postures, a gradient descent adaptive PID handles the dynamics, and I worked through the Lyapunov proof to confirm the adaptive law stays stable under mass variations and unmodeled disturbances. Target arrival times landed at 12 to 16 s, consistent with the paper. Reproducing it without the paper's exact GA weights showed how sensitive the result is to the fitness function.",
     stack: ["MATLAB", "Genetic Algorithm", "Adaptive PID", "Lyapunov Stability"],
     category: "Classical & Industrial Controls",
     featured: true,
@@ -141,7 +192,7 @@ const PROJECTS = [
   },
   {
     title: "A* Path Planning + Pure Pursuit (Sim2Real)",
-    blurb: "Grid A* feeding a pure pursuit follower, taken from a TurtleBot3 in Gazebo onto a physical TurtleBot4. The sim tuning did not carry over. On hardware I had to shrink the lookahead from 0.30 m down to 0.15 m near the goal and re tune the max linear velocity and heading gain, since the real robot overshot corners the sim never showed.",
+    blurb: "Grid A* with a string-pulling smoother feeding a pure pursuit follower, built from scratch and taken from a TurtleBot3 in Gazebo onto a physical TurtleBot4. The sim tuning did not carry over: on hardware I cut max linear speed from 0.45 to 0.25 m/s, raised the heading derivative gain from 0.22 to 0.28, and shortened the lookahead from 0.30 to 0.20 m.",
     stack: ["A* Search", "Pure Pursuit", "Sim-to-Real", "TurtleBot"],
     category: "Autonomous Systems",
     github: "https://github.com/ravivkrahul/astar-pure-pursuit-sim2real-tb3-tb4",
@@ -187,7 +238,7 @@ const PROJECTS = [
   },
   {
     title: "ResNet18 Arrow Direction Regression",
-    blurb: "Arrow direction sensing for the Baron robot, moved from HSV thresholding and PCA to a ResNet18 fine tuned to regress a continuous steering angle. Trained with SmoothL1 loss and Adam at 1e-4 for 20 epochs, it reached a best validation loss of 0.0002 and ran live inference on the Raspberry Pi 4 feeding the onboard PID loop.",
+    blurb: "Arrow direction sensing for the Baron robot, moved from HSV thresholding and PCA to a ResNet18 fine tuned to regress a continuous steering angle. Trained with SmoothL1 loss and Adam at 1e-4 for 20 epochs, it reached a best validation loss of 0.0002, scored 100% on the held-out test set, and ran live inference on the Raspberry Pi 4 feeding the onboard PID loop.",
     stack: ["PyTorch", "Transfer Learning", "ResNet18", "Raspberry Pi"],
     category: "Perception & Vision",
     github: "https://github.com/ravivkrahul/ResNet18-Arrow-Direction-Regression",
@@ -217,6 +268,14 @@ const PROJECTS = [
       ],
       stack: "Siemens PLC · TIA Portal (ladder logic) · Microsoft Visio · Temperature/flow sensors · Control & solenoid valves",
     },
+  },
+  // KRIBHCO — was missing
+  {
+    title: "Cooling Tower Control Panel Modernization",
+    blurb: "A 30 year old cooling tower panel ran on relay logic with degraded contacts and mostly broken terminal blocks, on a safety critical system with hard to source spares. I measured the existing panel, pre-built and tested a full replacement board in the workshop with modern relays, MCBs, and terminal blocks, and kept the control logic identical. Isolation (including the 110V vibration switch supply), wire tagging, the board swap, and recommissioning all fit inside the 8 hour window with zero downtime.",
+    stack: ["Relay Logic", "MCBs", "Panel Retrofit", "110V Isolation"],
+    category: "Industrial Automation",
+    metric: "Zero downtime",
   },
   {
     title: "Pump Torque-Converter Speed Control Modernization",
@@ -294,12 +353,56 @@ const PROJECTS = [
 ];
 
 const TIMELINE = [
-  { year: "May 2026 – Aug 2026", role: "Research Intern, Robotics & Machine Vision", org: "Telehealth & Robotics Lab, Children's National Medical Center · Washington, D.C.", desc: "Built a vision and geometry pipeline for surgical tray sorting across 12 tool classes on an Intel RealSense D455. Trained a DINOv2 ViT-L transformer to 94.5% accuracy, 35 points ahead of a ResNet-50 CNN once background and lighting changed, and paired it with an ArUco and PCA length gate plus multi angle voting to separate tools that look alike." },
-  { year: "Sep 2025 – May 2027", role: "M.Eng. in Robotics", org: "University of Maryland, College Park", desc: "Autonomous navigation, perception, planning, and optimal control. Widening a controls foundation into robotics, computer vision, ML, and industrial AI. GPA 3.9 / 4.0." },
-  { year: "May 2023 – Jul 2025", role: "Assistant Manager, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Held 99.5%+ availability of a Honeywell Safety Manager (ESD) and Experion PKS C300 DCS across 4000+ control loops, owning RAID5 storage, one to one spare station redundancy, periodic ESD interlock testing, and plant trip root cause analysis at live operating conditions." },
-  { year: "Oct 2019 – Apr 2023", role: "Senior Engineer, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Upgraded a 72-channel cracker unit temperature system, commissioning a modern scanner, 72 K-type thermocouples, and Inconel thermowells, then configuring and alarm testing every channel for reliable high temperature monitoring. Cut 90% of air dryer false trips with bistable relay software emulation." },
-  { year: "Oct 2018 – Oct 2019", role: "Graduate Engineer Trainee, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Held ±0.075% FS measurement accuracy across 4-20 mA and HART loops, pre calibrating and validating 20+ instrument types (Coriolis, guided wave radar, RTD Pt100, Type K/J thermocouples, control valves) against baselines and tracing drift and failure root causes on live process lines." },
-  { year: "Aug 2014 – May 2018", role: "B.Eng., Instrumentation & Control", org: "L.D. College of Engineering · Gujarat, India", desc: "GATE All India Rank 96. Foundation in control theory and process engineering. GPA 3.3 / 4.0." },
+  {
+    year: "Fall 2026",
+    now: true,
+    role: "Graduate Assistant (Grader), ENPM667 Control of Robotic Systems",
+    org: "University of Maryland, College Park",
+    desc: "Grading for the graduate controls course I completed in Fall 2025.",
+  },
+  {
+    year: "May 2026 – Aug 2026",
+    role: "Research Intern, Robotics & Machine Vision",
+    org: "Telehealth & Robotics Lab, Children's National Medical Center · Washington, D.C.",
+    desc: "Built a vision and geometry pipeline for surgical tray sorting across 12 tool classes on an Intel RealSense D455. Trained a DINOv2 ViT-L transformer to 94.5% in-domain accuracy, 35 points more robust than a ResNet-50 CNN once background and lighting changed, and paired it with a depth-free ArUco + PCA length gate (±5 mm) and 5-shot multi-angle voting to separate tools that look alike.",
+  },
+  {
+    year: "Sep 2025 – May 2027",
+    now: true,
+    role: "M.Eng. in Robotics",
+    org: "University of Maryland, College Park",
+    desc: "Control, robot modeling, perception, planning, stochastic control, ML for physical sensing, and industrial AI. GPA 3.9 / 4.0.",
+  },
+  {
+    year: "May 2023 – Jul 2025",
+    role: "Assistant Manager, Instrumentation & Controls",
+    org: "KRIBHCO Fertilizers Ltd · Gujarat, India",
+    desc: "Held 99.5%+ availability of a Honeywell Safety Manager (ESD) and Experion PKS C300 DCS across 4000+ control loops, owning RAID5 storage, one to one spare station redundancy, periodic ESD interlock testing, and plant trip root cause analysis. Led the air dryer control panel redesign, moving worn bistable relay and timer logic into a Siemens PLC with a single-day cutover inside an 8 hour window.",
+  },
+  {
+    year: "Oct 2019 – Apr 2023",
+    role: "Senior Engineer, Instrumentation & Controls",
+    org: "KRIBHCO Fertilizers Ltd · Gujarat, India",
+    desc: "Moved a 30 year old pump's dual cascade speed control into the Honeywell C300 DCS and retuned both loops online. Upgraded a 72-channel cracker unit temperature system (scanner, K-type thermocouples, Inconel thermowells) and alarm tested every channel. Ran online PID retuning across plant loops, including a 5 hour session on a safety-critical flow loop without stopping production.",
+  },
+  {
+    year: "Oct 2018 – Oct 2019",
+    role: "Graduate Engineer Trainee, Instrumentation & Controls",
+    org: "KRIBHCO Fertilizers Ltd · Gujarat, India",
+    desc: "Held ±0.075% FS measurement accuracy across 4-20 mA and HART loops, pre calibrating and validating 20+ instrument types (Coriolis, guided wave radar, RTD Pt100, Type K/J thermocouples, control valves) against baselines and tracing drift and failure root causes on live process lines.",
+  },
+  {
+    year: "May 2017 – Jun 2017",
+    role: "Summer Intern",
+    org: "Indian Oil Corporation Ltd · Vadodara, India",
+    desc: "Observed operations across a large-scale refinery, with exposure to the instrumentation and controls infrastructure behind continuous hydrocarbon processing.",
+  },
+  {
+    year: "Aug 2014 – May 2018",
+    role: "B.Eng., Instrumentation & Control",
+    org: "L.D. College of Engineering · Gujarat, India",
+    desc: "Foundation in control theory and process instrumentation. Final-year project: a self-regulating IoT plant cultivation system (Arduino, ESP8266, ThingSpeak). GPA 3.3 / 4.0.",
+  },
 ];
 
 const AFFILIATIONS = [
@@ -323,10 +426,11 @@ const COURSEWORK = [
 ];
 
 const CAT = {
-  "Autonomous Systems": { label: "Autonomous", tint: "var(--sage)", soft: "var(--sage-soft)" },
-  "Perception & Vision": { label: "Computer Vision / ML", tint: "var(--plum)", soft: "var(--plum-soft)" },
-  "Classical & Industrial Controls": { label: "Controls", tint: "var(--slate)", soft: "var(--slate-soft)" },
-  "Industrial Automation": { label: "Industrial", tint: "var(--accent)", soft: "var(--accent-soft)" },
+  "Autonomous Systems": { label: "Autonomous", tint: "var(--mint-deep)", soft: "var(--mint-deep-soft)" },
+  "Perception & Vision": { label: "Computer Vision / ML", tint: "var(--indigo-light)", soft: "var(--indigo-light-soft)" },
+  "Classical & Industrial Controls": { label: "Controls", tint: "var(--neutral)", soft: "var(--neutral-soft)" },
+  "Industrial Automation": { label: "Industrial", tint: "var(--accent-deep)", soft: "var(--accent-soft)" },
+  "Industrial AI": { label: "Industrial AI", tint: "var(--sage)", soft: "var(--sage-soft)" },
 };
 
 const NAV = [["work", "Work"], ["path", "Experience"], ["credentials", "Credentials"]];
@@ -432,6 +536,7 @@ export default function App() {
     All: PROJECTS.length,
     "Autonomous Systems": PROJECTS.filter(p => p.category === "Autonomous Systems").length,
     "Perception & Vision": PROJECTS.filter(p => p.category === "Perception & Vision").length,
+    "Industrial AI": PROJECTS.filter(p => p.category === "Industrial AI").length,
     "Industrial Automation": PROJECTS.filter(p => p.category === "Industrial Automation").length,
     "Classical & Industrial Controls": PROJECTS.filter(p => p.category === "Classical & Industrial Controls").length,
   };
@@ -491,7 +596,7 @@ export default function App() {
           </header>
 
           <div className="filters">
-            {["All", "Autonomous Systems", "Perception & Vision", "Industrial Automation", "Classical & Industrial Controls"].map(f => (
+            {["All", "Autonomous Systems", "Perception & Vision", "Industrial AI", "Industrial Automation", "Classical & Industrial Controls"].map(f => (
               <button key={f} className={`fbtn ${filter === f ? "on" : ""}`} onClick={() => setFilter(f)}>
                 {f === "All" ? "All" : CAT[f].label}
                 <span className="fcount">{counts[f]}</span>
@@ -513,7 +618,7 @@ export default function App() {
 
           <div className="timeline">
             {TIMELINE.map((t, i) => (
-              <div key={i} className={`tl ${i === 0 ? "tl-now" : ""}`}>
+              <div key={i} className={`tl ${t.now ? "tl-now" : ""}`}>
                 <div className="tl-rail"><span className="tl-dot" /></div>
                 <div className="tl-body">
                   <span className="tl-year">{t.year}</span>
@@ -608,12 +713,16 @@ const CSS = `
   --accent:#6331fb;
   --accent-deep:#7d55ff;
   --accent-soft:#1b1444;
+  /* 3-colour system: Onyx Black #01010D · Electric Indigo #6331FB · Tropical Mint #88F9C0
+     category tints are shades of indigo, mint, or neutral ink only */
   --sage:#88f9c0;
   --sage-soft:#0f2a20;
-  --slate:#8a9bd4;
-  --slate-soft:#17203f;
-  --plum:#b39dff;
-  --plum-soft:#1d1640;
+  --mint-deep:#4cc78f;
+  --mint-deep-soft:#0c231a;
+  --indigo-light:#b9a6ff;
+  --indigo-light-soft:#1d1640;
+  --neutral:#c9cce0;
+  --neutral-soft:#1c1c33;
   --serif:'Roboto Serif',Georgia,serif;
   --sans:'Inter',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
