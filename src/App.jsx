@@ -447,7 +447,7 @@ export default function App() {
           <button className="avatar-wrap" onClick={() => setPhotoOpen(true)} aria-label="View larger photo">
             <img src={profileImg} alt="Rahul Ravi VK" className="avatar" />
           </button>
-          <div className="badge">Open to 2026 Co-op & 2027 Full-time</div>
+          <div className="badge">Open to full-time roles starting June 2027</div>
           <h1 className="name">Rahul Ravi <span>VK</span></h1>
           <div className="typed">{typed}<span className="cursor" /></div>
           <p className="tagline">
