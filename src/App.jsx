@@ -128,16 +128,6 @@ const PROJECTS = [
     },
   },
 
-  // ENME691 HW1
-  {
-    title: "Industrial AI Literature Survey: 21 Papers",
-    blurb: "A survey reviewing 21 sources across Industry 4.0, IoT, cyber-physical systems, industrial big data analytics, and large language models, from the 2013 acatech Industrie 4.0 report and the 5C CPS architecture to 2023 foundation models for prognostics and health management. The thread through it: analytics is what turns the Industry 4.0 architecture into decisions on the plant floor.",
-    stack: ["Industry 4.0", "Cyber-Physical Systems", "PHM", "LLMs", "Literature Review"],
-    category: "Industrial AI",
-    metric: "21 papers reviewed",
-    // pdf: "papers/Industrial_AI_Survey.pdf",   // copy HW1_report_Rahul_Ravi_Vk.pdf into public/papers/ if you want it linked
-  },
-
   // CMSC818V HW1
   {
     title: "HexBot Tracking & Trajectory Prediction",
