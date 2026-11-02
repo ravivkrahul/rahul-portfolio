@@ -66,8 +66,29 @@ const BASE = import.meta.env.BASE_URL;
 
 const PROJECTS = [
   {
+    title: "Surgical Tool Identification, Counting & Measurement",
+    blurb: "A vision pipeline that reads a surgical tray for a UR5 sorting cell at Children's National. It classifies 12 instrument types, counts them, and measures each tool's physical length to separate instruments that look identical but differ only in size. I ran a head to head test that showed a DINOv2 transformer holding up under lighting and background changes where a ResNet-50 fell apart.",
+    stack: ["DINOv2 ViT-L", "ResNet-50", "YOLOv11", "PyTorch", "RealSense", "ArUco"],
+    category: "Perception & Vision",
+    featured: true,
+    metric: "94.5% in-domain",
+    github: "https://github.com/ravivkrahul/Surgical-Tool-Sorting-counting-and-identification",
+    details: {
+      scope: "Research internship at Children's National Hospital. The task was to read a surgical instrument tray with an Intel RealSense D455 and feed a UR5 sorting cell: name each tool, count how many are present, and do it reliably enough to act on. Everything ran on Ubuntu 22.04 with an RTX A6000.",
+      sections: [
+        { h: "The core problem", b: "Twelve instrument classes sit on the tray. Four of them are Needle Driver variants that differ only in physical length. Shape and texture are the same, so an appearance classifier gives you a confident wrong answer every time it sees one. That is why I stopped treating this as a pure classification problem and added a direct length measurement as a second, independent check on the class." },
+        { h: "Architecture", b: "Two separate capabilities share one RealSense capture layer. Identification runs two classifier tracks, a CNN and a transformer, scored against each other, plus an ArUco based length measurement. Counting runs a single class YOLOv11 detector. I captured data across 9 deliberately hard scene types (overlapping, occluded, cluttered, glare, edge cutoff) because the easy single tool shots hide exactly the failures that matter on a real tray." },
+        { h: "CNN vs transformer, and what broke", b: "The ResNet-50 hit 83.6% on data that matched its training conditions, then dropped to near zero the moment lighting, background, or camera angle changed. It stopped discriminating and just predicted one class regardless of input. The DINOv2 ViT-L held 94.5% in domain and 47 to 65% across changed conditions (64.9% on the hard 12 class set). That gap is why the transformer became the primary classifier and the CNN stayed only as a logged baseline." },
+        { h: "Transformer pipeline", b: "DINOv2 ViT-L at 518px, tried as a frozen probe, partial unfreeze, and full fine tune. I used ISNet segmentation to cut tools out and composite them onto plain backgrounds to widen the training set, and pre resized the roughly 12MP source images once so I was not decoding huge JPEGs every epoch. One trap cost real time: multi GPU DataParallel mis scaled the learning rate and the run diverged. It only trains cleanly pinned to a single GPU." },
+        { h: "Length measurement", b: "I tried depth first and dropped it. The D455 has a minimum range around 0.4 to 0.6 m, so at tool scale close up the depth was too noisy to measure a few millimeters. Instead I put four ArUco markers in the scene. Their centers define the work region and set the pixel to millimeter scale, which also stops a marker from being read as a tool. Tool length comes from the long axis of the segmented mask's rotated bounding box, converted through that scale. Markers and tool have to sit in the same plane for the scale to hold." },
+        { h: "Counting", b: "A single class YOLOv11 detector answers how many tools are on the tray. V1, trained on a Roboflow set, is reliable when tools are spread out and struggles on crowded overlapping trays because most of its training data is single tool shots. V2, aimed at occluded and stacked tools, is trained on manually captured data and not yet validated. The live counter runs on color only, with a mode filter over recent frames so the displayed number does not flicker frame to frame." },
+      ],
+      stack: "DINOv2 ViT-L (timm) · ResNet-50 · YOLOv11 (Ultralytics) · PyTorch · Intel RealSense D455 · ISNet/rembg · ArUco · Grad-CAM · Ubuntu 22.04 · RTX A6000",
+    },
+  },
+  {
     title: "Autonomous Block Retrieval Robot",
-    blurb: "A ground-up autonomous robot that navigated a 10×10 ft arena, detected colored blocks in sequence, and delivered them with zero human input — scoring a perfect 9/9 in the Grand Challenge.",
+    blurb: "A ground robot I built to clear a 10x10 ft arena, pick colored blocks in a set order, and drop them at a goal with no human input after the start signal. Raspberry Pi 4 for vision and planning, Arduino Nano for the low level motor and sensor loop. It scored 9 of 9 blocks in 7 minutes 21 seconds in the Grand Challenge run.",
     stack: ["Raspberry Pi 4", "C++", "PID Control", "Sensor Fusion", "OpenCV"],
     category: "Autonomous Systems",
     featured: true,
@@ -77,7 +98,7 @@ const PROJECTS = [
   },
   {
     title: "TurtleBot4 Real-Time Perception Pipeline",
-    blurb: "A native ROS 2 vision-control layer running four perception tasks at once on-robot — scanline path following, SIFT/FLANN logo detection, optical-flow collision stops, and Hough horizon tracking — all in classical CV to stay inside the control loop.",
+    blurb: "A ROS 2 vision layer running four perception jobs at once on the robot: scanline path following, SIFT and FLANN logo matching, optical flow collision stops, and Hough horizon tracking. I kept all of it in classical CV on purpose. A trained network pushed inference latency past what the control loop could absorb, so the robot reacted late. Classical CV stayed inside the loop budget.",
     stack: ["ROS 2", "TurtleBot4", "SIFT Matching", "Optical Flow", "OpenCV"],
     category: "Perception & Vision",
     featured: true,
@@ -86,8 +107,8 @@ const PROJECTS = [
     videoUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7466973004321779713/",
   },
   {
-    title: "Optimal Control — Nonholonomic Robot",
-    blurb: "Reproduced an IEEE Access control paper end to end: a Genetic Algorithm optimizes kinematic gains offline across 72 postures, a gradient-descent adaptive PID handles the dynamics, and Lyapunov analysis proves stability under 5–70 kg mass variation.",
+    title: "Optimal Control: Nonholonomic Robot",
+    blurb: "I rebuilt the method from an IEEE Access paper from scratch to check it held up. A genetic algorithm finds the kinematic gains offline across 72 start postures, a gradient descent adaptive PID handles the dynamics, and I worked through the Lyapunov proof to confirm stability as the robot mass moves from 5 to 70 kg. Reproducing it without the paper's exact GA weights showed how sensitive the result is to the fitness function.",
     stack: ["MATLAB", "Genetic Algorithm", "Adaptive PID", "Lyapunov Stability"],
     category: "Classical & Industrial Controls",
     featured: true,
@@ -96,8 +117,8 @@ const PROJECTS = [
     pdf: "Optimal_Control_Report.pdf",
   },
   {
-    title: "6-DOF Camera Crane — SolidWorks to URDF",
-    blurb: "Modeled a full 6-DOF crane assembly of prismatic and revolute joints in SolidWorks, exported a clean URDF, and validated forward kinematics live in ROS 2 RViz.",
+    title: "6-DOF Camera Crane: SolidWorks to URDF",
+    blurb: "Modeled a 6 DOF crane in SolidWorks with a mix of prismatic and revolute joints, exported it to URDF, and checked the joint frames and forward kinematics in ROS 2 RViz. Most of the work was getting the URDF export clean so the joint axes and link origins matched the CAD instead of drifting.",
     stack: ["SolidWorks", "URDF", "ROS 2", "RViz", "6-DOF"],
     category: "Autonomous Systems",
     github: "https://github.com/ravivkrahul/Camera_Crane-SOLIDWORKS-MODEL-and-URDF",
@@ -105,30 +126,30 @@ const PROJECTS = [
   },
   {
     title: "UR5 Browser-to-Robot Drawing System",
-    blurb: "A decoupled human-robot interface linking an HTML canvas to a Python WebSocket server, solving inverse kinematics via IKPy to draw strokes live on a simulated 6-DOF UR5 in Gazebo.",
+    blurb: "A browser canvas sends strokes to a Python WebSocket server, which solves inverse kinematics with IKPy and drives a simulated UR5 in Gazebo to draw them. I used a raw WebSocket instead of rosbridge to keep the round trip latency down, and pre computed the full joint trajectory per stroke so the arm did not stall mid line.",
     stack: ["ROS 2", "UR5", "Inverse Kinematics", "WebSockets", "Gazebo"],
     category: "Autonomous Systems",
     github: "https://github.com/ravivkrahul/UR5-ros2-drawing-robot",
     videoSrc: "https://drive.google.com/file/d/1DiG7gqiEOJPpZ6RzulsZfuZ8Wa0lbqSt/preview",
   },
   {
-    title: "Multi-Robot Planning — Anytime RRT* + ORCA",
-    blurb: "A decentralized multi-agent planner pairing Anytime RRT* global search with ORCA local velocity avoidance, clearing tight environments across Webots simulations with zero inter-robot collisions.",
+    title: "Multi-Robot Planning: Anytime RRT* + ORCA",
+    blurb: "Two TurtleBot3 Burgers planning in Webots with Anytime RRT* for the global path and ORCA for local avoidance, no central coordinator. Across 10 paired runs it averaged 17.9 m paths at 100% success with zero robot to robot collisions, against 21.4 m and 4 collisions for plain RRT and 18.7 m and 2 collisions for RRT*.",
     stack: ["Webots", "Anytime RRT*", "ORCA", "Multi-Robot"],
     category: "Autonomous Systems",
     github: "https://github.com/ravivkrahul/Multi-Robot-Planning-and-Obstacle-Avoidance",
   },
   {
     title: "A* Path Planning + Pure Pursuit (Sim2Real)",
-    blurb: "A grid-based A* planner feeding a dynamic pure-pursuit controller, deployed from Gazebo TurtleBot3 simulation onto a physical TurtleBot4 through structured runtime parameter tuning.",
+    blurb: "Grid A* feeding a pure pursuit follower, taken from a TurtleBot3 in Gazebo onto a physical TurtleBot4. The sim tuning did not carry over. On hardware I had to shrink the lookahead from 0.30 m down to 0.15 m near the goal and re tune the max linear velocity and heading gain, since the real robot overshot corners the sim never showed.",
     stack: ["A* Search", "Pure Pursuit", "Sim-to-Real", "TurtleBot"],
     category: "Autonomous Systems",
     github: "https://github.com/ravivkrahul/astar-pure-pursuit-sim2real-tb3-tb4",
     videoUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7466973004321779713/",
   },
   {
-    title: "LQG Control — Underactuated Double Pendulum Cart",
-    blurb: "Derived the dynamics via Euler-Lagrange, proved observability from cart position alone, tuned an LQR, and built a Luenberger observer with integral action to reject a 50 N disturbance to zero steady-state error.",
+    title: "LQG Control: Underactuated Double Pendulum Cart",
+    blurb: "An underactuated cart with two pendulums of different lengths. I derived the equations of motion with Euler-Lagrange, and the math only works out controllable when the two pendulum lengths differ. LQR settles the states under 20 seconds, a Luenberger observer reconstructs everything from cart position alone in under 3 seconds, and adding integral action holds zero steady state error against a 50 N push.",
     stack: ["MATLAB", "LQG", "State-Space Observers", "Euler-Lagrange"],
     category: "Classical & Industrial Controls",
     github: "https://github.com/ravivkrahul/Control_of_underactuated_cart",
@@ -136,14 +157,14 @@ const PROJECTS = [
   },
   {
     title: "Truck Twin-Trailer Simulation & Digital Twin",
-    blurb: "A non-holonomic articulated freight model taken from CAD to URDF/Xacro, driven by proportional steering with keyboard teleop, then deployed into a high-fidelity Falcon digital twin.",
+    blurb: "A truck with two hinged trailers, taken from SolidWorks CAD to URDF/Xacro and run under ROS 2 Control in Gazebo. A proportional controller handles point to point steering with keyboard teleop for manual driving. To get it into the Falcon digital twin I had to convert the URDF to FBX through Blender, since Falcon would not read the URDF directly.",
     stack: ["ROS 2 Control", "Gazebo", "Xacro", "Digital Twin"],
     category: "Autonomous Systems",
     github: "https://github.com/ravivkrahul/Truck-trailer-ros2",
   },
   {
     title: "ROS 2 MicroMouse Navigation System",
-    blurb: "An automated maze-solving system using depth-first search with dynamic path correction, built entirely on native ROS 2 C++ actions, mapping services, and velocity command nodes.",
+    blurb: "A maze solver that explores with depth first search and re plans as it finds new walls, built on native ROS 2 C++ with actions for the long running solve, services for mapping queries, and topics for velocity commands. The point was to wire a real ROS 2 graph end to end rather than run everything in one node.",
     stack: ["ROS 2", "C++17", "DFS Search", "Maze Navigation"],
     category: "Autonomous Systems",
     github: "https://github.com/ravivkrahul/ROS2-MicroMouse-Robot-Navigation",
@@ -151,121 +172,121 @@ const PROJECTS = [
   },
   {
     title: "Franka Panda Pick-and-Place",
-    blurb: "A collision-aware manipulation pipeline for a 7-DOF Franka Panda in ROS 2 Humble, using MoveIt 2 for planning and a custom C++ node for named-pose sequencing, validated in RViz2.",
+    blurb: "A pick and place pipeline for a 7 DOF Franka Panda in ROS 2 Humble. MoveIt 2 plans collision aware paths and a custom C++ node steps through named poses and drives the gripper as part of the action sequence. Validated in simulation with RViz2.",
     stack: ["ROS 2 Humble", "MoveIt 2", "7-DOF Arm", "C++"],
     category: "Autonomous Systems",
     github: "https://github.com/ravivkrahul/MoveIt-Franka-Panda-Pick-and-Place-Simulation",
     youtube: "https://www.youtube.com/playlist?list=PLfEoLXDpE4Es",
   },
   {
-    title: "A* Path Planning — Wheelchair Robot",
-    blurb: "A custom differential-drive wheelchair URDF built from scratch, navigated with 8-connected A* and obstacle inflation across both Gazebo and a FalconSim digital twin.",
+    title: "A* Path Planning: Wheelchair Robot",
+    blurb: "A differential drive wheelchair robot with a URDF I wrote from scratch (0.30 m wheel radius, 0.65 m separation) to replace the stock TurtleBot3. It plans with 8 connected A* on a scaled 8x16 m map with inflated obstacles, then runs the path through cmd_vel with live odometry, in Gazebo and a FalconSim twin.",
     stack: ["ROS 2 Humble", "Custom URDF", "A* Search", "FalconSim"],
     category: "Autonomous Systems",
     github: "https://github.com/ninad-iam/ENPM661_Project3",
   },
   {
     title: "ResNet18 Arrow Direction Regression",
-    blurb: "A navigation network that moved from classical thresholding to deep learning — a ResNet18 transfer-learning model regressing continuous steering angles, deployed for live inference on Raspberry Pi hardware.",
+    blurb: "Arrow direction sensing for the Baron robot, moved from HSV thresholding and PCA to a ResNet18 fine tuned to regress a continuous steering angle. Trained with SmoothL1 loss and Adam at 1e-4 for 20 epochs, it reached a best validation loss of 0.0002 and ran live inference on the Raspberry Pi 4 feeding the onboard PID loop.",
     stack: ["PyTorch", "Transfer Learning", "ResNet18", "Raspberry Pi"],
     category: "Perception & Vision",
     github: "https://github.com/ravivkrahul/ResNet18-Arrow-Direction-Regression",
   },
   {
     title: "Self-Regulatory IoT Plant Cultivation System",
-    blurb: "An Arduino Mega station that reads soil, temperature, and light, actuates solenoid valves on thresholds, and streams live telemetry to ThingSpeak over ESP8266 — a self-running irrigation controller.",
+    blurb: "An Arduino Mega station that reads soil moisture, temperature and humidity from a DHT11, and light from an LDR, then opens solenoid valves on threshold logic. An ESP8266 pushes readings to ThingSpeak every 5 seconds, which I used to check the actuation against the actual daily sensor trends.",
     stack: ["Arduino", "ESP8266", "IoT", "ThingSpeak"],
     category: "Classical & Industrial Controls",
   },
 
   /* ── KRIBHCO INDUSTRIAL (2018–2025) ── */
   {
-    title: "Air Dryer Unit — Control Panel Redesign & Commissioning",
-    blurb: "Redesigned and built an in-house control panel that replaced a worn bistable relay and mechanical timer with PLC ladder logic — preserving proven operator behavior while removing the mechanical failure points. Executed a single-day cutover inside the 8-hour maintenance window with zero production loss.",
+    title: "Air Dryer Unit: Control Panel Redesign & Commissioning",
+    blurb: "The air dryer panel ran on a worn bistable relay and a mechanical timer that had started drifting and throwing false mode changes. I rebuilt the panel in house, moved the relay and timer logic into a PLC, and kept the exact switching behavior operators already knew. The swap happened in one shift inside the 8 hour maintenance window with no lost production.",
     stack: ["Siemens PLC", "TIA Portal", "Ladder Logic", "Panel Design", "Commissioning"],
     category: "Industrial Automation",
     metric: "Single-day cutover",
     details: {
-      scope: "Complete redesign and in-house construction of a control panel to eliminate mechanical failure points in the air dryer regeneration system.",
+      scope: "Rebuild the air dryer regeneration control panel to get rid of two mechanical parts that were failing, without changing how the unit behaved for operators.",
       sections: [
-        { h: "Challenge", b: "The original panel relied on two degraded mechanical components. A bistable relay served as the mode selector between Dryer A ↔ Dryer B regeneration and inline bypass — its worn cam mechanism caused poor contact, elevated resistance, and erratic false mode transitions. A mechanical timer controlled the 5-hour heating and 3-hour cooling regeneration cycles; worn gears caused timing drift and unpredictable execution. The deteriorated panel made preventive maintenance risky and prompted a full replacement." },
-        { h: "Solution", b: "Designed and built a new panel in-house that preserved the proven relay-based control logic (and operator familiarity), eliminated the bistable relay and timer by implementing their functionality in an integrated PLC, and consolidated all logic into a single maintainable platform." },
-        { h: "Execution", b: "Documented the exact relay switching sequence and timer cycle with operators and maintenance staff; redrew complete electrical documentation in Microsoft Visio. Designed the layout and supervised in-house construction, integrating temperature sensors, flow sensors, control valves, and solenoid valves with organized terminal blocks. Verified the new logic operated identically to the original before commissioning, coordinating cutover with Mechanical, Electrical, Production, and Civil teams." },
-        { h: "Commissioning & Cutover", b: "Executed a single-day cutover: shut down the compressor, de-energized and disconnected the old panel (fully documented), rewired to the new panel, powered up, tested, and handed over — all within the scheduled 8-hour maintenance window." },
-        { h: "Outcome", b: "Transitioned from legacy mechanical control to modern PLC logic with no production loss, eliminated failures from worn relay contacts and timer degradation, and delivered a maintainable system operators could run reliably." },
+        { h: "What was breaking", b: "Two parts were worn out. A bistable relay selected the mode between Dryer A regeneration, Dryer B regeneration, and bypass; its cam had worn to the point of poor contact, high resistance, and random false mode changes. A mechanical timer ran the 5 hour heating and 3 hour cooling cycles, and its worn gears had started drifting the timing. The whole panel had degraded far enough that even opening it up for maintenance was a risk, so it needed a full replacement." },
+        { h: "Approach", b: "I built a new panel in house that kept the same relay based control behavior operators were used to, and moved the bistable relay and timer functions into a PLC so there were no worn mechanical parts left in the mode and cycle logic. Everything ended up on one platform I could actually maintain." },
+        { h: "Execution", b: "I sat with operators and maintenance to write down the exact relay switching sequence and timer cycle, then redrew the full electrical set in Microsoft Visio. I laid out the panel, supervised the in house build, and wired in the temperature and flow sensors, control valves, and solenoid valves on labeled terminal blocks. Before touching production I confirmed the new logic behaved identically to the old panel, and coordinated the cutover with mechanical, electrical, production, and civil." },
+        { h: "Cutover", b: "The swap ran in a single shift: shut the compressor down, de energized and disconnected the old panel with everything documented, rewired to the new panel, powered up, tested, and handed it back to production, all inside the 8 hour maintenance window." },
+        { h: "Result", b: "The unit moved off worn mechanical control onto PLC logic with no lost production, the false mode changes and timer drift stopped, and operators got a panel that could actually be maintained going forward." },
       ],
       stack: "Siemens PLC · TIA Portal (ladder logic) · Microsoft Visio · Temperature/flow sensors · Control & solenoid valves",
     },
   },
   {
     title: "Pump Torque-Converter Speed Control Modernization",
-    blurb: "Consolidated a legacy two-stage cascade controller into the Honeywell C300 DCS, replaced an obsolete speed sensor with a Pepperl+Fuchs unit on a custom-fabricated mount, and performed online PID retuning of both level and speed loops during shutdown at near-normal operating conditions.",
+    blurb: "A 30 year old pump ran a two stage cascade where the DCS level controller fed a setpoint to a local speed controller in the pump's own panel. Both the local controller and its speed sensor were obsolete with no spares, so a failure meant an unplanned stop with no fix. I pulled both cascade loops into the Honeywell C300 DCS, fitted a new Pepperl+Fuchs speed sensor on a bracket we fabricated, and re tuned both PID loops online during shutdown at close to normal operating conditions.",
     stack: ["Honeywell DCS", "Cascade PID", "Pepperl+Fuchs", "Online Tuning"],
     category: "Industrial Automation",
     metric: "Dual-loop consolidation",
     details: {
-      scope: "Upgrade a 30-year-old pump control system to consolidate dual cascade controllers into a single DCS platform with modern sensor technology.",
+      scope: "Move an aging pump's two stage cascade control into the DCS and replace its obsolete speed sensor, so a single failed part could no longer stop the pump.",
       sections: [
-        { h: "Challenge", b: "The system used a two-stage cascade design: a level controller in the DCS output a setpoint to a local speed controller in the pump's original panel. No spare parts existed for the obsolete local controller, and the worn speed sensor had no available equivalent — failure of either meant production stoppage with no repair path." },
-        { h: "Solution", b: "Consolidated both cascade controllers into the DCS to eliminate dependence on the obsolete local panel, replaced the speed sensor with a modern Pepperl+Fuchs unit, redesigned the sensor mounting with the fabrication team, and retraced and reconfigured all wiring for the new architecture." },
-        { h: "Execution", b: "Selected the Pepperl+Fuchs sensor and built a custom mounting bracket integrating it with the existing pump structure. Developed the secondary speed-controller logic inside the Honeywell C300 DCS, configuring level (primary) → speed (secondary) cascade PID modules while preserving all legacy safety interlocks and pre-start conditions. Installed new multicore cable from the DCS to the legacy panel and updated all terminal routing." },
-        { h: "Commissioning & PID Tuning", b: "Brought the system online with production during annual shutdown, held process conditions near normal operating parameters, and performed online PID retuning of both level and speed loops under realistic dynamics — validating stability across the operating range." },
-        { h: "Outcome", b: "Eliminated single points of failure from obsolete hardware, created a sustainable vendor-standard solution, and tuned the system to run reliably at actual operating conditions with no permanent downtime." },
+        { h: "What was breaking", b: "The control was a two stage cascade: a level controller in the DCS handed a setpoint to a local speed controller sitting in the pump's original panel. Neither the local controller nor its worn speed sensor had any available spare or equivalent, so if either one failed the pump stopped and there was no repair path." },
+        { h: "Approach", b: "I moved both cascade stages into the DCS so nothing depended on the obsolete local panel anymore, put in a modern Pepperl+Fuchs speed sensor, redesigned the sensor mount with the fabrication team, and retraced and reworked the wiring for the new layout." },
+        { h: "Execution", b: "I picked the Pepperl+Fuchs sensor and built a custom bracket to fit it to the existing pump structure. I wrote the secondary speed controller inside the Honeywell C300 DCS, set up the level primary to speed secondary cascade PID modules, and kept all the original safety interlocks and pre start conditions intact. I ran new multicore cable from the DCS to the old panel and reworked the terminal routing." },
+        { h: "Commissioning and tuning", b: "I brought it up with production during annual shutdown, held the process close to normal running conditions, and re tuned both the level and speed PID loops online against real dynamics rather than a bench approximation, checking stability across the operating range." },
+        { h: "Result", b: "There is no longer a single obsolete part that can stop the pump, the solution runs on current vendor hardware, and the loops were tuned at the conditions the pump actually runs at, with no permanent downtime taken." },
       ],
       stack: "Honeywell Experion PKS C300 DCS · Pepperl+Fuchs speed sensor · Cascade PID loops · Fabrication support",
     },
   },
   {
-    title: "DCS & Safety System Management — 4000+ Loops",
-    blurb: "Ran day-to-day operations of a Honeywell Experion PKS C300 DCS and Safety Manager ESD supporting 4000+ control loops: RAID5 storage administration, backup and disaster-recovery validation, safety-interlock verification, one-to-one station redundancy, and plant-trip root-cause analysis for operators.",
+    title: "DCS & Safety System Management: 4000+ Loops",
+    blurb: "I ran the day to day of a Honeywell Experion PKS C300 DCS and its Safety Manager ESD covering more than 4000 control loops. That meant RAID5 storage and drive replacement, backups and recovery checks, periodic ESD interlock testing, keeping spare stations ready for one to one swap, and being the person who worked out the root cause when the plant tripped. Availability stayed above 99.5%.",
     stack: ["Honeywell C300", "Safety Manager ESD", "RAID5", "Trip Analysis"],
     category: "Industrial Automation",
     metric: "99.5%+ availability",
     details: {
-      scope: "Manage and maintain Honeywell Experion PKS C300 DCS infrastructure and the Safety Manager ESD system supporting 4000+ control loops across plant operations.",
+      scope: "Own the health and uptime of a Honeywell Experion PKS C300 DCS and its Safety Manager ESD carrying more than 4000 control loops across the plant.",
       sections: [
-        { h: "System Architecture", b: "A primary C300 DCS server on RAID5 storage drove 4000+ process loops across fertilizer units, air handling, compressor control, pump speed, temperature/pressure, and level systems. Multiple operator and engineering stations connected over the plant network, with spare station/server configurations maintained for one-to-one replacement, plus a Safety Manager ESD for safety-critical interlocks." },
-        { h: "DCS & RAID5 Administration", b: "Continuously monitored server performance and availability, managed user access across stations, ran routine backups to RAID5, validated data integrity and disaster recovery, and monitored disk-array health — performing drive replacements as needed to maintain redundancy." },
-        { h: "Safety Manager (ESD)", b: "Verified Emergency Shut Down function and interlock operation, monitored safety diagnostics for faults or degradation, ensured safety-critical loops maintained proper response times, and ran periodic safety-system tests and validation." },
-        { h: "Trip Analysis & Troubleshooting", b: "On plant trips, checked interlocks and identified root causes — distinguishing safety-system function, process upset, or instrumentation anomaly — and gave operators clear root-cause analysis to speed recovery. Resolved DCS server, station-connectivity, and loop-performance issues with minimal production impact." },
-        { h: "Outcome", b: "Maintained 99.5%+ DCS availability across 4000+ loops, kept the ESD system operational, protected data integrity via RAID5 and backups, and supported continuous plant operation without critical outages." },
+        { h: "The system", b: "A primary C300 server on RAID5 storage drove 4000 plus loops across the fertilizer units, air handling, compressor control, pump speed, and temperature, pressure, and level systems. Operator and engineering stations sat on the plant network, spare stations and server configs were kept ready for one to one replacement, and a Safety Manager ESD handled the safety critical interlocks." },
+        { h: "DCS and RAID5 upkeep", b: "I watched server load and availability, managed station access, ran the scheduled backups to RAID5, checked data integrity and recovery, and kept an eye on the disk array, swapping drives when needed so the redundancy never sat degraded." },
+        { h: "Safety Manager (ESD)", b: "I verified the emergency shutdown function and interlock operation, watched the safety diagnostics for faults or slow degradation, checked that safety critical loops held their response times, and ran the periodic ESD tests." },
+        { h: "Trip analysis", b: "When the plant tripped, I traced the interlocks and separated whether it was the safety system doing its job, a process upset, or an instrument fault, and handed operators a clear root cause so recovery did not stall on guesswork. I also cleared the day to day DCS server, station connectivity, and loop performance issues with minimal impact on running." },
+        { h: "Result", b: "Availability held above 99.5% across the 4000 plus loops, the ESD stayed functional, backups and RAID5 kept the data safe, and the plant ran without a critical control system outage on my watch." },
       ],
       stack: "Honeywell Experion PKS C300 DCS · Safety Manager ESD · RAID5 storage · Distributed client-server architecture · 4000+ loops",
     },
   },
   {
-    title: "Cracker Unit — 72-Channel Temperature System Upgrade",
-    blurb: "Replaced an aged 72-channel temperature scanner with modern instrumentation: 72 new K-type thermocouples in Inconel thermowells, a signal-conditioning junction box, full rewiring with shielding, and per-channel simulation plus high/low alarm testing across all 72 measurement points.",
+    title: "Cracker Unit: 72-Channel Temperature System Upgrade",
+    blurb: "The cracker unit's 72 channel temperature scanner had aged out and gone unreliable, and temperature there drives both operation and product quality. I replaced the scanner, put in 72 new K type thermocouples in Inconel thermowells with a signal conditioning junction box, rewired all 72 channels with proper shielding, and simulated and alarm tested every one of them before handing it back.",
     stack: ["Thermocouples", "Inconel Thermowells", "Signal Conditioning", "Alarm Testing"],
     category: "Industrial Automation",
     metric: "72 channels verified",
     details: {
-      scope: "Replace an aged 72-channel temperature scanner and upgrade the temperature measurement system across the cracker unit with modern instrumentation.",
+      scope: "Replace the aged 72 channel temperature scanner on the cracker unit and bring the whole measurement chain up to current instrumentation.",
       sections: [
-        { h: "Challenge", b: "The original 72-channel scanner had aged and become unreliable. Multiple K-type thermocouple elements needed replacement, temperature measurement was critical to operation and product quality, and the signal-conditioning and junction-box infrastructure required an upgrade — with all 72 channels needing reconfiguration and alarm testing." },
-        { h: "Mechanical Coordination", b: "Coordinated with the mechanical team to fabricate small thermowells on the pipeline, sized to the new element dimensions and validated for proper thermal contact and sensor protection." },
-        { h: "Scanner & Element Replacement", b: "Procured a modern 72-channel scanner, 72 high-temperature K-type thermocouples, Inconel thermowells for durability, and a junction box with signal conditioning and reference-junction compensation. Installed all hardware and connected each element to its scanner channel." },
-        { h: "Rewiring & Configuration", b: "Performed complete rewiring of all 72 channels with proper shielding and grounding, configuring each channel's sensor type, temperature range, alarm setpoints, and data-logging parameters — with clear labeling and documentation." },
-        { h: "Simulation & Alarm Testing", b: "Ran temperature simulation on each of the 72 channels, verified scanner response across the operating range, tested every high/low alarm, confirmed setpoints triggered at design temperatures, and validated data logging — documenting results for all channels." },
-        { h: "Outcome", b: "Restored reliable, accurate temperature measurement across cracker operations with improved alarm functionality and full visibility into the temperature profile — all 72 channels verified operational." },
+        { h: "What was breaking", b: "The 72 channel scanner had aged and gone unreliable, and several K type thermocouple elements were failing. Temperature here matters for both running the unit and product quality, and the signal conditioning and junction box also needed upgrading, so all 72 channels had to be reconfigured and alarm tested." },
+        { h: "Mechanical side", b: "I worked with the mechanical team to fabricate thermowells on the pipeline sized to the new element dimensions, and checked each for proper thermal contact and sensor protection." },
+        { h: "Scanner and elements", b: "I procured a modern 72 channel scanner, 72 high temperature K type thermocouples, Inconel thermowells for durability, and a junction box with signal conditioning and reference junction compensation, then installed all of it and landed each element on its channel." },
+        { h: "Wiring and configuration", b: "I rewired all 72 channels with proper shielding and grounding, and set each channel's sensor type, range, alarm setpoints, and logging, with clear labeling and documentation so the next person could follow it." },
+        { h: "Simulation and alarm testing", b: "I simulated temperature on every one of the 72 channels, checked the scanner response across the range, tested each high and low alarm to confirm it fired at the design temperature, and verified logging, documenting the result per channel." },
+        { h: "Result", b: "The cracker unit got back accurate temperature measurement with working alarms and full visibility of the temperature profile, with all 72 channels checked out." },
       ],
       stack: "72-channel scanner · K-type thermocouples · Inconel thermowells · Signal-conditioning junction box · Shielded wiring · Simulation & alarm testing",
     },
   },
   {
-    title: "Compressor Panel — Isolator Replacement & Loop Verification",
-    blurb: "Documented and replaced aged AI/AO/DI/DO isolators in a compressor control panel with matched Pepperl+Fuchs equivalents during annual shutdown, then verified signal integrity end-to-end across all 60 control loops from field transmitter through panel to final element.",
+    title: "Compressor Panel: Isolator Replacement & Loop Verification",
+    blurb: "The isolators in a compressor control panel had aged out and were no longer available as spares, across AI, AO, DI, and DO types feeding 60 loops the compressor depends on. During annual shutdown I documented every isolator, matched each to a Pepperl+Fuchs equivalent, swapped them in place, and then checked all 60 loops end to end from the field transmitter through the panel to the final element.",
     stack: ["Pepperl+Fuchs Isolators", "Loop Verification", "24VDC", "Shutdown Execution"],
     category: "Industrial Automation",
     metric: "60 loops verified",
     details: {
-      scope: "Replace aged isolators in a compressor control panel with modern equivalents and verify integrity across all 60 dependent control loops.",
+      scope: "Replace the aged isolators in a compressor control panel and confirm all 60 loops that run through them still work end to end.",
       sections: [
-        { h: "Challenge", b: "The panel's isolators had aged and were no longer reliable or readily available as spares. Multiple types (AI, AO, DI, DO) supported 60 control loops critical to compressor operation, and replacement had to happen during annual shutdown to minimize production impact." },
-        { h: "Documentation & Procurement", b: "Conducted a full documentation review of every installed isolator, capturing electrical specs and functionality, and built a matched replacement list from the Pepperl+Fuchs catalog — including single-input/double-output configurations — selected for drop-in compatibility." },
-        { h: "Replacement", b: "During shutdown, systematically removed all aged isolators and installed new Pepperl+Fuchs units in identical positions to preserve circuit configuration, verifying proper seating and electrical contact." },
-        { h: "Wiring & Loop Verification", b: "Wired with printed ferrules and terminal lugs for reliable connections, then verified all 60 loops — confirming signal continuity from field transmitters through the panel to control valves, testing each loop for correct transmission and response, and confirming no signal degradation." },
-        { h: "Outcome", b: "Restored reliable signal isolation across all 60 loops, verified complete signal-chain integrity, eliminated isolator-failure risk, and extended panel service life — all within the annual shutdown window with no production impact." },
+        { h: "What was breaking", b: "The panel's isolators had aged past reliable and were no longer stocked as spares. They spanned AI, AO, DI, and DO types feeding 60 loops the compressor depends on, and the swap had to fit inside annual shutdown to avoid taking extra production down." },
+        { h: "Documentation and procurement", b: "I went through every installed isolator, captured its electrical spec and function, and built a matched replacement list from the Pepperl+Fuchs catalog, including the single input double output types, chosen to drop straight into the existing positions." },
+        { h: "Replacement", b: "During shutdown I pulled the old isolators and fitted the new Pepperl+Fuchs units in the same positions so the circuit layout did not change, checking each one for proper seating and contact." },
+        { h: "Wiring and loop checks", b: "I landed everything on printed ferrules and terminal lugs, then walked all 60 loops: continuity from the field transmitter through the panel to the control valve, correct transmission and response on each loop, and no signal degradation." },
+        { h: "Result", b: "All 60 loops came back verified end to end, the isolator failure risk is gone, and the panel is good for continued service, done inside the shutdown window with no extra production lost." },
       ],
       stack: "Pepperl+Fuchs isolators (AI/AO/DI/DO) · 24VDC supply · Printed ferrules & terminal lugs · Loop verification procedures",
     },
@@ -273,22 +294,26 @@ const PROJECTS = [
 ];
 
 const TIMELINE = [
-  { year: "May 2026 — Present", role: "Robotics Research Intern", org: "Children's National Hospital · Washington, DC", desc: "Applied robotics research within surgical and clinical contexts." },
-  { year: "Sep 2025 — May 2027", role: "M.Eng. in Robotics", org: "University of Maryland, College Park", desc: "Autonomous navigation, high-speed perception pipelines, and optimal control theory. GPA 3.9." },
-  { year: "May 2023 — Jul 2025", role: "Assistant Manager, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Surat, India", desc: "Led automation lifecycle and predictive maintenance across Honeywell DCS and Siemens PLC arrays, cutting system-level downtime by 50%." },
-  { year: "Oct 2019 — Apr 2023", role: "Senior Engineer, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Surat, India", desc: "Eliminated 90% of false trips on air-drying systems via bistable-relay software emulation, alongside comprehensive control-loop re-tuning." },
-  { year: "Oct 2018 — Oct 2019", role: "Graduate Engineering Trainee", org: "KRIBHCO Fertilizers Ltd", desc: "Calibrated and validated signal integrity across 20+ field transmitter types over 4–20 mA and HART loops." },
-  { year: "Aug 2014 — May 2018", role: "B.Eng., Instrumentation & Control", org: "L.D. College of Engineering · Ahmedabad, India", desc: "GATE All India Rank 96. Foundation in control theory and process engineering." },
+  { year: "May 2026 – Aug 2026", role: "Research Intern, Robotics & Machine Vision", org: "Telehealth & Robotics Lab, Children's National Medical Center · Washington, D.C.", desc: "Built a vision and geometry pipeline for surgical tray sorting across 12 tool classes on an Intel RealSense D455. Trained a DINOv2 ViT-L transformer to 94.5% accuracy, 35 points ahead of a ResNet-50 CNN once background and lighting changed, and paired it with an ArUco and PCA length gate plus multi angle voting to separate tools that look alike." },
+  { year: "Sep 2025 – May 2027", role: "M.Eng. in Robotics", org: "University of Maryland, College Park", desc: "Autonomous navigation, perception, planning, and optimal control. Widening a controls foundation into robotics, computer vision, ML, and industrial AI. GPA 3.9 / 4.0." },
+  { year: "May 2023 – Jul 2025", role: "Assistant Manager, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Held 99.5%+ availability of a Honeywell Safety Manager (ESD) and Experion PKS C300 DCS across 4000+ control loops, owning RAID5 storage, one to one spare station redundancy, periodic ESD interlock testing, and plant trip root cause analysis at live operating conditions." },
+  { year: "Oct 2019 – Apr 2023", role: "Senior Engineer, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Upgraded a 72-channel cracker unit temperature system, commissioning a modern scanner, 72 K-type thermocouples, and Inconel thermowells, then configuring and alarm testing every channel for reliable high temperature monitoring. Cut 90% of air dryer false trips with bistable relay software emulation." },
+  { year: "Oct 2018 – Oct 2019", role: "Graduate Engineer Trainee, Instrumentation & Controls", org: "KRIBHCO Fertilizers Ltd · Gujarat, India", desc: "Held ±0.075% FS measurement accuracy across 4-20 mA and HART loops, pre calibrating and validating 20+ instrument types (Coriolis, guided wave radar, RTD Pt100, Type K/J thermocouples, control valves) against baselines and tracing drift and failure root causes on live process lines." },
+  { year: "Aug 2014 – May 2018", role: "B.Eng., Instrumentation & Control", org: "L.D. College of Engineering · Gujarat, India", desc: "GATE All India Rank 96. Foundation in control theory and process engineering. GPA 3.3 / 4.0." },
+];
+
+const AFFILIATIONS = [
+  { org: "International Society of Automation (ISA)", detail: "Member · Baltimore-Washington, D.C. Section" },
 ];
 
 const CERTIFICATIONS = [
-  "Control Valve Sizing (PDH) — ISA",
-  "Experion PKS C300 Fundamentals & Troubleshooting — Honeywell",
-  "M580 PLC Hardware & EcoStruxure Control Expert — Schneider Electric",
-  "Process Instrumentation, SCADA & PLC Logic — Siemens",
-  "Simscape, Simulink & MATLAB Onramp — MathWorks",
+  "Control Valve Sizing (PDH), ISA",
+  "Experion PKS C300 Fundamentals & Troubleshooting, Honeywell",
+  "M580 PLC Hardware & EcoStruxure Control Expert, Schneider Electric",
+  "Process Instrumentation, SCADA & PLC Logic, Siemens",
+  "Simscape, Simulink & MATLAB Onramp, MathWorks",
   "Aveva Edge HMI / SCADA Architecture",
-  "Docker & Git / GitHub — LinkedIn Learning",
+  "Docker & Git / GitHub, LinkedIn Learning",
 ];
 
 const COURSEWORK = [
@@ -299,7 +324,7 @@ const COURSEWORK = [
 
 const CAT = {
   "Autonomous Systems": { label: "Autonomous", tint: "var(--sage)", soft: "var(--sage-soft)" },
-  "Perception & Vision": { label: "Computer Vision", tint: "var(--plum)", soft: "var(--plum-soft)" },
+  "Perception & Vision": { label: "Computer Vision / ML", tint: "var(--plum)", soft: "var(--plum-soft)" },
   "Classical & Industrial Controls": { label: "Controls", tint: "var(--slate)", soft: "var(--slate-soft)" },
   "Industrial Automation": { label: "Industrial", tint: "var(--accent)", soft: "var(--accent-soft)" },
 };
@@ -423,29 +448,23 @@ export default function App() {
             <img src={profileImg} alt="Rahul Ravi VK" className="avatar" />
           </button>
           <div className="badge">Open to 2026 Co-op & 2027 Full-time</div>
-          <h1 className="name">Rahul <span>Ravi VK</span></h1>
+          <h1 className="name">Rahul Ravi <span>VK</span></h1>
           <div className="typed">{typed}<span className="cursor" /></div>
           <p className="tagline">
-            Six years tuning safety-critical industrial control systems. Now widening my
-            expertise into robotics, computer vision, ML and Industrial AI through an M.Eng.
+            Six years tuning safety-critical industrial control systems, now widening my
+            expertise into robotics, computer vision, and industrial AI/ML through an M.Eng.
             at the University of Maryland, College Park.
           </p>
 
           <div className="rail-loc"><MapPin size={13} /> College Park, MD · DMV Area</div>
 
           <div className="socials">
-            <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="soc" aria-label="Copy email"><Mail size={19} /></button>
+            <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied: ravivk.rahul@gmail.com")} className="soc" aria-label="Copy email"><Mail size={19} /></button>
             <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="soc" aria-label="LinkedIn"><Linkedin size={19} /></a>
             <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="soc" aria-label="GitHub"><Github size={19} /></a>
-            <button onClick={() => copyText("abhyutthanam", "Discord copied — abhyutthanam")} className="soc" aria-label="Copy Discord username"><DiscordIcon /></button>
+            <button onClick={() => copyText("abhyutthanam", "Discord copied: abhyutthanam")} className="soc" aria-label="Copy Discord username"><DiscordIcon /></button>
           </div>
           {copied && <div className="copied-toast">{copied}</div>}
-
-          <div className="rail-cta">
-            <a href={`${BASE}Rahul_Ravi_Resume.pdf`} target="_blank" rel="noopener noreferrer" className="btn-fill">
-              Resume <ArrowUpRight size={15} />
-            </a>
-          </div>
 
           <nav className="rail-nav">
             {NAV.map(([id, label]) => (
@@ -535,11 +554,21 @@ export default function App() {
             </div>
           </div>
 
+          <div className="affil">
+            <div className="cred-label"><Award size={16} /> Professional affiliations</div>
+            {AFFILIATIONS.map((a, i) => (
+              <div key={i} className="affil-row">
+                <span className="affil-org">{a.org}</span>
+                <span className="affil-detail">{a.detail}</span>
+              </div>
+            ))}
+          </div>
+
           <div className="closer">
             <h3>Let's build something.</h3>
-            <p>Open to automation, controls, and robotics engineering roles, research collaborations, and hard automation problems.</p>
+            <p>Open to robotics engineering roles, research collaborations, and hard automation problems.</p>
             <div className="closer-links">
-              <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied — ravivk.rahul@gmail.com")} className="btn-fill">ravivk.rahul@gmail.com</button>
+              <button onClick={() => copyText("ravivk.rahul@gmail.com", "Email copied: ravivk.rahul@gmail.com")} className="btn-fill">ravivk.rahul@gmail.com</button>
               <a href="https://www.linkedin.com/in/rahulravivk/" target="_blank" rel="noopener noreferrer" className="btn-line">LinkedIn <ArrowUpRight size={14} /></a>
               <a href="https://github.com/ravivkrahul" target="_blank" rel="noopener noreferrer" className="btn-line">GitHub <ArrowUpRight size={14} /></a>
             </div>
@@ -727,6 +756,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
   background:var(--accent);opacity:0.5;}
 
 /* closer */
+.affil{margin-bottom:72px;}
+.affil-row{display:flex;flex-direction:column;gap:4px;padding:16px 20px;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;max-width:60ch;}
+.affil-org{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;}
+.affil-detail{font-family:var(--mono);font-size:12px;color:var(--ink3);letter-spacing:0.02em;}
 .closer{border-top:1px solid var(--line);padding-top:56px;text-align:center;}
 .closer h3{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:500;
   letter-spacing:-0.02em;margin-bottom:14px;}
